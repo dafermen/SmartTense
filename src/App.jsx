@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { buildRows, getTensesByGroup, getVerbSummary, GROUP_LABELS } from "./conjugation.js";
-import { DEFAULT_DATA, LEVELS, SUBJECTS } from "./data/defaultData.js";
+import { DEFAULT_DATA, LEVELS, SUBJECTS, TENSES } from "./data/defaultData.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
@@ -10,7 +10,15 @@ const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "documentation", "about"];
+const MENU_ITEMS = ["home", "individual", "complete", "documentation", "about"];
+const INDIVIDUAL_TENSE_GROUPS = [
+  { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
+  { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
+  { id: "future", labelKey: "future", tenseIds: ["simpleFuture", "futurePerfect", "futureContinuous"] },
+  { id: "conditional", labelKey: "conditional", tenseIds: ["simpleConditional", "perfectConditional", "continuousConditional"] }
+];
+const INDIVIDUAL_DEFAULT_TENSE_IDS = ["simplePresent"];
+const COMPLETE_FORM_COLUMNS = ["affirmative", "negative", "questionPositive", "questionNegative"];
 
 export default function App() {
   const [storedSettings] = useState(readStoredSettings);
@@ -19,6 +27,15 @@ export default function App() {
   const [appData, setAppData] = useState(DEFAULT_DATA);
   const [verbId, setVerbId] = useState(storedSettings.verbId || DEFAULT_DATA.verbs[0].id);
   const [subjectId, setSubjectId] = useState(storedSettings.subjectId || SUBJECTS[0].id);
+  const [individualTenseIds, setIndividualTenseIds] = useState(() => {
+    if (Array.isArray(storedSettings.individualTenseIds) && storedSettings.individualTenseIds.length) return storedSettings.individualTenseIds;
+    if (storedSettings.individualTenseId) return [storedSettings.individualTenseId];
+    return INDIVIDUAL_DEFAULT_TENSE_IDS;
+  });
+  const [individualSubjectIds, setIndividualSubjectIds] = useState(() => {
+    if (Array.isArray(storedSettings.individualSubjectIds) && storedSettings.individualSubjectIds.length) return storedSettings.individualSubjectIds;
+    return [storedSettings.subjectId || SUBJECTS[0].id];
+  });
   const [group, setGroup] = useState(storedSettings.group || "all");
   const [level, setLevel] = useState(storedSettings.level || "basic");
   const [verbPattern, setVerbPattern] = useState(storedSettings.verbPattern || "all");
@@ -29,6 +46,10 @@ export default function App() {
   const [showAllSubjects, setShowAllSubjects] = useState(storedSettings.showAllSubjects ?? false);
   const [showTranslations, setShowTranslations] = useState(storedSettings.showTranslations ?? true);
   const [showSentenceParts, setShowSentenceParts] = useState(storedSettings.showSentenceParts ?? true);
+  const [completeFormColumns, setCompleteFormColumns] = useState(() => {
+    if (Array.isArray(storedSettings.completeFormColumns) && storedSettings.completeFormColumns.length) return storedSettings.completeFormColumns;
+    return COMPLETE_FORM_COLUMNS;
+  });
   const [visitedVerbIds, setVisitedVerbIds] = useState(storedSettings.visitedVerbIds || []);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
@@ -124,11 +145,42 @@ export default function App() {
     [currentVerb, subjects, tenses, interfaceLanguage, learnerLanguage, useContractions]
   );
 
+  const individualTenses = useMemo(
+    () => INDIVIDUAL_TENSE_GROUPS.flatMap((tenseGroup) => tenseGroup.tenseIds.map((tenseId) => TENSES.find((tense) => tense.id === tenseId)).filter(Boolean)),
+    []
+  );
+
+  const selectedIndividualSubjects = useMemo(
+    () => SUBJECTS.filter((subject) => individualSubjectIds.includes(subject.id)),
+    [individualSubjectIds]
+  );
+
+  const selectedIndividualTenses = useMemo(
+    () => individualTenses.filter((tense) => individualTenseIds.includes(tense.id)),
+    [individualTenseIds, individualTenses]
+  );
+
+  const individualRows = useMemo(
+    () => selectedIndividualSubjects.length && selectedIndividualTenses.length ? buildRows(currentVerb, selectedIndividualSubjects, selectedIndividualTenses, interfaceLanguage, { learnerLanguage, useContractions }) : [],
+    [currentVerb, selectedIndividualSubjects, selectedIndividualTenses, interfaceLanguage, learnerLanguage, useContractions]
+  );
+
   const verbSummary = useMemo(() => getVerbSummary(currentVerb, learnerLanguage), [currentVerb, learnerLanguage]);
   const progressCount = useMemo(
     () => visitedVerbIds.filter((id) => appData.verbs.some((verb) => verb.id === id)).length,
     [appData.verbs, visitedVerbIds]
   );
+  const progressPercent = appData.verbs.length ? Math.round((progressCount / appData.verbs.length) * 100) : 0;
+  const recommendedVerb = useMemo(
+    () => filteredVerbs.find((verb) => !visitedVerbIds.includes(verb.id)) || filteredVerbs.find((verb) => verb.id !== currentVerb?.id) || currentVerb,
+    [currentVerb, filteredVerbs, visitedVerbIds]
+  );
+  const recommendedSummary = useMemo(() => getVerbSummary(recommendedVerb || currentVerb, learnerLanguage), [currentVerb, learnerLanguage, recommendedVerb]);
+  const homePreviewRow = useMemo(() => {
+    const previewSubject = SUBJECTS.find((subject) => subject.id === subjectId) || SUBJECTS[0];
+    const previewTense = TENSES.find((tense) => tense.id === "simplePresent") || tenses[0] || TENSES[0];
+    return buildRows(currentVerb, [previewSubject], [previewTense], interfaceLanguage, { learnerLanguage, useContractions })[0];
+  }, [currentVerb, interfaceLanguage, learnerLanguage, subjectId, tenses, useContractions]);
 
   useEffect(() => {
     if (!currentVerb?.id) return;
@@ -144,14 +196,17 @@ export default function App() {
       verbPattern,
       verbSearch,
       activePage,
+      individualTenseIds,
+      individualSubjectIds,
       interfaceLanguage,
       learnerLanguage,
       showAllSubjects,
       showTranslations,
       showSentenceParts,
+      completeFormColumns,
       visitedVerbIds
     });
-  }, [activePage, group, interfaceLanguage, learnerLanguage, level, showAllSubjects, showSentenceParts, showTranslations, subjectId, verbId, verbPattern, verbSearch, visitedVerbIds]);
+  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, showAllSubjects, showSentenceParts, showTranslations, subjectId, verbId, verbPattern, verbSearch, visitedVerbIds]);
 
   function showTimedAlert(message, type = "success") {
     setAlert({ message, type });
@@ -241,6 +296,325 @@ export default function App() {
     showTimedAlert(t("progressReset"));
   }
 
+
+  function toggleIndividualTense(tenseId) {
+    setIndividualTenseIds((current) => toggleSelection(current, tenseId));
+  }
+
+  function toggleIndividualSubject(selectedSubjectId) {
+    setIndividualSubjectIds((current) => toggleSelection(current, selectedSubjectId));
+  }
+
+  function toggleIndividualTenseGroup(tenseIds) {
+    setIndividualTenseIds((current) => toggleSelectionGroup(current, tenseIds));
+  }
+
+  function toggleAllIndividualSubjects() {
+    setIndividualSubjectIds((current) => toggleSelectionGroup(current, SUBJECTS.map((subject) => subject.id)));
+  }
+
+  function toggleCompleteFormColumn(columnId) {
+    setCompleteFormColumns((current) => {
+      if (current.includes(columnId) && current.length === 1) return current;
+      return toggleSelection(current, columnId);
+    });
+  }
+
+  function renderAlert() {
+    if (!alert) return null;
+
+    return (
+      <section className={`alert ${alert.type === "error" ? "error" : ""}`}>
+        {alert.message}
+      </section>
+    );
+  }
+
+  function renderDashboard() {
+    const levelLabel = LEVELS.find((entry) => entry.id === level)?.[interfaceLanguage];
+
+    return (
+      <section className="home-board" aria-label={t("home")}>
+        <div className="home-hero-grid">
+          <article className="home-primary-card">
+            <div>
+              <p className="eyebrow">{t("workspace")}</p>
+              <h2>{currentVerb.label}</h2>
+              <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
+            </div>
+            <div className="dashboard-actions compact-home-actions" aria-label={t("homeActions")}>
+              <button type="button" onClick={() => setActivePage("individual")}>{t("practiceIndividual")}</button>
+              <button type="button" onClick={() => setActivePage("complete")}>{t("viewComplete")}</button>
+            </div>
+          </article>
+
+          {homePreviewRow && (
+            <article className="home-example-card">
+              <p className="eyebrow">{t("exampleNow")}</p>
+              <h3>{homePreviewRow.affirmative}</h3>
+              {showSentenceParts && <SentenceParts parts={homePreviewRow.breakdown.affirmative} />}
+              {showTranslations && <p>{homePreviewRow.translations.affirmative}</p>}
+            </article>
+          )}
+        </div>
+
+        <section className="home-stat-grid" aria-label={t("studyProgress")}>
+          <article className="home-stat-card home-progress-card">
+            <div>
+              <span>{progressCount}/{appData.verbs.length}</span>
+              <small>{t("verbsPracticed")}</small>
+            </div>
+            <div className="progress-track" aria-hidden="true"><span style={{ width: `${progressPercent}%` }} /></div>
+          </article>
+          <article className="home-stat-card"><span>{levelLabel}</span><small>{t("level")}</small></article>
+          <article className="home-stat-card"><span>{tenses.length}</span><small>{t("tenses")}</small></article>
+          <article className="home-stat-card"><span>{filteredVerbs.length}</span><small>{t("verbs")}</small></article>
+        </section>
+
+        <section className="home-content-grid">
+          <article className="home-info-card">
+            <div className="home-card-heading">
+              <p className="eyebrow">{t("profileSnapshot")}</p>
+              <h3>{currentVerb.label}</h3>
+            </div>
+            <dl className="home-compact-list">
+              <div><dt>{t("learnerMeaning")}</dt><dd>{verbSummary.meaning || t("noLearnerMeaning")}</dd></div>
+              <div><dt>{t("baseExample")}</dt><dd>{verbSummary.object || currentVerb.object || "core form"}</dd></div>
+              <div><dt>{t("verbType")}</dt><dd>{verbTypeLabel(verbSummary.type, t)}</dd></div>
+              <div><dt>{t("verbPattern")}</dt><dd>{verbPatternLabel(verbSummary.pattern, t)}</dd></div>
+              <div><dt>{t("keyForms")}</dt><dd>{verbSummary.base} / {verbSummary.past} / {verbSummary.participle} / {verbSummary.gerund}</dd></div>
+            </dl>
+          </article>
+
+          <article className="home-info-card home-recommend-card">
+            <div className="home-card-heading">
+              <p className="eyebrow">{t("recommendedNow")}</p>
+              <h3>{recommendedVerb?.label || currentVerb.label}</h3>
+            </div>
+            <dl className="home-compact-list">
+              <div><dt>{t("suggestedVerb")}</dt><dd>{recommendedVerb?.label || currentVerb.label}</dd></div>
+              <div><dt>{t("learnerMeaning")}</dt><dd>{recommendedSummary.meaning || t("noLearnerMeaning")}</dd></div>
+              <div><dt>{t("suggestedTense")}</dt><dd>{TENSES.find((tense) => tense.id === "simplePresent")?.[interfaceLanguage]}</dd></div>
+              <div><dt>{t("suggestedSubject")}</dt><dd>{SUBJECTS.find((subject) => subject.id === subjectId)?.label || SUBJECTS[0].label}</dd></div>
+            </dl>
+            <button
+              type="button"
+              className="home-recommend-button"
+              onClick={() => {
+                if (recommendedVerb?.id) setVerbId(recommendedVerb.id);
+                setActivePage("individual");
+              }}
+            >
+              {t("continueLast")}
+            </button>
+          </article>
+        </section>
+      </section>
+    );
+  }  function renderFilterPanel() {
+    const isIndividualPage = activePage === "individual";
+    const isCompletePage = activePage === "complete";
+    return (
+      <section className="workspace-filters" aria-label={t("filters")}>
+        <div className="filter-primary-grid">
+          <TextField label={t("verbSearch")} value={verbSearch} onChange={setVerbSearch} placeholder={t("verbSearchPlaceholder")} />
+          <SelectField label={t("verb")} value={filteredVerbs.length ? verbId : ""} onChange={setVerbId} variant="light" disabled={filteredVerbs.length === 0}>{filteredVerbs.length === 0 ? <option value="">{t("noVerbMatches")}</option> : filteredVerbs.map((verb) => <option key={verb.id} value={verb.id}>{verb.label}</option>)}</SelectField>
+          <SelectField label={t("verbPatternFilter")} value={verbPattern} onChange={setVerbPattern} variant="light">{VERB_PATTERN_FILTERS.map((pattern) => <option key={pattern} value={pattern}>{verbPatternFilterLabel(pattern, t)}</option>)}</SelectField>
+          <SelectField label={t("level")} value={level} onChange={setLevel} variant="light">{LEVELS.map((entry) => <option key={entry.id} value={entry.id}>{entry[interfaceLanguage]}</option>)}</SelectField>
+        </div>
+        <details className="more-filters" open={isFiltersOpen} onToggle={(event) => setIsFiltersOpen(event.currentTarget.open)}>
+          <summary><span className="more-filters-label">{t("moreFilters")}</span></summary>
+          <div className="filter-secondary-grid">
+            {!isIndividualPage && <><SelectField label={t("subject")} value={subjectId} onChange={setSubjectId} disabled={showAllSubjects} variant="light">{SUBJECTS.map((subject) => <option key={subject.id} value={subject.id}>{subject.label}</option>)}</SelectField><SelectField label={t("tenseGroup")} value={group} onChange={setGroup} variant="light"><option value="all">{t("allGroups")}</option><option value="present">{t("present")}</option><option value="past">{t("past")}</option><option value="future">{t("future")}</option><option value="conditional">{t("conditional")}</option></SelectField></>}
+            <SelectField label={t("interfaceLanguage")} value={interfaceLanguage} onChange={setInterfaceLanguage} variant="light"><option value="en">English</option><option value="es">Espa&ntilde;ol</option></SelectField>
+            <SelectField label={t("learnerLanguage")} value={learnerLanguage} onChange={setLearnerLanguage} variant="light">{SUPPORTED_LEARNER_LANGUAGES.map((entry) => <option key={entry.id} value={entry.id}>{entry.label}</option>)}</SelectField>
+            {!isIndividualPage && <label className="check-row check-row-light"><input type="checkbox" checked={showAllSubjects} onChange={(event) => setShowAllSubjects(event.target.checked)} /><span>{t("showAllSubjects")}</span></label>}
+            {isCompletePage && (
+              <div className="column-toggle-panel" aria-label={t("visibleForms")}>
+                <span>{t("visibleForms")}</span>
+                <div className="column-toggle-buttons">
+                  {COMPLETE_FORM_COLUMNS.map((columnId) => (
+                    <button
+                      type="button"
+                      className={completeFormColumns.includes(columnId) ? "active" : ""}
+                      key={columnId}
+                      aria-pressed={completeFormColumns.includes(columnId)}
+                      onClick={() => toggleCompleteFormColumn(columnId)}
+                    >
+                      {t(columnId)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <label className="check-row check-row-light"><input type="checkbox" checked={showTranslations} onChange={(event) => setShowTranslations(event.target.checked)} /><span>{t("showTranslations")}</span></label>
+            <label className="check-row check-row-light"><input type="checkbox" checked={showSentenceParts} onChange={(event) => setShowSentenceParts(event.target.checked)} /><span>{t("showSentenceParts")}</span></label>
+            <div className="filter-table-actions" aria-label={t("tableActions")}>{!isIndividualPage && <button type="button" className="compact-action" onClick={handleExportCsv} aria-label={t("exportCsv")}>CSV</button>}{!isIndividualPage && <button type="button" className="compact-action" onClick={handleExportJson} aria-label={t("exportJson")}>JSON</button>}</div>
+          </div>
+        </details>
+        {filteredVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
+      </section>
+    );
+  }
+
+  function renderCompleteView() {
+    return (
+      <>
+        {renderFilterPanel()}
+        <section className="table-card complete-table-card">
+          <VerbProfile verb={currentVerb} summary={verbSummary} t={t} />
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th className="sticky-col sticky-subject">{t("subjectCol")}</th>
+                  <th className="sticky-col sticky-tense">{t("tenseCol")}</th>
+                  {completeFormColumns.map((columnId) => (
+                    <th key={columnId}>{t(columnId)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} visibleColumns={completeFormColumns} />
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mobile-card-list" aria-label={t("mobileCardsTitle")}>
+          <div className="mobile-card-header">
+            <div>
+              <h3>{t("mobileCardsTitle")}</h3>
+              <p>{t("caption")}</p>
+            </div>
+          </div>
+          <ConjugationCards rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
+        </section>
+      </>
+    );
+  }
+  function renderIndividualView() {
+    const individualRowsByTense = selectedIndividualTenses
+      .map((tense) => ({
+        tense,
+        rows: individualRows.filter((row) => row.tenseId === tense.id)
+      }))
+      .filter((entry) => entry.rows.length > 0);
+
+    return (
+      <>
+        {renderFilterPanel()}
+        <section className="individual-board">
+          <div className="individual-header">
+            <div>
+              <p className="eyebrow">{t("individual")}</p>
+              <h2>{currentVerb.label}</h2>
+              <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
+            </div>
+            <p className="selection-summary">
+              {selectedIndividualTenses.length} {t("tensesSelected")} | {selectedIndividualSubjects.length} {t("subjectsSelected")}
+            </p>
+          </div>
+
+          <div className="choice-panel" aria-label={t("tenseGroup")}>
+            <div>
+              <p className="choice-label">{t("tenseCol")}</p>
+              <div className="individual-tense-groups">
+                {INDIVIDUAL_TENSE_GROUPS.map((tenseGroup) => {
+                  const isGroupActive = tenseGroup.tenseIds.every((tenseId) => individualTenseIds.includes(tenseId));
+
+                  return (
+                    <section className="individual-tense-group" key={tenseGroup.id}>
+                      <button
+                        type="button"
+                        className={`group-toggle ${isGroupActive ? "active" : ""}`}
+                        aria-pressed={isGroupActive}
+                        onClick={() => toggleIndividualTenseGroup(tenseGroup.tenseIds)}
+                      >
+                        <span>{t(tenseGroup.labelKey)}</span>
+                        <small>{isGroupActive ? t("clearGroup") : t("selectGroup")}</small>
+                      </button>
+                      <div className="choice-buttons">
+                        {tenseGroup.tenseIds.map((tenseId) => {
+                          const tense = individualTenses.find((entry) => entry.id === tenseId);
+                          if (!tense) return null;
+
+                          return (
+                            <button
+                              type="button"
+                              className={individualTenseIds.includes(tense.id) ? "active" : ""}
+                              key={tense.id}
+                              aria-pressed={individualTenseIds.includes(tense.id)}
+                              onClick={() => toggleIndividualTense(tense.id)}
+                            >
+                              {individualTenseButtonLabel(tense.id, interfaceLanguage)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="button"
+                className={`choice-label choice-label-button ${individualSubjectIds.length === SUBJECTS.length ? "active" : ""}`}
+                aria-pressed={individualSubjectIds.length === SUBJECTS.length}
+                onClick={toggleAllIndividualSubjects}
+              >
+                <span>{t("subject")}</span>
+                <small>{individualSubjectIds.length === SUBJECTS.length ? t("clearGroup") : t("selectGroup")}</small>
+              </button>
+              <div className="choice-buttons subject-buttons">
+                {SUBJECTS.map((subject) => (
+                  <button
+                    type="button"
+                    className={individualSubjectIds.includes(subject.id) ? "active" : ""}
+                    key={subject.id}
+                    aria-pressed={individualSubjectIds.includes(subject.id)}
+                    onClick={() => toggleIndividualSubject(subject.id)}
+                  >
+                    {subject.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {individualRows.length === 0 ? (
+            <p className="empty-filter-message">{t("individualEmpty")}</p>
+          ) : (
+            <div className="affirmative-grid">
+              {individualRowsByTense.map(({ tense, rows: tenseRows }) => (
+                <section className="affirmative-group" key={tense.id}>
+                  <h3>{tense[interfaceLanguage]}</h3>
+                  <div className="affirmative-group-grid">
+                    {tenseRows.map((row) => (
+                      <article className="affirmative-card" key={`${row.subject}-${row.tenseId}`}>
+                        <div>
+                          <p className="eyebrow">{row.tense}</p>
+                          <h3>{row.subject}</h3>
+                        </div>
+                        <div className="affirmative-sentence">
+                          <span className="sentence">{row.affirmative}</span>
+                          {showSentenceParts && <SentenceParts parts={row.breakdown.affirmative} />}
+                          {showTranslations && row.translations.affirmative && <span className="translation">{row.translations.affirmative}</span>}
+                          {row.usageNote && <span className="usage-note">{row.usageNote}</span>}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+        </section>
+      </>
+    );
+  }
   return (
     <div className={`app-shell ${isMenuOpen ? "menu-open" : "menu-collapsed"}`}>
       <button
@@ -297,188 +671,10 @@ export default function App() {
       </aside>
 
       <main className="content">
-        {activePage === "home" && (
-          <>
-        <section className="top-strip">
-          <div>
-            <p className="eyebrow">{t("workspace")}</p>
-            <h2>{currentVerb.label}</h2>
-            <p>{verbSummary.meaning || t("noLearnerMeaning")} | {currentVerb.object || "core form"}</p>
-          </div>
-          <div className="stats" aria-label="Current table summary">
-            <div>
-              <span>{LEVELS.find((entry) => entry.id === level)?.[interfaceLanguage]}</span>
-              <small>{t("level")}</small>
-            </div>
-            <div>
-              <span>{tenses.length}</span>
-              <small>{t("tenses")}</small>
-            </div>
-            <div>
-              <span>{subjects.length}</span>
-              <small>{t("subjects")}</small>
-            </div>
-            <div>
-              <span>{progressCount}/{appData.verbs.length}</span>
-              <small>{t("progress")}</small>
-            </div>
-          </div>
-        </section>
-
-        {alert && (
-          <section className={`alert ${alert.type === "error" ? "error" : ""}`}>
-            {alert.message}
-          </section>
-        )}
-
-        <section className="workspace-filters" aria-label={t("filters")}> 
-          <div className="filter-primary-grid">
-            <TextField label={t("verbSearch")} value={verbSearch} onChange={setVerbSearch} placeholder={t("verbSearchPlaceholder")} />
-
-            <SelectField label={t("verb")} value={filteredVerbs.length ? verbId : ""} onChange={setVerbId} variant="light" disabled={filteredVerbs.length === 0}>
-              {filteredVerbs.length === 0 ? (
-                <option value="">{t("noVerbMatches")}</option>
-              ) : (
-                filteredVerbs.map((verb) => (
-                  <option key={verb.id} value={verb.id}>
-                    {verb.label}
-                  </option>
-                ))
-              )}
-            </SelectField>
-
-            <SelectField label={t("verbPatternFilter")} value={verbPattern} onChange={setVerbPattern} variant="light">
-              {VERB_PATTERN_FILTERS.map((pattern) => (
-                <option key={pattern} value={pattern}>
-                  {verbPatternFilterLabel(pattern, t)}
-                </option>
-              ))}
-            </SelectField>
-
-            <SelectField label={t("level")} value={level} onChange={setLevel} variant="light">
-              {LEVELS.map((entry) => (
-                <option key={entry.id} value={entry.id}>
-                  {entry[interfaceLanguage]}
-                </option>
-              ))}
-            </SelectField>
-          </div>
-
-          <details className="more-filters" open={isFiltersOpen} onToggle={(event) => setIsFiltersOpen(event.currentTarget.open)}>
-            <summary>
-              <span className="more-filters-label">{t("moreFilters")}</span>
-              <span className="filter-summary-metrics">
-                <span>{filteredVerbs.length} {t("verbs")}</span>
-                <span>{t("progress")}: {progressCount}/{appData.verbs.length}</span>
-              </span>
-            </summary>
-            <div className="filter-secondary-grid">
-              <SelectField label={t("subject")} value={subjectId} onChange={setSubjectId} disabled={showAllSubjects} variant="light">
-                {SUBJECTS.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.label}
-                  </option>
-                ))}
-              </SelectField>
-
-              <SelectField label={t("tenseGroup")} value={group} onChange={setGroup} variant="light">
-                <option value="all">{t("allGroups")}</option>
-                <option value="present">{t("present")}</option>
-                <option value="past">{t("past")}</option>
-                <option value="future">{t("future")}</option>
-                <option value="conditional">{t("conditional")}</option>
-              </SelectField>
-
-              <SelectField label={t("interfaceLanguage")} value={interfaceLanguage} onChange={setInterfaceLanguage} variant="light">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-              </SelectField>
-
-              <SelectField label={t("learnerLanguage")} value={learnerLanguage} onChange={setLearnerLanguage} variant="light">
-                {SUPPORTED_LEARNER_LANGUAGES.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.label}
-                  </option>
-                ))}
-              </SelectField>
-
-              <label className="check-row check-row-light">
-                <input
-                  type="checkbox"
-                  checked={showAllSubjects}
-                  onChange={(event) => setShowAllSubjects(event.target.checked)}
-                />
-                <span>{t("showAllSubjects")}</span>
-              </label>
-
-              <label className="check-row check-row-light">
-                <input
-                  type="checkbox"
-                  checked={showTranslations}
-                  onChange={(event) => setShowTranslations(event.target.checked)}
-                />
-                <span>{t("showTranslations")}</span>
-              </label>
-
-              <label className="check-row check-row-light">
-                <input
-                  type="checkbox"
-                  checked={showSentenceParts}
-                  onChange={(event) => setShowSentenceParts(event.target.checked)}
-                />
-                <span>{t("showSentenceParts")}</span>
-              </label>
-
-              <button type="button" className="reset-progress-button" onClick={handleResetProgress}>
-                {t("resetProgress")}
-              </button>
-
-              <div className="filter-table-actions" aria-label={t("tableActions")}>
-                <button type="button" className="compact-action" onClick={handleExportCsv} aria-label={t("exportCsv")}>CSV</button>
-                <button type="button" className="compact-action" onClick={handleExportJson} aria-label={t("exportJson")}>JSON</button>
-                <label className="import-button import-button-light compact-action" aria-label={t("importJson")}>
-                  <input ref={fileInputRef} type="file" accept="application/json,.json" onChange={handleImportJson} />
-                  <span>{t("importShort")}</span>
-                </label>
-              </div>
-            </div>
-          </details>
-          {filteredVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
-        </section>
-
-        <section className="table-card">
-          <VerbProfile verb={currentVerb} summary={verbSummary} t={t} />
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>{t("subjectCol")}</th>
-                  <th>{t("tenseCol")}</th>
-                  <th>{t("affirmative")}</th>
-                  <th>{t("negative")}</th>
-                  <th>{t("questionPositive")}</th>
-                  <th>{t("questionNegative")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="mobile-card-list" aria-label={t("mobileCardsTitle")}> 
-          <div className="mobile-card-header">
-            <div>
-              <h3>{t("mobileCardsTitle")}</h3>
-              <p>{t("caption")}</p>
-            </div>
-          </div>
-          <ConjugationCards rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
-        </section>
-          </>
-        )}
-
+        {renderAlert()}
+        {activePage === "home" && renderDashboard()}
+        {activePage === "individual" && renderIndividualView()}
+        {activePage === "complete" && renderCompleteView()}
         {activePage === "documentation" && <DocumentationPage t={t} learnerLanguage={learnerLanguage} />}
         {activePage === "about" && <AboutPage t={t} />}
       </main>
@@ -582,7 +778,7 @@ function VerbProfile({ verb, summary, t }) {
   );
 }
 
-function ConjugationRows({ rows, language, showTranslations, showSentenceParts }) {
+function ConjugationRows({ rows, language, showTranslations, showSentenceParts, visibleColumns = COMPLETE_FORM_COLUMNS }) {
   let activeGroup = "";
 
   return rows.map((row) => {
@@ -599,29 +795,36 @@ function ConjugationRows({ rows, language, showTranslations, showSentenceParts }
         showGroup={shouldRenderGroup}
         showTranslations={showTranslations}
         showSentenceParts={showSentenceParts}
+        visibleColumns={visibleColumns}
       />
     );
   });
 }
 
-function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts }) {
+function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts, visibleColumns }) {
   return (
     <>
       {showGroup && (
         <tr className="group-row">
-          <td colSpan="6">{GROUP_LABELS[row.group][language]}</td>
+          <td colSpan={visibleColumns.length + 2}>{GROUP_LABELS[row.group][language]}</td>
         </tr>
       )}
       <tr>
-        <td className="subject-cell">{row.subject}</td>
-        <td className="tense-cell">
+        <td className="subject-cell sticky-col sticky-subject">{row.subject}</td>
+        <td className="tense-cell sticky-col sticky-tense">
           <span>{row.tense}</span>
           {row.usageNote && <span className="usage-note">{row.usageNote}</span>}
         </td>
-        <SentenceCell sentence={row.affirmative} parts={row.breakdown.affirmative} translation={row.translations.affirmative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-        <SentenceCell sentence={row.negative} parts={row.breakdown.negative} translation={row.translations.negative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-        <SentenceCell sentence={row.questionPositive} parts={row.breakdown.questionPositive} translation={row.translations.questionPositive} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-        <SentenceCell sentence={row.questionNegative} parts={row.breakdown.questionNegative} translation={row.translations.questionNegative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
+        {visibleColumns.map((columnId) => (
+          <SentenceCell
+            key={columnId}
+            sentence={row[columnId]}
+            parts={row.breakdown[columnId]}
+            translation={row.translations[columnId]}
+            showTranslations={showTranslations}
+            showSentenceParts={showSentenceParts}
+          />
+        ))}
       </tr>
     </>
   );
@@ -692,6 +895,34 @@ function SentenceParts({ parts }) {
   );
 }
 
+function toggleSelectionGroup(current, values) {
+  const hasAllValues = values.every((value) => current.includes(value));
+  if (hasAllValues) return current.filter((item) => !values.includes(item));
+  return [...new Set([...current, ...values])];
+}
+
+function toggleSelection(current, value) {
+  return current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
+}
+
+function individualTenseButtonLabel(tenseId, language) {
+  const labels = {
+    simplePast: { en: "Simple", es: "Simple" },
+    pastPerfect: { en: "Perfect", es: "Perfecto" },
+    pastContinuous: { en: "Continuous", es: "Continuo" },
+    simplePresent: { en: "Simple", es: "Simple" },
+    presentPerfect: { en: "Perfect", es: "Perfecto" },
+    presentContinuous: { en: "Continuous", es: "Continuo" },
+    simpleFuture: { en: "Simple", es: "Simple" },
+    futurePerfect: { en: "Perfect", es: "Perfecto" },
+    futureContinuous: { en: "Continuous", es: "Continuo" },
+    simpleConditional: { en: "Simple", es: "Simple" },
+    perfectConditional: { en: "Perfect", es: "Perfecto" },
+    continuousConditional: { en: "Continuous", es: "Continuo" }
+  };
+
+  return labels[tenseId]?.[language] || labels[tenseId]?.en || tenseId;
+}
 function verbTypeLabel(type, t) {
   if (type === "be") return t("beVerb");
   if (type === "modal") return t("modalVerb");

@@ -1,13 +1,44 @@
-# Publishing SmartTense To GitHub Pages
+# Publishing SmartTense With GitHub
 
-This guide explains how to publish SmartTense as a static website with GitHub
-Pages, including how to use a custom subdomain.
+This guide explains how to keep the SmartTense repository updated and how to publish the web app with GitHub Pages.
 
-## Recommended Deployment Model
+## Repository Remote
 
-SmartTense is a static React/Vite app. For GitHub Pages, publish the generated
-`dist/` folder through GitHub Actions. Do not add a custom server unless the
-project later needs server-side features.
+The expected remote is:
+
+```text
+https://github.com/dafermen/SmartTense.git
+```
+
+Check it locally with:
+
+```bash
+git remote -v
+```
+
+## Recommended Local Release Flow
+
+Before pushing a UI, documentation, or data change:
+
+```bash
+npm test
+npm run build
+```
+
+Then commit and push:
+
+```bash
+git status
+git add .
+git commit -m "Update SmartTense documentation and UI"
+git push origin main
+```
+
+Use a more specific commit message when possible.
+
+## GitHub Pages Deployment Model
+
+SmartTense is a static React/Vite app. For GitHub Pages, publish the generated `dist/` folder through GitHub Actions. Do not add a custom server unless the project later needs server-side features.
 
 The repository includes this workflow:
 
@@ -15,8 +46,13 @@ The repository includes this workflow:
 .github/workflows/deploy-pages.yml
 ```
 
-The workflow runs tests, builds the Vite app, uploads `dist/`, and deploys it to
-GitHub Pages.
+The workflow:
+
+1. Runs `npm ci`.
+2. Runs `npm test`.
+3. Builds the app with `npm run build -- --base "$BASE_PATH"`.
+4. Uploads `dist/` as a Pages artifact.
+5. Deploys to GitHub Pages.
 
 ## Publish Without A Custom Domain
 
@@ -33,20 +69,20 @@ Steps:
 3. Go to `Settings` -> `Pages`.
 4. Under `Build and deployment`, choose `GitHub Actions`.
 5. Push to the `main` branch, or run the workflow manually from the `Actions` tab.
-6. Wait for the `Deploy web app to GitHub Pages` workflow to finish.
+6. Wait for the `Deploy SmartTense to GitHub Pages` workflow to finish.
 7. Open the Pages URL shown by GitHub.
 
-The workflow automatically builds with:
+When `PAGES_BASE_PATH` is not set, the workflow uses:
 
 ```text
-base=/REPOSITORY_NAME/
+/SmartTense/
 ```
 
-This is required because Vite assets must be loaded from the repository path.
+That value is required because Vite assets must be loaded from the repository path.
 
 ## Publish With A Custom Subdomain
 
-Yes, a subdomain can point to GitHub Pages. Example:
+A subdomain can point to GitHub Pages. Example:
 
 ```text
 smarttense.example.com
@@ -56,12 +92,7 @@ High-level steps:
 
 1. In GitHub, open the repository.
 2. Go to `Settings` -> `Pages`.
-3. Set `Custom domain` to your subdomain, for example:
-
-   ```text
-   smarttense.example.com
-   ```
-
+3. Set `Custom domain` to your subdomain, for example `smarttense.example.com`.
 4. Enable `Enforce HTTPS` after GitHub finishes provisioning the certificate.
 5. In your DNS provider, create a `CNAME` record:
 
@@ -71,8 +102,7 @@ High-level steps:
    Value: YOUR_GITHUB_USER.github.io
    ```
 
-6. In the GitHub repository, go to `Settings` -> `Secrets and variables` ->
-   `Actions` -> `Variables`.
+6. In the GitHub repository, go to `Settings` -> `Secrets and variables` -> `Actions` -> `Variables`.
 7. Add this repository variable:
 
    ```text
@@ -82,26 +112,21 @@ High-level steps:
 
 8. Re-run the deploy workflow.
 
-The `PAGES_BASE_PATH=/` value matters because a custom subdomain serves the app
-from the domain root, not from `/REPOSITORY_NAME/`.
+The `PAGES_BASE_PATH=/` value matters because a custom subdomain serves the app from the domain root, not from `/SmartTense/`.
 
 ## DNS Notes
 
-For a subdomain, use `CNAME`. For an apex/root domain such as `example.com`, use
-GitHub Pages' recommended `A` and `AAAA` records instead. A subdomain is simpler
-and is the recommended first setup.
+For a subdomain, use `CNAME`. For an apex/root domain such as `example.com`, use GitHub Pages' recommended `A` and `AAAA` records instead. A subdomain is simpler and is the recommended first setup.
 
 DNS changes can take minutes or hours to propagate depending on the DNS provider.
 
 ## Security Notes For GitHub Pages
 
-GitHub Pages is suitable for SmartTense because the app is static and the JSON
-import runs only in the user's browser.
+GitHub Pages is suitable for SmartTense because the app is static and JSON import runs only in the user's browser.
 
 Important limitation:
 
-- GitHub Pages does not use `public/_headers`. That file is useful on static
-  hosts such as Cloudflare Pages or Netlify, but GitHub Pages does not apply it.
+- GitHub Pages does not use `public/_headers`. That file is useful on static hosts such as Cloudflare Pages or Netlify, but GitHub Pages does not apply it.
 
 For GitHub Pages, keep these protections in the app itself:
 
@@ -127,8 +152,7 @@ Then push to `main` and verify the GitHub Actions deployment.
 
 If the page loads blank or assets return 404:
 
-- If using `github.io/REPOSITORY_NAME/`, remove `PAGES_BASE_PATH` or set it to
-  `/REPOSITORY_NAME/`.
+- If using `github.io/SmartTense/`, leave `PAGES_BASE_PATH` unset or set it to `/SmartTense/`.
 - If using a custom subdomain, set `PAGES_BASE_PATH` to `/`.
 
 If the custom domain does not work:

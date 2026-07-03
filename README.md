@@ -1,32 +1,36 @@
 # SmartTense
 
-SmartTense is an English verb tense trainer built with React, Vite, and Capacitor. It helps learners explore affirmative, negative, interrogative, and negative interrogative forms without seeing every tense at once.
+SmartTense is an English verb tense trainer built with React, Vite, and Capacitor. It helps learners study verb forms through a compact dashboard, focused affirmative practice, and a complete conjugation table.
 
 The app is designed for two audiences:
 
-- English learners who want a simple practice table with learner-language guidance.
-- Developers who want a small, readable React project that can run on web, iPhone, and Android.
+- English learners who want clear examples with learner-language guidance.
+- Developers who want a small React project that can run on the web, iPhone, and Android.
 
-## Features
+## Main Features
 
+- Home dashboard with current verb summary, progress, quick actions, a live example, and a recommended next practice.
+- Individual practice view focused on affirmative conjugation only.
+- Complete view with affirmative, negative, interrogative, and negative interrogative forms.
+- Toggleable visible columns in Complete so users can reduce visual load.
+- Multi-select tense and subject controls in Individual.
 - Learning levels: Basic, Intermediate, and Advanced.
 - Verb pattern filter: Regular -ED, AAA, ABB, ABC, ABA, BE, and Modal.
 - Search by verb label, learner-language meaning, principal forms, complement, or pattern.
 - Tense groups: Present, Past, Future, and Conditional.
-- Affirmative, negative, interrogative, and negative interrogative forms.
 - English and Spanish interface, with Spanish and French learner-language guides.
-- Responsive layout with mobile practice cards.
+- Responsive layout optimized for desktop and mobile.
 - Local JSON verb data with hardened import support for custom verb lists.
-- CSV and JSON export.
+- CSV and JSON export from Complete.
 - Capacitor projects for iOS and Android.
 
 ## Screens And Main Flow
 
-1. Search or choose a verb from the filter panel above the table.
-2. Filter by verb pattern, learning level, subject, or tense group.
-3. Review the table on desktop or practice cards on mobile.
-4. Use the collapsible left menu to switch between Home, Documentation, and About.
-5. Export the result as CSV or JSON if needed.
+1. Start on Home to see progress, the current verb, a short example, and quick actions.
+2. Open Individual when you want focused affirmative practice with selected tenses and subjects.
+3. Open Complete when you want the full table and comparison across sentence forms.
+4. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
+5. Export CSV or JSON from Complete if you need a generated table snapshot.
 
 ## Tech Stack
 
@@ -40,25 +44,26 @@ The app is designed for two audiences:
 
 ```text
 SmartTense/
-├── android/                    Android Capacitor project
-├── ios/                        iOS Capacitor project
-├── public/
-│   ├── assets/                 Static visual assets
-│   └── data/verbs.json         Default editable verb data
-├── src/
-│   ├── App.jsx                 Main React interface and app state
-│   ├── conjugation.js          Verb tense generation engine
-│   ├── i18n.js                 English/Spanish UI strings
-│   ├── learnerLanguages/       Learner-language explanations and translations
-│   ├── styles.css              Responsive visual design
-│   └── data/
-│       ├── defaultData.js      Embedded fallback data and tense metadata
-│       └── validation.js       JSON import validation
-├── tests/                      Unit tests for grammar and validation
-├── .github/workflows/          GitHub Pages deployment workflow
-├── capacitor.config.json       Capacitor app settings
-├── package.json                Scripts and dependencies
-└── README.md                   Project overview
+  android/                    Android Capacitor project
+  ios/                        iOS Capacitor project
+  public/
+    assets/                   Static visual assets
+    data/verbs.json           Default editable verb data
+  src/
+    App.jsx                   Main React interface and app state
+    conjugation.js            Verb tense generation engine
+    i18n.js                   English/Spanish UI strings
+    learnerLanguages/         Learner-language guidance
+    styles.css                Responsive visual design
+    data/
+      defaultData.js          Embedded fallback data and tense metadata
+      validation.js           JSON import validation
+  tests/                      Unit tests for grammar and validation
+  docs/                       User, developer, data, and GitHub guides
+  .github/workflows/          GitHub Actions workflows
+  capacitor.config.json       Capacitor app settings
+  package.json                Scripts and dependencies
+  README.md                   Project overview
 ```
 
 ## Requirements
@@ -69,7 +74,7 @@ SmartTense/
 - Android Studio for Android builds.
 - JDK 21 for the Android Gradle build used by the generated Capacitor project.
 
-## Run Locally
+## Run Locally On Windows
 
 Install dependencies:
 
@@ -84,6 +89,13 @@ npm run dev
 ```
 
 Open the URL shown by Vite, usually `http://127.0.0.1:5173/` or the next available port.
+
+If PowerShell blocks `npm.ps1`, run npm through `npm.cmd`:
+
+```powershell
+npm.cmd install
+npm.cmd run dev
+```
 
 ## Test And Build
 
@@ -113,16 +125,11 @@ SmartTense includes a GitHub Actions workflow for GitHub Pages:
 .github/workflows/deploy-pages.yml
 ```
 
-For a normal GitHub Pages project URL such as
-`https://YOUR_GITHUB_USER.github.io/REPOSITORY_NAME/`, enable GitHub Pages with
-`GitHub Actions` as the source and push to `main`.
+For a normal GitHub Pages project URL such as `https://YOUR_GITHUB_USER.github.io/REPOSITORY_NAME/`, enable GitHub Pages with `GitHub Actions` as the source and push to `main`.
 
-For a custom subdomain such as `smarttense.example.com`, point a DNS `CNAME`
-record to `YOUR_GITHUB_USER.github.io`, set the repository variable
-`PAGES_BASE_PATH` to `/`, and configure the custom domain in repository
-`Settings` -> `Pages`.
+For a custom subdomain such as `smarttense.example.com`, point a DNS `CNAME` record to `YOUR_GITHUB_USER.github.io`, set the repository variable `PAGES_BASE_PATH` to `/`, and configure the custom domain in repository `Settings` -> `Pages`.
 
-See `docs/GITHUB_PAGES.md` for the full step-by-step guide.
+See `docs/GITHUB_PAGES.md` for the full guide.
 
 ## Mobile Builds With Capacitor
 
@@ -146,11 +153,7 @@ Open the Android project in Android Studio:
 npm run cap:open:android
 ```
 
-Native app settings live in:
-
-```text
-capacitor.config.json
-```
+Native app settings live in `capacitor.config.json`.
 
 Current native app id:
 
@@ -162,69 +165,36 @@ Change this id before publishing if you have a final App Store or Play Store bun
 
 ## Data
 
-Default verb data lives in:
+Default verb data lives in `public/data/verbs.json`.
 
-```text
-public/data/verbs.json
-```
+The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 
-The app also includes embedded fallback data in:
+Imported JSON only changes the current browser session; it does not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
 
-```text
-src/data/defaultData.js
-```
-
-The fallback data keeps the app usable if the browser cannot load `public/data/verbs.json`. Imported JSON only changes the current browser session; it does not overwrite project files.
-
-Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
-
-## JSON Shape
-
-```json
-{
-  "schemaVersion": 1,
-  "updatedAt": "2026-06-28",
-  "verbs": [
-    {
-      "id": "write",
-      "label": "to write",
-      "meaningEs": "escribir",
-      "meanings": {
-        "es": "escribir"
-      },
-      "base": "write",
-      "third": "writes",
-      "past": "wrote",
-      "participle": "written",
-      "gerund": "writing",
-      "object": "a message",
-      "objectEs": "un mensaje",
-      "objects": {
-        "es": "un mensaje"
-      }
-    }
-  ]
-}
-```
-
-`meaningEs` and `objectEs` are still supported for current Spanish learner data. New data can also use `meanings` and `objects` maps so future learner languages, such as French, can be added without changing the schema again.
-
-For more detail about custom data files, see `docs/DATA_SCHEMA.md`.
+For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 
 ## Documentation
 
-- `docs/USER_GUIDE.md`: plain-language guide for learners and non-technical users.
+- `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.
-- `docs/GITHUB_PAGES.md`: web publishing guide for GitHub Pages and custom subdomains.
+- `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.
 
-## Current Build Notes
+## Current Validation
 
-- Web tests pass with `npm test`.
-- Web build and Capacitor sync pass with `npm run cap:sync`.
-- iOS build was verified with Xcode command-line tools.
-- Android native build requires JDK 21. If Android compilation fails with `invalid source release: 21`, switch your Java environment to JDK 21 and run the Gradle build again.
+Before publishing a change, run:
+
+```bash
+npm test
+npm run build
+```
+
+For native wrapper updates, also run:
+
+```bash
+npm run cap:sync
+```
 
 ## License
 

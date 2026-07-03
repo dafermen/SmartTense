@@ -1,59 +1,96 @@
 # SmartTense User Guide
 
-SmartTense helps you study English verb tenses by creating example sentences from a verb, a subject, and a learning level.
+SmartTense helps you study English verb tenses by creating example sentences from a verb, a subject, and a learning level. The app is organized into focused screens so you do not have to see every form at the same time.
 
-## What You Can Practice
+## Main Screens
 
-Each row shows four forms:
+### Home
+
+Home is the starting dashboard. It shows:
+
+- The current verb and learner-language meaning.
+- Quick actions for Individual and Complete.
+- A current affirmative example with sentence parts and translation when those options are enabled.
+- Progress for verbs already viewed in this browser.
+- Current level, number of visible tenses, and number of matching verbs.
+- A recommended next practice.
+
+Use Home when you want to quickly continue studying without opening the full table.
+
+### Individual
+
+Individual is focused practice. It shows affirmative sentences only.
+
+Use it when you want less visual noise and want to focus on one or more tenses and subjects. You can enable several tense buttons at the same time, and you can enable several subjects at the same time.
+
+Tense groups in Individual:
+
+- Past: Simple, Perfect, Continuous.
+- Present: Simple, Perfect, Continuous.
+- Future: Simple, Perfect, Continuous.
+- Conditional: Simple, Perfect, Continuous.
+
+You can select or clear a whole tense group by pressing the group label. You can also select or clear all subjects from the subject header.
+
+### Complete
+
+Complete shows the full conjugation table. Each row can include:
 
 - Affirmative form: `He writes a message.`
 - Negative form: `He does not write a message.`
 - Interrogative form: `Does he write a message?`
 - Negative interrogative form: `Does he not write a message?`
 
-The app can show the interface in English or Spanish. It also includes a learner-language guide line for each generated sentence. Today the learner guide supports Spanish and French.
+Use Display options to choose which forms are visible. For example, you can hide negative and interrogative forms when you only want to compare subjects and tenses.
 
-The collapsible left menu has three sections:
+On desktop, Subject and Tense stay visible while you scroll horizontally. On mobile, the app uses compact practice cards instead of a wide table.
 
-- Home: the main practice table and filters.
-- Documentation: a short in-app guide.
-- About: project purpose and platform notes.
+## Languages
+
+SmartTense has two language settings:
+
+- Interface language: controls app labels and navigation.
+- Learner language: controls meanings, translations, and usage notes.
+
+The interface currently supports English and Spanish. The learner guide currently supports Spanish and French.
 
 ## Learning Levels
 
-SmartTense separates the table into levels so beginners do not have to see every tense at once.
+SmartTense separates tenses into levels so beginners do not have to see everything at once.
 
 - Basic: common starting tenses such as Simple Present, Present Continuous, Simple Past, and Simple Future.
 - Intermediate: adds more tenses, including Present Perfect, Past Continuous, Future Continuous, and Simple Conditional.
 - Advanced: shows the full tense set, including perfect continuous and advanced conditional forms.
 
-## Filters
+## Search And Filters
 
-Use the filter panel above the table to choose:
+Use the filter panel to choose:
 
 - Search text for a verb, learner-language meaning, or form such as `wrote`.
 - Verb.
 - Verb pattern, such as `ABC` or `Regular -ED`.
-- Subject.
-- Tense group.
 - Learning level.
-- Interface language.
-- Learner language.
-
-You can also enable all subjects to compare how the same tense changes from `I` to `he`, `she`, `we`, and `they`.
+- Subject and tense group in Complete.
+- Interface language and learner language.
+- Display options such as translations and sentence parts.
 
 The verb pattern filter is useful when you want to practice one irregular family at a time. For example, `ABC` shows verbs like `sing / sang / sung`, while `ABB` shows verbs like `buy / bought / bought`.
 
 ## Mobile Use
 
-On a phone, SmartTense shows compact practice cards. The filters are collapsible so the screen has more room for examples.
+SmartTense is designed to save space on phones:
+
+- Home uses compact cards and two-column sections when the screen is wide enough.
+- Individual keeps affirmative practice compact and grouped by tense.
+- Complete switches from a wide table to mobile practice cards.
+- Display options are collapsible.
 
 Recommended mobile flow:
 
-1. Open filters.
-2. Pick a verb, subject, and level.
-3. Close filters.
-4. Practice with the cards.
+1. Start on Home and choose Individual or Complete.
+2. Use only the filters you need.
+3. Collapse Display options after changing them.
+4. In Individual, select only the tense groups and subjects you want to practice now.
 
 ## Importing JSON
 
@@ -63,6 +100,11 @@ For safety, SmartTense rejects files that are too large, do not use the `.json` 
 
 ## Exporting
 
-Use Export table to download a CSV file for spreadsheets.
+Export is available from Complete.
 
-Use Export JSON to save the current generated rows and filters in a structured file.
+- CSV: useful for spreadsheets.
+- JSON: useful when you want a structured snapshot of generated rows and active filters.
+
+## Progress
+
+Progress is local to the browser. It counts verbs you have viewed on the current device and browser. It is not uploaded to a server and does not require an account.
