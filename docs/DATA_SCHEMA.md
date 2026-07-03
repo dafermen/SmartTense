@@ -130,7 +130,7 @@ Use `type: "modal"` for modal-style entries. `actionBase`, `actionParticiple`, a
 
 ## Settings Data Manager
 
-Settings provides a browser-side administrator for this schema. It can import/export the database, add a draft verb, review an indexed/searchable/sortable table, edit a single row, enable Bulk edit for documented fields, delete draft rows, restore demo data, and save or discard the draft.
+Settings provides a browser-side administrator for this schema. It can import/export the database, add a draft verb, review an indexed/searchable/sortable/paginated table, edit a single row, cancel an in-progress row edit, enable Bulk edit for documented fields, delete draft rows, restore demo data, and save or discard the draft.
 
 The row editor and bulk editor intentionally expose only documented fields. Updating a draft runs the same validation used by file import, so duplicate IDs, missing required fields, unsupported types, unknown fields, and unsafe strings are rejected before `appData` changes. Update and delete actions require browser confirmation.
 

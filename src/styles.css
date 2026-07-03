@@ -2263,9 +2263,48 @@ th {
   color: #9b2f2f;
 }
 
+.data-table-pagination {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(150px, 190px) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.data-table-pagination > span,
+.pagination-buttons span {
+  color: #596579;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.pagination-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pagination-buttons button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
 @media (max-width: 720px) {
   .bulk-edit-controls {
     grid-template-columns: 1fr;
+  }
+
+  .data-table-pagination {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination-buttons {
+    justify-content: stretch;
+  }
+
+  .pagination-buttons button {
+    flex: 1 1 120px;
   }
 }
 .bulk-edit-table th:last-child,

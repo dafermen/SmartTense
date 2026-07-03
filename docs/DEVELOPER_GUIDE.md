@@ -174,7 +174,7 @@ For built-in data, update both files:
 
 Keeping both in sync preserves fallback behavior.
 
-For temporary user testing, use Settings -> Import JSON, Settings -> Edit on one row, or Settings -> Bulk edit in the app.
+For temporary user testing, use Settings -> Import JSON, Settings -> Edit on one row, or Settings -> Bulk edit in the app. The Settings data table is indexed, searchable, sortable, and paginated; single-row edits keep a backup so Cancel can restore the row before saving.
 
 See `docs/DATA_SCHEMA.md` for the accepted fields.
 

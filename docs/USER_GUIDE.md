@@ -55,10 +55,12 @@ Settings keeps configuration and data tools in one place. It includes:
 - Restore default data when you want to return to the demo database for this browser session.
 - Add verb to create a new draft entry.
 - Data table to search, sort, and review verb rows before editing.
-- Single-row Edit for focused changes, or Bulk edit when several rows need updates.
+- Single-row Edit for focused changes, with Cancel to leave the row unchanged.
+- Pagination controls for large verb lists, including rows-per-page selection.
+- Bulk edit when several rows need updates.
 - Update and Delete actions ask for confirmation before applying changes.
 
-Settings changes to the verb database are local to the current browser session. The data table opens in review mode first; press Edit on one row for a focused change, or Bulk edit to make the whole filtered table editable. Use Export database when you want to keep a copy or send the updated data to a developer.
+Settings changes to the verb database are local to the current browser session. The data table opens in review mode first; press Edit on one row for a focused change, Cancel to discard that row edit, or Bulk edit to make the whole filtered page editable. Use Export database when you want to keep a copy or send the updated data to a developer.
 
 ## Languages
 

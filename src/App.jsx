@@ -20,6 +20,7 @@ const INDIVIDUAL_TENSE_GROUPS = [
 const INDIVIDUAL_DEFAULT_TENSE_IDS = ["simplePresent"];
 const COMPLETE_FORM_COLUMNS = ["affirmative", "negative", "questionPositive", "questionNegative"];
 const DATA_MANAGER_FIELDS = ["id", "label", "meaningEs", "base", "third", "past", "participle", "gerund", "object", "objectEs", "type"];
+const DATA_TABLE_PAGE_SIZES = [10, 25, 50, 100];
 const EMPTY_VERB_FORM = {
   id: "",
   label: "",
@@ -78,7 +79,10 @@ export default function App() {
   const [bulkEditSearch, setBulkEditSearch] = useState("");
   const [isBulkEditMode, setIsBulkEditMode] = useState(false);
   const [editingDraftIndex, setEditingDraftIndex] = useState(null);
+  const [editingDraftBackup, setEditingDraftBackup] = useState(null);
   const [dataTableSort, setDataTableSort] = useState({ field: "index", direction: "asc" });
+  const [dataTablePage, setDataTablePage] = useState(1);
+  const [dataTablePageSize, setDataTablePageSize] = useState(25);
 
   const t = (key) => translate(interfaceLanguage, key);
 
@@ -325,6 +329,7 @@ export default function App() {
       applyVerbData(payload);
       setIsBulkEditMode(false);
       setEditingDraftIndex(null);
+      setEditingDraftBackup(null);
       showTimedAlert(t("dataSaved"));
     } catch (error) {
       console.error(error);
@@ -337,6 +342,7 @@ export default function App() {
     setNewVerbForm(EMPTY_VERB_FORM);
     setIsBulkEditMode(false);
     setEditingDraftIndex(null);
+    setEditingDraftBackup(null);
     showTimedAlert(t("draftDiscarded"));
   }
 
@@ -346,6 +352,7 @@ export default function App() {
     setNewVerbForm(EMPTY_VERB_FORM);
     setIsBulkEditMode(false);
     setEditingDraftIndex(null);
+    setEditingDraftBackup(null);
     showTimedAlert(t("defaultDataRestored"));
   }
 
@@ -373,6 +380,7 @@ export default function App() {
       return next;
     });
     setEditingDraftIndex(null);
+    setEditingDraftBackup(null);
   }
 
   function handleNewVerbField(field, value) {
@@ -382,11 +390,25 @@ export default function App() {
   function handleToggleBulkEditMode() {
     setIsBulkEditMode((current) => !current);
     setEditingDraftIndex(null);
+    setEditingDraftBackup(null);
   }
 
   function handleEditSingleVerb(index) {
     setIsBulkEditMode(false);
     setEditingDraftIndex(index);
+    setEditingDraftBackup(cloneVerbData(dataDraft.verbs[index]));
+  }
+
+  function handleCancelSingleEdit(index) {
+    if (editingDraftBackup) {
+      setDataDraft((current) => {
+        const next = cloneVerbData(current);
+        next.verbs[index] = cloneVerbData(editingDraftBackup);
+        return next;
+      });
+    }
+    setEditingDraftIndex(null);
+    setEditingDraftBackup(null);
   }
 
   function handleDataTableSort(field) {
@@ -394,6 +416,17 @@ export default function App() {
       field,
       direction: current.field === field && current.direction === "asc" ? "desc" : "asc"
     }));
+    setDataTablePage(1);
+  }
+
+  function handleBulkEditSearch(value) {
+    setBulkEditSearch(value);
+    setDataTablePage(1);
+  }
+
+  function handleDataTablePageSize(value) {
+    setDataTablePageSize(Number(value));
+    setDataTablePage(1);
   }
   function handleAddDraftVerb(event) {
     event.preventDefault();
@@ -597,12 +630,16 @@ export default function App() {
 
   function renderSettingsView() {
     const dataSummary = getDataSummary(dataDraft);
-    const visibleDraftVerbs = sortDraftEntries(
+    const filteredDraftVerbs = sortDraftEntries(
       dataDraft.verbs
         .map((verb, index) => ({ verb, index }))
         .filter(({ verb }) => matchesVerbSearch(verb, bulkEditSearch)),
       dataTableSort
     );
+    const totalDataTablePages = Math.max(1, Math.ceil(filteredDraftVerbs.length / dataTablePageSize));
+    const currentDataTablePage = Math.min(dataTablePage, totalDataTablePages);
+    const dataTableStart = (currentDataTablePage - 1) * dataTablePageSize;
+    const visibleDraftVerbs = filteredDraftVerbs.slice(dataTableStart, dataTableStart + dataTablePageSize);
     const hasEditableRows = isBulkEditMode || editingDraftIndex !== null;
 
     return (
@@ -688,7 +725,7 @@ export default function App() {
             <div className="bulk-edit-controls">
               <TextField label={t("searchDraft")}
                 value={bulkEditSearch}
-                onChange={setBulkEditSearch}
+                onChange={handleBulkEditSearch}
                 placeholder={t("verbSearchPlaceholder")}
               />
               <div className="settings-actions settings-actions-wrap">
@@ -726,7 +763,7 @@ export default function App() {
                   const isRowEditable = isBulkEditMode || editingDraftIndex === index;
                   return (
                     <tr key={`${verb.id}-${index}`} className={isRowEditable ? "editing-row" : ""}>
-                      <td className="index-cell">{displayIndex + 1}</td>
+                      <td className="index-cell">{dataTableStart + displayIndex + 1}</td>
                       {DATA_MANAGER_FIELDS.map((field) => (
                         <td key={field}>
                           {isRowEditable ? (
@@ -747,7 +784,14 @@ export default function App() {
                       <td><span className="pattern-pill">{verbPatternLabel(getVerbSummary(verb).pattern, t)}</span></td>
                       <td>
                         <div className="row-action-group">
-                          {isRowEditable ? <button type="button" className="compact-action" onClick={() => handleSaveDataDraft(true)}>{t("updateRecord")}</button> : <button type="button" className="compact-action" onClick={() => handleEditSingleVerb(index)}>{t("editRecord")}</button>}
+                          {isRowEditable ? (
+                            <>
+                              <button type="button" className="compact-action" onClick={() => handleSaveDataDraft(true)}>{t("updateRecord")}</button>
+                              {!isBulkEditMode && <button type="button" className="compact-action" onClick={() => handleCancelSingleEdit(index)}>{t("cancelEdit")}</button>}
+                            </>
+                          ) : (
+                            <button type="button" className="compact-action" onClick={() => handleEditSingleVerb(index)}>{t("editRecord")}</button>
+                          )}
                           <button type="button" className="compact-action danger-action" onClick={() => handleDeleteDraftVerb(index)}>{t("deleteVerb")}</button>
                         </div>
                       </td>
@@ -757,7 +801,18 @@ export default function App() {
               </tbody>
             </table>
           </div>
-          {visibleDraftVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
+          <div className="data-table-pagination" aria-label={t("pagination")}>
+            <span>{t("showingRows")} {filteredDraftVerbs.length === 0 ? 0 : dataTableStart + 1}-{Math.min(dataTableStart + visibleDraftVerbs.length, filteredDraftVerbs.length)} {t("of")} {filteredDraftVerbs.length}</span>
+            <SelectField label={t("rowsPerPage")} value={String(dataTablePageSize)} onChange={handleDataTablePageSize} variant="light">
+              {DATA_TABLE_PAGE_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
+            </SelectField>
+            <div className="pagination-buttons">
+              <button type="button" className="compact-action" onClick={() => setDataTablePage((page) => Math.max(1, page - 1))} disabled={currentDataTablePage <= 1}>{t("previousPage")}</button>
+              <span>{currentDataTablePage} / {totalDataTablePages}</span>
+              <button type="button" className="compact-action" onClick={() => setDataTablePage((page) => Math.min(totalDataTablePages, page + 1))} disabled={currentDataTablePage >= totalDataTablePages}>{t("nextPage")}</button>
+            </div>
+          </div>
+          {filteredDraftVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
         </section>
       </section>
     );
