@@ -18,14 +18,14 @@ git remote -v
 
 ## Recommended Local Release Flow
 
-Before pushing a UI, documentation, or data change:
+Before pushing a UI, documentation, Settings data export, or source data change:
 
 ```bash
 npm test
 npm run build
 ```
 
-Then commit and push:
+If Settings was used to edit verbs, export the database first and intentionally update `public/data/verbs.json` plus `src/data/defaultData.js` before committing. Then commit and push:
 
 ```bash
 git status
@@ -122,7 +122,7 @@ DNS changes can take minutes or hours to propagate depending on the DNS provider
 
 ## Security Notes For GitHub Pages
 
-GitHub Pages is suitable for SmartTense because the app is static and JSON import runs only in the user's browser.
+GitHub Pages is suitable for SmartTense because the app is static and JSON import plus Settings data edits run only in the user's browser.
 
 Important limitation:
 
@@ -131,6 +131,7 @@ Important limitation:
 For GitHub Pages, keep these protections in the app itself:
 
 - Strict JSON validation in `src/data/validation.js`.
+- Settings draft validation before local database changes are applied.
 - File type and file size checks before import.
 - No `eval`.
 - No `dangerouslySetInnerHTML`.
@@ -146,7 +147,7 @@ npm run build
 npm audit --audit-level=moderate
 ```
 
-Then push to `main` and verify the GitHub Actions deployment.
+Then push to `main` and verify the GitHub Actions deployment. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
 
 ## Troubleshooting
 

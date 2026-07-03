@@ -6,11 +6,11 @@ This guide explains how the source code is organized and how to work on the app 
 
 SmartTense is intentionally small. Most behavior is split into these areas:
 
-- `src/App.jsx`: React state, page composition, controls, import/export, and rendering.
+- `src/App.jsx`: React state, page composition, controls, import/export, Settings data manager, and rendering.
 - `src/conjugation.js`: grammar engine that generates sentence rows.
 - `src/learnerLanguages/`: learner-language translations, usage notes, and explanations.
 - `src/data/`: default data, tense metadata, and JSON validation.
-- `src/styles.css`: responsive layout for Home, Individual, Complete, mobile cards, and shared controls.
+- `src/styles.css`: responsive layout for Home, Individual, Complete, Settings, mobile cards, and shared controls.
 
 The app loads editable verb data from `public/data/verbs.json`. If that request fails, it uses the embedded `DEFAULT_DATA` from `src/data/defaultData.js` so the UI can still run.
 
@@ -42,7 +42,7 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 
 1. `App.jsx` loads verb data with `fetch('/data/verbs.json')`.
 2. `validateVerbData` checks the JSON shape before state is updated.
-3. The selected verb, search text, verb pattern, subject, level, tense group, page, and display preferences are stored in React state and persisted in local storage.
+3. The selected verb, search text, verb pattern, subject, level, tense group, page, Settings draft data, and display preferences are stored in React state; user-facing preferences and progress are persisted in local storage.
 4. Search and pattern filtering reduce the verb list shown in selectors and recommendations.
 5. `getVerbSummary` and `classifyVerbPattern` power the verb profile and pattern filter.
 6. `getTensesByGroup` filters visible Complete tenses by group and learning level.
@@ -62,7 +62,7 @@ Key responsibilities:
 - Handle imports and exports, including client-side file checks before import.
 - Track filters, page selection, visible Complete columns, and Individual selections.
 - Keep interface language and learner language as separate settings.
-- Render Home, Individual, Complete, Documentation, and About.
+- Render Home, Individual, Complete, Settings, Documentation, and About.
 
 ### `src/conjugation.js`
 
@@ -174,7 +174,7 @@ For built-in data, update both files:
 
 Keeping both in sync preserves fallback behavior.
 
-For temporary user testing, use Import JSON in the app.
+For temporary user testing, use Settings -> Import JSON or Settings -> Bulk edit in the app.
 
 See `docs/DATA_SCHEMA.md` for the accepted fields.
 
@@ -191,7 +191,7 @@ Before publishing, review:
 - `src/data/validation.js` when adding new JSON fields.
 - `docs/GITHUB_PAGES.md` for GitHub Pages, custom subdomains, and the Vite base path used by deployment.
 
-If a new JSON field is added, update `ALLOWED_VERB_KEYS`, documentation, and validation tests in the same change.
+If a new JSON field is added, update `ALLOWED_VERB_KEYS`, `DATA_MANAGER_FIELDS`, documentation, and validation tests in the same change.
 
 ## Capacitor Notes
 
@@ -220,6 +220,7 @@ The workflow supports the repository variable `PAGES_BASE_PATH`:
 2. Choose a license and add a `LICENSE` file if the repository will be public.
 3. Replace `com.smarttense.app` in `capacitor.config.json` with the final bundle id if needed.
 4. Run `npm test` and `npm run build`.
-5. Run `npm audit` and review dependency findings.
-6. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
-7. Run `npm run cap:sync` if native projects should include the latest web build.
+5. If Settings was used to edit the database, export the database JSON and intentionally copy it into `public/data/verbs.json`; then keep `src/data/defaultData.js` aligned if the fallback should change.
+6. Run `npm audit` and review dependency findings.
+7. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
+8. Run `npm run cap:sync` if native projects should include the latest web build.

@@ -10,7 +10,7 @@ const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "individual", "complete", "documentation", "about"];
+const MENU_ITEMS = ["home", "individual", "complete", "settings", "documentation", "about"];
 const INDIVIDUAL_TENSE_GROUPS = [
   { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
   { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
@@ -19,6 +19,20 @@ const INDIVIDUAL_TENSE_GROUPS = [
 ];
 const INDIVIDUAL_DEFAULT_TENSE_IDS = ["simplePresent"];
 const COMPLETE_FORM_COLUMNS = ["affirmative", "negative", "questionPositive", "questionNegative"];
+const DATA_MANAGER_FIELDS = ["id", "label", "meaningEs", "base", "third", "past", "participle", "gerund", "object", "objectEs", "type"];
+const EMPTY_VERB_FORM = {
+  id: "",
+  label: "",
+  meaningEs: "",
+  base: "",
+  third: "",
+  past: "",
+  participle: "",
+  gerund: "",
+  object: "",
+  objectEs: "",
+  type: ""
+};
 
 export default function App() {
   const [storedSettings] = useState(readStoredSettings);
@@ -58,6 +72,10 @@ export default function App() {
   });
   const [alert, setAlert] = useState(null);
   const fileInputRef = useRef(null);
+  const settingsFileInputRef = useRef(null);
+  const [dataDraft, setDataDraft] = useState(() => cloneVerbData(DEFAULT_DATA));
+  const [newVerbForm, setNewVerbForm] = useState(EMPTY_VERB_FORM);
+  const [bulkEditSearch, setBulkEditSearch] = useState("");
 
   const t = (key) => translate(interfaceLanguage, key);
 
@@ -103,6 +121,10 @@ export default function App() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    setDataDraft(cloneVerbData(appData));
+  }, [appData]);
 
   useEffect(() => {
     if (!alert) return undefined;
@@ -262,16 +284,100 @@ export default function App() {
 
     try {
       validateImportFile(file);
-      // Imported data is kept in React state only; it never overwrites local files.
       const payload = validateVerbData(JSON.parse(await file.text()));
-      setAppData(payload);
-      setVerbId(payload.verbs[0]?.id ?? "");
+      applyVerbData(payload);
       showTimedAlert(t("imported"));
     } catch (error) {
       console.error(error);
       showTimedAlert(t("invalidJson"), "error");
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = "";
+      if (settingsFileInputRef.current) settingsFileInputRef.current.value = "";
+    }
+  }
+
+  function applyVerbData(payload) {
+    const safePayload = cloneVerbData(payload);
+    setAppData(safePayload);
+    setDataDraft(safePayload);
+    setVerbId((current) => safePayload.verbs.some((verb) => verb.id === current) ? current : safePayload.verbs[0]?.id ?? "");
+  }
+
+  function handleExportDataJson() {
+    try {
+      const payload = validateVerbData(buildVerbPayload(dataDraft));
+      downloadText(`${JSON.stringify(payload, null, 2)}\n`, "smarttense-verbs.json", "application/json");
+      showTimedAlert(t("dataExported"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("draftInvalid"), "error");
+    }
+  }
+
+  function handleSaveDataDraft() {
+    try {
+      const payload = validateVerbData(buildVerbPayload(dataDraft));
+      applyVerbData(payload);
+      showTimedAlert(t("dataSaved"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("draftInvalid"), "error");
+    }
+  }
+
+  function handleDiscardDataDraft() {
+    setDataDraft(cloneVerbData(appData));
+    setNewVerbForm(EMPTY_VERB_FORM);
+    showTimedAlert(t("draftDiscarded"));
+  }
+
+  function handleRestoreDefaultData() {
+    if (!window.confirm(t("restoreDefaultConfirm"))) return;
+    applyVerbData(DEFAULT_DATA);
+    setNewVerbForm(EMPTY_VERB_FORM);
+    showTimedAlert(t("defaultDataRestored"));
+  }
+
+  function handleBulkVerbChange(index, field, value) {
+    setDataDraft((current) => {
+      const next = cloneVerbData(current);
+      const verb = { ...next.verbs[index] };
+      if (field === "type" && value === "") {
+        delete verb.type;
+      } else {
+        verb[field] = value;
+      }
+      next.verbs[index] = verb;
+      return next;
+    });
+  }
+
+  function handleDeleteDraftVerb(index) {
+    setDataDraft((current) => {
+      if (current.verbs.length <= 1) return current;
+      const next = cloneVerbData(current);
+      next.verbs.splice(index, 1);
+      return next;
+    });
+  }
+
+  function handleNewVerbField(field, value) {
+    setNewVerbForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function handleAddDraftVerb(event) {
+    event.preventDefault();
+    const newVerb = cleanVerbForm(newVerbForm);
+
+    try {
+      const payload = validateVerbData(buildVerbPayload({ ...dataDraft, verbs: [...dataDraft.verbs, newVerb] }));
+      setDataDraft(payload);
+      setNewVerbForm(EMPTY_VERB_FORM);
+      setBulkEditSearch(newVerb.id);
+      showTimedAlert(t("verbAddedToDraft"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("draftInvalid"), "error");
     }
   }
 
@@ -411,7 +517,9 @@ export default function App() {
         </section>
       </section>
     );
-  }  function renderFilterPanel() {
+  }
+
+  function renderFilterPanel() {
     const isIndividualPage = activePage === "individual";
     const isCompletePage = activePage === "complete";
     return (
@@ -453,6 +561,135 @@ export default function App() {
           </div>
         </details>
         {filteredVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
+      </section>
+    );
+  }
+
+  function renderSettingsView() {
+    const draftPayload = buildVerbPayload(dataDraft);
+    const dataSummary = getDataSummary(draftPayload);
+    const visibleDraftVerbs = dataDraft.verbs
+      .map((verb, index) => ({ verb, index }))
+      .filter(({ verb }) => matchesVerbSearch(verb, bulkEditSearch));
+
+    return (
+      <section className="settings-page" aria-label={t("settings")}>
+        <div className="settings-header">
+          <div>
+            <p className="eyebrow">{t("settings")}</p>
+            <h2>{t("settingsTitle")}</h2>
+            <p>{t("settingsIntro")}</p>
+          </div>
+          <div className="settings-actions">
+            <button type="button" onClick={handleSaveDataDraft}>{t("saveDataChanges")}</button>
+            <button type="button" onClick={handleDiscardDataDraft}>{t("discardDraft")}</button>
+          </div>
+        </div>
+
+        <section className="settings-grid">
+          <article className="settings-card">
+            <p className="eyebrow">{t("generalSettings")}</p>
+            <div className="settings-control-grid">
+              <SelectField label={t("interfaceLanguage")} value={interfaceLanguage} onChange={setInterfaceLanguage} variant="light">
+                <option value="en">English</option>
+                <option value="es">Espa&ntilde;ol</option>
+              </SelectField>
+              <SelectField label={t("learnerLanguage")} value={learnerLanguage} onChange={setLearnerLanguage} variant="light">
+                {SUPPORTED_LEARNER_LANGUAGES.map((entry) => <option key={entry.id} value={entry.id}>{entry.label}</option>)}
+              </SelectField>
+              <label className="check-row check-row-light"><input type="checkbox" checked={showTranslations} onChange={(event) => setShowTranslations(event.target.checked)} /><span>{t("showTranslations")}</span></label>
+              <label className="check-row check-row-light"><input type="checkbox" checked={showSentenceParts} onChange={(event) => setShowSentenceParts(event.target.checked)} /><span>{t("showSentenceParts")}</span></label>
+            </div>
+            <button type="button" className="reset-progress-button" onClick={handleResetProgress}>{t("resetProgress")}</button>
+          </article>
+
+          <article className="settings-card">
+            <p className="eyebrow">{t("dataManager")}</p>
+            <dl className="data-summary-grid">
+              <div><dt>{t("verbs")}</dt><dd>{dataSummary.total}</dd></div>
+              <div><dt>{t("updatedAt")}</dt><dd>{dataSummary.updatedAt}</dd></div>
+              <div><dt>{t("schemaVersion")}</dt><dd>{dataSummary.schemaVersion}</dd></div>
+              <div><dt>{t("patterns")}</dt><dd>{dataSummary.patterns}</dd></div>
+            </dl>
+            <div className="settings-actions settings-actions-wrap">
+              <label className="import-button import-button-light">
+                <input ref={settingsFileInputRef} type="file" accept="application/json,.json" onChange={handleImportJson} />
+                {t("importJson")}
+              </label>
+              <button type="button" onClick={handleExportDataJson}>{t("exportDatabase")}</button>
+              <button type="button" onClick={handleRestoreDefaultData}>{t("restoreDefaultData")}</button>
+            </div>
+            <p className="settings-note">{t("dataManagerNote")}</p>
+          </article>
+        </section>
+
+        <section className="settings-card add-verb-card">
+          <div className="settings-section-heading">
+            <div>
+              <p className="eyebrow">{t("addVerb")}</p>
+              <h3>{t("addVerbTitle")}</h3>
+            </div>
+          </div>
+          <form className="add-verb-grid" onSubmit={handleAddDraftVerb}>
+            {DATA_MANAGER_FIELDS.map((field) => (
+              field === "type" ? (
+                <SelectField key={field} label={dataFieldLabel(field, t)} value={newVerbForm[field]} onChange={(value) => handleNewVerbField(field, value)} variant="light">
+                  <option value="">{t("regularOrIrregular")}</option>
+                  <option value="be">{t("beVerb")}</option>
+                  <option value="modal">{t("modalVerb")}</option>
+                </SelectField>
+              ) : (
+                <TextField key={field} label={dataFieldLabel(field, t)} value={newVerbForm[field]} onChange={(value) => handleNewVerbField(field, value)} placeholder={field === "id" ? "write" : ""} />
+              )
+            ))}
+            <button type="submit" className="add-verb-button">{t("addToDraft")}</button>
+          </form>
+        </section>
+
+        <section className="settings-card bulk-edit-card">
+          <div className="settings-section-heading">
+            <div>
+              <p className="eyebrow">{t("bulkEdit")}</p>
+              <h3>{t("bulkEditTitle")}</h3>
+            </div>
+            <TextField label={t("searchDraft")}
+              value={bulkEditSearch}
+              onChange={setBulkEditSearch}
+              placeholder={t("verbSearchPlaceholder")}
+            />
+          </div>
+          <div className="bulk-edit-wrap">
+            <table className="bulk-edit-table">
+              <thead>
+                <tr>
+                  {DATA_MANAGER_FIELDS.map((field) => <th key={field}>{dataFieldLabel(field, t)}</th>)}
+                  <th>{t("actions")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleDraftVerbs.map(({ verb, index }) => (
+                  <tr key={`${verb.id}-${index}`}>
+                    {DATA_MANAGER_FIELDS.map((field) => (
+                      <td key={field}>
+                        {field === "type" ? (
+                          <select value={verb.type || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)}>
+                            <option value="">{t("regularOrIrregular")}</option>
+                            <option value="be">{t("beVerb")}</option>
+                            <option value="modal">{t("modalVerb")}</option>
+                          </select>
+                        ) : (
+                          <input value={verb[field] || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)} />
+                        )}
+                      </td>
+                    ))}
+                    <td><button type="button" className="compact-action" onClick={() => handleDeleteDraftVerb(index)}>{t("deleteVerb")}</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {visibleDraftVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
+        </section>
       </section>
     );
   }
@@ -675,6 +912,7 @@ export default function App() {
         {activePage === "home" && renderDashboard()}
         {activePage === "individual" && renderIndividualView()}
         {activePage === "complete" && renderCompleteView()}
+        {activePage === "settings" && renderSettingsView()}
         {activePage === "documentation" && <DocumentationPage t={t} learnerLanguage={learnerLanguage} />}
         {activePage === "about" && <AboutPage t={t} />}
       </main>
@@ -970,6 +1208,53 @@ function matchesVerbSearch(verb, query) {
   return normalizeSearchText(searchableText).includes(normalizedQuery);
 }
 
+function cloneVerbData(data) {
+  return JSON.parse(JSON.stringify(data));
+}
+
+function buildVerbPayload(data) {
+  return {
+    schemaVersion: data.schemaVersion || 1,
+    updatedAt: new Date().toISOString().slice(0, 10),
+    verbs: data.verbs.map(cleanVerbForm)
+  };
+}
+
+function cleanVerbForm(verb) {
+  return Object.fromEntries(
+    Object.entries(verb)
+      .map(([key, value]) => [key, typeof value === "string" ? value.trim() : value])
+      .filter(([, value]) => value !== "" && value !== undefined && value !== null)
+  );
+}
+
+function getDataSummary(data) {
+  const patterns = new Set(data.verbs.map((verb) => getVerbSummary(verb).pattern));
+  return {
+    total: data.verbs.length,
+    updatedAt: data.updatedAt || "local draft",
+    schemaVersion: data.schemaVersion || 1,
+    patterns: patterns.size
+  };
+}
+
+function dataFieldLabel(field, t) {
+  const labels = {
+    id: "ID",
+    label: t("verb"),
+    meaningEs: t("learnerMeaning"),
+    base: "Base",
+    third: "3rd",
+    past: "Past",
+    participle: "Participle",
+    gerund: "Gerund",
+    object: t("baseExample"),
+    objectEs: t("learnerObject"),
+    type: t("verbType")
+  };
+
+  return labels[field] || field;
+}
 function normalizeSearchText(value) {
   return String(value || "")
     .toLowerCase()

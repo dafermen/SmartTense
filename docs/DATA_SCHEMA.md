@@ -6,7 +6,7 @@ SmartTense reads verb data from JSON. The default file is:
 public/data/verbs.json
 ```
 
-The same shape is accepted by the Import JSON button.
+The same shape is accepted by Settings -> Import JSON and by the Settings data manager before saving a draft.
 
 ## Root Object
 
@@ -128,9 +128,17 @@ Use `type: "be"` for `to be`. The grammar engine handles it separately because i
 
 Use `type: "modal"` for modal-style entries. `actionBase`, `actionParticiple`, and `actionGerund` help the engine create natural examples for continuous and perfect tenses.
 
+## Settings Data Manager
+
+Settings provides a browser-side administrator for this schema. It can import/export the database, add a draft verb, bulk edit documented fields, delete draft rows, restore demo data, and save or discard the draft.
+
+The bulk editor intentionally exposes only documented fields. Saving a draft runs the same validation used by file import, so duplicate IDs, missing required fields, unsupported types, unknown fields, and unsafe strings are rejected before `appData` changes.
+
+Settings edits are not written directly to `public/data/verbs.json`. To make them permanent, export the database JSON and update the project data files intentionally.
+
 ## Validation Rules
 
-The importer rejects data when:
+Import and Settings draft save reject data when:
 
 - The selected file does not end in `.json`.
 - The selected file is larger than 512 KB.
@@ -148,7 +156,7 @@ The importer rejects data when:
 
 ## Keeping Built-In Data In Sync
 
-When adding permanent verbs, update both files:
+When adding permanent verbs after using Settings export, update both files:
 
 - `public/data/verbs.json`
 - `src/data/defaultData.js`

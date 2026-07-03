@@ -45,6 +45,19 @@ Use Display options to choose which forms are visible. For example, you can hide
 
 On desktop, Subject and Tense stay visible while you scroll horizontally. On mobile, the app uses compact practice cards instead of a wide table.
 
+### Settings
+
+Settings keeps configuration and data tools in one place. It includes:
+
+- General settings for interface language, learner language, translations, sentence parts, and local progress reset.
+- Data manager summary with total verbs, schema version, update date, and pattern count.
+- Import JSON and Export database for compatible SmartTense verb files.
+- Restore default data when you want to return to the demo database for this browser session.
+- Add verb to create a new draft entry.
+- Bulk edit to search, update, or delete draft verb rows before saving.
+
+Settings changes to the verb database are local to the current browser session. Use Export database when you want to keep a copy or send the updated data to a developer.
+
 ## Languages
 
 SmartTense has two language settings:
@@ -94,17 +107,17 @@ Recommended mobile flow:
 
 ## Importing JSON
 
-Use Import JSON when you have a compatible verb file. Imported data only affects the current browser session. Refreshing or reopening the app will return to the default data unless the project file itself is changed by a developer.
+Use Settings -> Data manager -> Import JSON when you have a compatible verb file. Imported data only affects the current browser session. Refreshing or reopening the app will return to the default data unless the project file itself is changed by a developer.
 
 For safety, SmartTense rejects files that are too large, do not use the `.json` extension, or do not match the expected verb schema.
 
 ## Exporting
 
-Export is available from Complete.
+There are two export options:
 
-- CSV: useful for spreadsheets.
-- JSON: useful when you want a structured snapshot of generated rows and active filters.
+- Complete -> CSV or JSON: exports a generated table snapshot from the current filters.
+- Settings -> Export database: exports the active verb database so it can be reused or reviewed.
 
 ## Progress
 
-Progress is local to the browser. It counts verbs you have viewed on the current device and browser. It is not uploaded to a server and does not require an account.
+Progress is local to the browser and can be reset from Settings. It counts verbs you have viewed on the current device and browser. It is not uploaded to a server and does not require an account.

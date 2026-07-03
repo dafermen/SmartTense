@@ -5,14 +5,14 @@ SmartTense is designed to run as a static frontend application. It does not need
 ## Security Model
 
 - The production web app can be hosted as static files on platforms such as Cloudflare Pages, Netlify, Vercel, or GitHub Pages.
-- Imported JSON files are read only in the user's browser session.
-- Imported JSON never overwrites `public/data/verbs.json`, `src/data/defaultData.js`, or any server-side file.
+- Imported JSON files and Settings data edits are handled only in the user's browser session.
+- Imported JSON and Settings edits never overwrite `public/data/verbs.json`, `src/data/defaultData.js`, or any server-side file.
 - Local progress is stored in the user's browser storage and is not uploaded to a server.
 - The app uses `JSON.parse` and React text rendering. It does not use `eval` or `dangerouslySetInnerHTML`.
 
-## JSON Import Protections
+## JSON Import And Settings Protections
 
-The importer rejects risky or incompatible files before updating application state:
+The importer and Settings draft save reject risky or incompatible data before updating application state:
 
 - File name must end in `.json`.
 - MIME type must be empty, `application/json`, or `text/json`.
@@ -27,7 +27,7 @@ The importer rejects risky or incompatible files before updating application sta
 - Unknown verb fields are rejected.
 - Duplicate verb IDs are rejected.
 
-These checks protect the browser from oversized files, malformed data, and common XSS-style payloads in imported text.
+These checks protect the browser from oversized files, malformed data, and common XSS-style payloads in imported or edited text.
 
 ## Static Hosting Headers
 

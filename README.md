@@ -50,7 +50,7 @@ SmartTense/
     assets/                   Static visual assets
     data/verbs.json           Default editable verb data
   src/
-    App.jsx                   Main React interface and app state
+    App.jsx                   Main React interface, app state, and local data manager
     conjugation.js            Verb tense generation engine
     i18n.js                   English/Spanish UI strings
     learnerLanguages/         Learner-language guidance
@@ -169,7 +169,7 @@ Default verb data lives in `public/data/verbs.json`.
 
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 
-Imported JSON only changes the current browser session; it does not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
+Imported JSON and Settings edits only change the current browser session; they do not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
 
 For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 
