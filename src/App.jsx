@@ -76,6 +76,9 @@ export default function App() {
   const [dataDraft, setDataDraft] = useState(() => cloneVerbData(DEFAULT_DATA));
   const [newVerbForm, setNewVerbForm] = useState(EMPTY_VERB_FORM);
   const [bulkEditSearch, setBulkEditSearch] = useState("");
+  const [isBulkEditMode, setIsBulkEditMode] = useState(false);
+  const [editingDraftIndex, setEditingDraftIndex] = useState(null);
+  const [dataTableSort, setDataTableSort] = useState({ field: "index", direction: "asc" });
 
   const t = (key) => translate(interfaceLanguage, key);
 
@@ -314,10 +317,14 @@ export default function App() {
     }
   }
 
-  function handleSaveDataDraft() {
+  function handleSaveDataDraft(shouldConfirm = false) {
+    if (shouldConfirm && !window.confirm(t("updateDataConfirm"))) return;
+
     try {
       const payload = validateVerbData(buildVerbPayload(dataDraft));
       applyVerbData(payload);
+      setIsBulkEditMode(false);
+      setEditingDraftIndex(null);
       showTimedAlert(t("dataSaved"));
     } catch (error) {
       console.error(error);
@@ -328,6 +335,8 @@ export default function App() {
   function handleDiscardDataDraft() {
     setDataDraft(cloneVerbData(appData));
     setNewVerbForm(EMPTY_VERB_FORM);
+    setIsBulkEditMode(false);
+    setEditingDraftIndex(null);
     showTimedAlert(t("draftDiscarded"));
   }
 
@@ -335,6 +344,8 @@ export default function App() {
     if (!window.confirm(t("restoreDefaultConfirm"))) return;
     applyVerbData(DEFAULT_DATA);
     setNewVerbForm(EMPTY_VERB_FORM);
+    setIsBulkEditMode(false);
+    setEditingDraftIndex(null);
     showTimedAlert(t("defaultDataRestored"));
   }
 
@@ -353,18 +364,37 @@ export default function App() {
   }
 
   function handleDeleteDraftVerb(index) {
+    if (!window.confirm(t("deleteDataConfirm"))) return;
+
     setDataDraft((current) => {
       if (current.verbs.length <= 1) return current;
       const next = cloneVerbData(current);
       next.verbs.splice(index, 1);
       return next;
     });
+    setEditingDraftIndex(null);
   }
 
   function handleNewVerbField(field, value) {
     setNewVerbForm((current) => ({ ...current, [field]: value }));
   }
 
+  function handleToggleBulkEditMode() {
+    setIsBulkEditMode((current) => !current);
+    setEditingDraftIndex(null);
+  }
+
+  function handleEditSingleVerb(index) {
+    setIsBulkEditMode(false);
+    setEditingDraftIndex(index);
+  }
+
+  function handleDataTableSort(field) {
+    setDataTableSort((current) => ({
+      field,
+      direction: current.field === field && current.direction === "asc" ? "desc" : "asc"
+    }));
+  }
   function handleAddDraftVerb(event) {
     event.preventDefault();
     const newVerb = cleanVerbForm(newVerbForm);
@@ -566,11 +596,14 @@ export default function App() {
   }
 
   function renderSettingsView() {
-    const draftPayload = buildVerbPayload(dataDraft);
-    const dataSummary = getDataSummary(draftPayload);
-    const visibleDraftVerbs = dataDraft.verbs
-      .map((verb, index) => ({ verb, index }))
-      .filter(({ verb }) => matchesVerbSearch(verb, bulkEditSearch));
+    const dataSummary = getDataSummary(dataDraft);
+    const visibleDraftVerbs = sortDraftEntries(
+      dataDraft.verbs
+        .map((verb, index) => ({ verb, index }))
+        .filter(({ verb }) => matchesVerbSearch(verb, bulkEditSearch)),
+      dataTableSort
+    );
+    const hasEditableRows = isBulkEditMode || editingDraftIndex !== null;
 
     return (
       <section className="settings-page" aria-label={t("settings")}>
@@ -581,7 +614,7 @@ export default function App() {
             <p>{t("settingsIntro")}</p>
           </div>
           <div className="settings-actions">
-            <button type="button" onClick={handleSaveDataDraft}>{t("saveDataChanges")}</button>
+            <button type="button" onClick={() => handleSaveDataDraft(true)}>{t("saveDataChanges")}</button>
             <button type="button" onClick={handleDiscardDataDraft}>{t("discardDraft")}</button>
           </div>
         </div>
@@ -647,44 +680,80 @@ export default function App() {
         </section>
 
         <section className="settings-card bulk-edit-card">
-          <div className="settings-section-heading">
+          <div className="settings-section-heading bulk-edit-heading">
             <div>
-              <p className="eyebrow">{t("bulkEdit")}</p>
-              <h3>{t("bulkEditTitle")}</h3>
+              <p className="eyebrow">{t("dataTable")}</p>
+              <h3>{t("dataTableTitle")}</h3>
             </div>
-            <TextField label={t("searchDraft")}
-              value={bulkEditSearch}
-              onChange={setBulkEditSearch}
-              placeholder={t("verbSearchPlaceholder")}
-            />
+            <div className="bulk-edit-controls">
+              <TextField label={t("searchDraft")}
+                value={bulkEditSearch}
+                onChange={setBulkEditSearch}
+                placeholder={t("verbSearchPlaceholder")}
+              />
+              <div className="settings-actions settings-actions-wrap">
+                <button type="button" onClick={handleToggleBulkEditMode} className={isBulkEditMode ? "active" : ""} aria-pressed={isBulkEditMode}>{isBulkEditMode ? t("exitBulkEdit") : t("bulkEdit")}</button>
+                {hasEditableRows && <button type="button" onClick={() => handleSaveDataDraft(true)}>{t("updateChanges")}</button>}
+              </div>
+            </div>
           </div>
           <div className="bulk-edit-wrap">
-            <table className="bulk-edit-table">
+            <table className={`bulk-edit-table ${hasEditableRows ? "is-editable" : "is-readonly"}`}>
               <thead>
                 <tr>
-                  {DATA_MANAGER_FIELDS.map((field) => <th key={field}>{dataFieldLabel(field, t)}</th>)}
+                  <th>
+                    <button type="button" className={`table-sort-button ${dataTableSort.field === "index" ? "active" : ""}`} onClick={() => handleDataTableSort("index")} aria-label={`${t("sortBy")} ${t("indexColumn")}`}>
+                      {t("indexColumn")} {dataTableSort.field === "index" ? (dataTableSort.direction === "asc" ? "ASC" : "DESC") : ""}
+                    </button>
+                  </th>
+                  {DATA_MANAGER_FIELDS.map((field) => (
+                    <th key={field}>
+                      <button type="button" className={`table-sort-button ${dataTableSort.field === field ? "active" : ""}`} onClick={() => handleDataTableSort(field)} aria-label={`${t("sortBy")} ${dataFieldLabel(field, t)}`}>
+                        {dataFieldLabel(field, t)} {dataTableSort.field === field ? (dataTableSort.direction === "asc" ? "ASC" : "DESC") : ""}
+                      </button>
+                    </th>
+                  ))}
+                  <th>
+                    <button type="button" className={`table-sort-button ${dataTableSort.field === "pattern" ? "active" : ""}`} onClick={() => handleDataTableSort("pattern")} aria-label={`${t("sortBy")} ${t("pattern")}`}>
+                      {t("pattern")} {dataTableSort.field === "pattern" ? (dataTableSort.direction === "asc" ? "ASC" : "DESC") : ""}
+                    </button>
+                  </th>
                   <th>{t("actions")}</th>
                 </tr>
               </thead>
               <tbody>
-                {visibleDraftVerbs.map(({ verb, index }) => (
-                  <tr key={`${verb.id}-${index}`}>
-                    {DATA_MANAGER_FIELDS.map((field) => (
-                      <td key={field}>
-                        {field === "type" ? (
-                          <select value={verb.type || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)}>
-                            <option value="">{t("regularOrIrregular")}</option>
-                            <option value="be">{t("beVerb")}</option>
-                            <option value="modal">{t("modalVerb")}</option>
-                          </select>
-                        ) : (
-                          <input value={verb[field] || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)} />
-                        )}
+                {visibleDraftVerbs.map(({ verb, index }, displayIndex) => {
+                  const isRowEditable = isBulkEditMode || editingDraftIndex === index;
+                  return (
+                    <tr key={`${verb.id}-${index}`} className={isRowEditable ? "editing-row" : ""}>
+                      <td className="index-cell">{displayIndex + 1}</td>
+                      {DATA_MANAGER_FIELDS.map((field) => (
+                        <td key={field}>
+                          {isRowEditable ? (
+                            field === "type" ? (
+                              <select value={verb.type || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)}>
+                                <option value="">{t("regularOrIrregular")}</option>
+                                <option value="be">{t("beVerb")}</option>
+                                <option value="modal">{t("modalVerb")}</option>
+                              </select>
+                            ) : (
+                              <input value={verb[field] || ""} onChange={(event) => handleBulkVerbChange(index, field, event.target.value)} />
+                            )
+                          ) : (
+                            <span className="table-read-value">{field === "type" ? verbTypeLabel(verb.type, t) : verb[field] || "-"}</span>
+                          )}
+                        </td>
+                      ))}
+                      <td><span className="pattern-pill">{verbPatternLabel(getVerbSummary(verb).pattern, t)}</span></td>
+                      <td>
+                        <div className="row-action-group">
+                          {isRowEditable ? <button type="button" className="compact-action" onClick={() => handleSaveDataDraft(true)}>{t("updateRecord")}</button> : <button type="button" className="compact-action" onClick={() => handleEditSingleVerb(index)}>{t("editRecord")}</button>}
+                          <button type="button" className="compact-action danger-action" onClick={() => handleDeleteDraftVerb(index)}>{t("deleteVerb")}</button>
+                        </div>
                       </td>
-                    ))}
-                    <td><button type="button" className="compact-action" onClick={() => handleDeleteDraftVerb(index)}>{t("deleteVerb")}</button></td>
-                  </tr>
-                ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -1254,6 +1323,27 @@ function dataFieldLabel(field, t) {
   };
 
   return labels[field] || field;
+}
+function sortDraftEntries(entries, sort) {
+  const direction = sort.direction === "desc" ? -1 : 1;
+
+  return [...entries].sort((left, right) => {
+    const leftValue = getDraftSortValue(left.verb, sort.field, left.index);
+    const rightValue = getDraftSortValue(right.verb, sort.field, right.index);
+
+    if (typeof leftValue === "number" && typeof rightValue === "number") {
+      return (leftValue - rightValue) * direction;
+    }
+
+    return String(leftValue).localeCompare(String(rightValue), undefined, { numeric: true, sensitivity: "base" }) * direction;
+  });
+}
+
+function getDraftSortValue(verb, field, index) {
+  if (field === "index") return index;
+  if (field === "pattern") return getVerbSummary(verb).pattern;
+  if (field === "type") return verbTypeLabel(verb.type, (key) => key);
+  return normalizeSearchText(verb[field] || "");
 }
 function normalizeSearchText(value) {
   return String(value || "")

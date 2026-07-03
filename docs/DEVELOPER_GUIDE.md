@@ -174,7 +174,7 @@ For built-in data, update both files:
 
 Keeping both in sync preserves fallback behavior.
 
-For temporary user testing, use Settings -> Import JSON or Settings -> Bulk edit in the app.
+For temporary user testing, use Settings -> Import JSON, Settings -> Edit on one row, or Settings -> Bulk edit in the app.
 
 See `docs/DATA_SCHEMA.md` for the accepted fields.
 
