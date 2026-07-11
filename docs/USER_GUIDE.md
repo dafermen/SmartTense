@@ -9,13 +9,29 @@ SmartTense helps you study English verb tenses by creating example sentences fro
 Home is the starting dashboard. It shows:
 
 - The current verb and learner-language meaning.
-- Quick actions for Individual and Complete.
+- Quick actions for Theory, Individual, and Complete.
 - A current affirmative example with sentence parts and translation when those options are enabled.
 - Progress for verbs already viewed in this browser.
 - Current level, number of visible tenses, and number of matching verbs.
 - A recommended next practice.
 
 Use Home when you want to quickly continue studying without opening the full table.
+
+### Theory
+
+Theory shows a short lesson before practice. The first unit is Present Simple.
+
+Theory includes:
+
+- learning objectives;
+- linked tenses and context tags;
+- meaning and signal words;
+- grammar structures;
+- common mistakes;
+- contextual examples;
+- starter practice preview with expandable answers.
+
+Use Theory when you want to understand the rule before opening Individual or Complete.
 
 ### Individual
 
@@ -104,7 +120,7 @@ SmartTense is designed to save space on phones:
 
 Recommended mobile flow:
 
-1. Start on Home and choose Individual or Complete.
+1. Start on Home and choose Theory, Individual, or Complete.
 2. Use only the filters you need.
 3. Collapse Display options after changing them.
 4. In Individual, select only the tense groups and subjects you want to practice now.
@@ -128,6 +144,6 @@ Progress is local to the browser and can be reset from Settings. It counts verbs
 
 ## Learning Content Roadmap
 
-SmartTense now includes a structured learning-content foundation for future Theory and Practice screens. This content is not shown as a separate page yet, but the project already has a Present Simple foundation unit with objectives, theory, structures, common mistakes, examples, and starter exercises.
+SmartTense now includes a structured Theory screen powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, and starter exercises.
 
-The current visible learning flow is still Home -> Individual -> Complete -> Settings. Theory and interactive Practice are planned as later phases so they can be added cleanly without overcrowding the current interface.
+The current visible learning flow is Home -> Theory -> Individual -> Complete -> Settings. Interactive Practice is planned as a later phase so it can be added cleanly without overcrowding the current interface.

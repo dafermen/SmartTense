@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { buildRows, getTensesByGroup, getVerbSummary, GROUP_LABELS } from "./conjugation.js";
 import { DEFAULT_DATA, LEVELS, SUBJECTS, TENSES } from "./data/defaultData.js";
+import { validateLearningContent } from "./data/learningContentValidation.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
@@ -10,7 +11,7 @@ const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "individual", "complete", "settings", "documentation", "about"];
+const MENU_ITEMS = ["home", "theory", "individual", "complete", "settings", "documentation", "about"];
 const INDIVIDUAL_TENSE_GROUPS = [
   { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
   { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
@@ -40,6 +41,7 @@ export default function App() {
   // Most state in this component represents visible learner choices. The grammar
   // rules themselves stay in conjugation.js so UI changes do not affect output.
   const [appData, setAppData] = useState(DEFAULT_DATA);
+  const [learningContent, setLearningContent] = useState({ schemaVersion: 1, units: [] });
   const [verbId, setVerbId] = useState(storedSettings.verbId || DEFAULT_DATA.verbs[0].id);
   const [subjectId, setSubjectId] = useState(storedSettings.subjectId || SUBJECTS[0].id);
   const [individualTenseIds, setIndividualTenseIds] = useState(() => {
@@ -130,6 +132,31 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
+    async function loadLearningContent() {
+      try {
+        const response = await fetch("/data/learningUnits.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = validateLearningContent(await response.json());
+        if (!isMounted) return;
+        setLearningContent(payload);
+      } catch (error) {
+        console.error(error);
+        if (!isMounted) return;
+        setLearningContent({ schemaVersion: 1, units: [] });
+        showTimedAlert(t("learningContentFallback"), "error");
+      }
+    }
+
+    loadLearningContent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
     setDataDraft(cloneVerbData(appData));
   }, [appData]);
 
@@ -210,6 +237,10 @@ export default function App() {
     const previewTense = TENSES.find((tense) => tense.id === "simplePresent") || tenses[0] || TENSES[0];
     return buildRows(currentVerb, [previewSubject], [previewTense], interfaceLanguage, { learnerLanguage, useContractions })[0];
   }, [currentVerb, interfaceLanguage, learnerLanguage, subjectId, tenses, useContractions]);
+  const primaryLearningUnit = useMemo(
+    () => learningContent.units.find((unit) => unit.tenseIds.includes("simplePresent")) || learningContent.units[0],
+    [learningContent.units]
+  );
 
   useEffect(() => {
     if (!currentVerb?.id) return;
@@ -512,6 +543,7 @@ export default function App() {
               <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
             </div>
             <div className="dashboard-actions compact-home-actions" aria-label={t("homeActions")}>
+              <button type="button" onClick={() => setActivePage("theory")}>{t("openTheory")}</button>
               <button type="button" onClick={() => setActivePage("individual")}>{t("practiceIndividual")}</button>
               <button type="button" onClick={() => setActivePage("complete")}>{t("viewComplete")}</button>
             </div>
@@ -854,6 +886,18 @@ export default function App() {
       </>
     );
   }
+
+  function renderTheoryView() {
+    return (
+      <TheoryPage
+        unit={primaryLearningUnit}
+        t={t}
+        language={interfaceLanguage}
+        onPractice={() => setActivePage("individual")}
+      />
+    );
+  }
+
   function renderIndividualView() {
     const individualRowsByTense = selectedIndividualTenses
       .map((tense) => ({
@@ -1034,6 +1078,7 @@ export default function App() {
       <main className="content">
         {renderAlert()}
         {activePage === "home" && renderDashboard()}
+        {activePage === "theory" && renderTheoryView()}
         {activePage === "individual" && renderIndividualView()}
         {activePage === "complete" && renderCompleteView()}
         {activePage === "settings" && renderSettingsView()}
@@ -1042,6 +1087,155 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+function TheoryPage({ unit, t, language, onPractice }) {
+  if (!unit) {
+    return (
+      <section className="theory-page">
+        <div className="theory-header">
+          <div>
+            <p className="eyebrow">{t("theory")}</p>
+            <h2>{t("theoryTitle")}</h2>
+            <p>{t("noLearningContent")}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="theory-page">
+      <div className="theory-header">
+        <div>
+          <p className="eyebrow">{t("theory")}</p>
+          <h2>{unit.title}</h2>
+          <p>{unit.focus}</p>
+        </div>
+        <button type="button" onClick={onPractice}>{t("practiceIndividual")}</button>
+      </div>
+
+      <div className="theory-summary-grid">
+        <article>
+          <p className="eyebrow">{t("learningObjectives")}</p>
+          <ul>
+            {unit.objectives.map((objective) => <li key={objective}>{objective}</li>)}
+          </ul>
+        </article>
+        <article>
+          <p className="eyebrow">{t("linkedTenses")}</p>
+          <div className="theory-pill-row">
+            {unit.tenseIds.map((tenseId) => (
+              <span className="pattern-pill" key={tenseId}>{tenseLabel(tenseId, language)}</span>
+            ))}
+          </div>
+          <p className="theory-muted">{t("focus")}: {unit.contextTags.join(", ")}</p>
+        </article>
+      </div>
+
+      <div className="theory-section-grid">
+        {unit.sections.map((section) => (
+          <LearningSection key={section.id} section={section} t={t} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function LearningSection({ section, t }) {
+  switch (section.type) {
+    case "theory":
+      return (
+        <article className="theory-card">
+          <h3>{section.title}</h3>
+          {section.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {section.signalWords && (
+            <div className="signal-word-wrap">
+              <p className="eyebrow">{t("signalWords")}</p>
+              <div className="theory-pill-row">
+                {section.signalWords.map((word) => <span className="pattern-pill" key={word}>{word}</span>)}
+              </div>
+            </div>
+          )}
+        </article>
+      );
+    case "structures":
+      return (
+        <article className="theory-card theory-wide-card">
+          <h3>{section.title}</h3>
+          <div className="theory-list">
+            {section.structures.map((item) => (
+              <div className="theory-list-row" key={`${item.form}-${item.pattern}`}>
+                <strong>{t(item.form)}</strong>
+                <span>{item.pattern}</span>
+                <em>{item.example}</em>
+              </div>
+            ))}
+          </div>
+        </article>
+      );
+    case "commonMistakes":
+      return (
+        <article className="theory-card">
+          <h3>{section.title}</h3>
+          <div className="mistake-list">
+            {section.mistakes.map((item) => (
+              <div key={item.wrong}>
+                <p><strong>{t("wrong")}:</strong> {item.wrong}</p>
+                <p><strong>{t("right")}:</strong> {item.right}</p>
+                <p className="theory-muted">{item.why}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+      );
+    case "examples":
+      return (
+        <article className="theory-card">
+          <h3>{section.title}</h3>
+          <div className="example-list">
+            {section.examples.map((item) => (
+              <div key={item.sentence}>
+                <p className="sentence">{item.sentence}</p>
+                <p className="theory-muted">{item.context} | {item.note}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+      );
+    case "exercises":
+      return (
+        <article className="theory-card theory-wide-card">
+          <h3>{section.title}</h3>
+          <div className="theory-list">
+            {section.exercises.map((item) => (
+              <details className="practice-preview" key={item.id}>
+                <summary>{item.prompt}</summary>
+                <p><strong>{t("answer")}:</strong> {item.answer}</p>
+                <p className="theory-muted">{item.explanation}</p>
+              </details>
+            ))}
+          </div>
+        </article>
+      );
+    case "vocabulary":
+      return (
+        <article className="theory-card">
+          <h3>{section.title}</h3>
+          <div className="theory-list">
+            {section.vocabulary.map((item) => (
+              <div className="theory-list-row" key={item.term}>
+                <strong>{item.term}</strong>
+                <span>{item.meaning}</span>
+                {item.example && <em>{item.example}</em>}
+              </div>
+            ))}
+          </div>
+        </article>
+      );
+    default:
+      return null;
+  }
 }
 
 function DocumentationPage({ t, learnerLanguage }) {
@@ -1284,6 +1478,11 @@ function individualTenseButtonLabel(tenseId, language) {
   };
 
   return labels[tenseId]?.[language] || labels[tenseId]?.en || tenseId;
+}
+
+function tenseLabel(tenseId, language) {
+  const tense = TENSES.find((entry) => entry.id === tenseId);
+  return tense?.[language] || tense?.en || tenseId;
 }
 function verbTypeLabel(type, t) {
   if (type === "be") return t("beVerb");

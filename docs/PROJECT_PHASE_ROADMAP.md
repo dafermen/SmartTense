@@ -9,7 +9,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase | Estado | Entregable actual | Evidencia |
 | --- | --- | --- | --- |
 | Fase 0 - Arquitectura de contenido | Cerrada | `public/data/learningUnits.json`, validador, pruebas y esquema documentado | `npm test` con validacion de contenido |
-| Fase 1 - Theory | Pendiente | Pagina/seccion Theory renderizada desde JSON | No iniciada |
+| Fase 1 - Theory | Cerrada | Pagina Theory renderizada desde JSON, enlazada desde Home y menu | `npm test`, `npm run build`; navegador interno no disponible para captura automatizada |
 | Fase 2 - Explicaciones inteligentes | Pendiente | Panel de explicacion por oracion | No iniciada |
 | Fase 3 - Motor de practica | Pendiente | Ejercicios interactivos con feedback | No iniciada |
 | Fase 4 - Ruta de aprendizaje | Pendiente | Home recomienda el siguiente paso dentro de una unidad | No iniciada |
@@ -89,6 +89,10 @@ Tareas operativas:
 Entregable:
 
 - Present Simple tiene una vista de teoria navegable desde la app.
+
+Estado:
+
+- Cerrada. Theory carga `public/data/learningUnits.json`, valida el contenido, renderiza la unidad Present Simple y muestra objetivos, teoria, estructuras, palabras senal, errores comunes, ejemplos y vista previa de ejercicios.
 
 ### Fase 2 - Explicaciones Inteligentes
 
@@ -221,13 +225,13 @@ gantt
     Contenido Present Simple                :done, p0b, 2026-07-11, 1d
 
     section Teoria
-    Fase 1 - Theory                         :p1, 2026-07-12, 12d
-    Componentes de teoria                   :p1a, 2026-07-12, 6d
-    Vista responsive                        :p1b, after p1a, 6d
+    Fase 1 - Theory                         :done, p1, 2026-07-11, 1d
+    Componentes de teoria                   :done, p1a, 2026-07-11, 1d
+    Vista responsive                        :done, p1b, 2026-07-11, 1d
 
     section Explicaciones
-    Fase 2 - Smart explanations             :p2, after p1, 10d
-    Metadatos explicativos                  :p2a, after p1, 5d
+    Fase 2 - Smart explanations             :p2, 2026-07-12, 10d
+    Metadatos explicativos                  :p2a, 2026-07-12, 5d
     Panel Why this form                     :p2b, after p2a, 5d
 
     section Practica
@@ -286,12 +290,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 1:
+Continuar con Fase 2:
 
-1. Cargar `public/data/learningUnits.json` desde la app.
-2. Agregar `Theory` al menu.
-3. Renderizar objetivos, explicacion, estructuras, palabras senal, errores comunes y ejemplos.
-4. Mantener la vista responsive y compacta.
-5. Dejar ejercicios interactivos para Fase 3.
+1. Extender las filas generadas con metadatos explicativos.
+2. Agregar un panel compacto `Why this form?`.
+3. Explicar errores comunes comunes desde los datos de aprendizaje.
+4. Agregar pruebas para los helpers de explicacion.
+5. Mantener Practice interactivo fuera de alcance hasta Fase 3.
 
-Este paso vuelve visible la nueva direccion del producto sin tocar demasiado el motor de conjugacion existente.
+Este paso debe explicar por que una oracion usa una forma determinada, sin convertir todavia la app en un motor de ejercicios.

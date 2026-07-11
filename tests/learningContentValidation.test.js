@@ -13,6 +13,15 @@ test("validates bundled learning content", () => {
   assert.equal(validateLearningContent(learningContent), learningContent);
 });
 
+test("bundled Present Simple unit has the sections needed by Theory", () => {
+  const unit = learningContent.units.find((entry) => entry.id === "present-simple-foundation");
+  assert.ok(unit);
+  assert.deepEqual(
+    new Set(unit.sections.map((section) => section.type)),
+    new Set(["theory", "structures", "commonMistakes", "examples", "exercises"])
+  );
+});
+
 test("rejects empty learning unit collections", () => {
   assert.throws(() => validateLearningContent({ schemaVersion: 1, units: [] }), /Invalid learning content/);
 });

@@ -10,6 +10,7 @@ The app is designed for two audiences:
 ## Main Features
 
 - Home dashboard with current verb summary, progress, quick actions, a live example, and a recommended next practice.
+- Theory view for the first Present Simple learning unit, rendered from structured JSON content.
 - Individual practice view focused on affirmative conjugation only.
 - Complete view with affirmative, negative, interrogative, and negative interrogative forms.
 - Toggleable visible columns in Complete so users can reduce visual load.
@@ -27,10 +28,11 @@ The app is designed for two audiences:
 ## Screens And Main Flow
 
 1. Start on Home to see progress, the current verb, a short example, and quick actions.
-2. Open Individual when you want focused affirmative practice with selected tenses and subjects.
-3. Open Complete when you want the full table and comparison across sentence forms.
-4. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
-5. Export CSV or JSON from Complete if you need a generated table snapshot.
+2. Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, examples, and starter practice preview.
+3. Open Individual when you want focused affirmative practice with selected tenses and subjects.
+4. Open Complete when you want the full table and comparison across sentence forms.
+5. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
+6. Export CSV or JSON from Complete if you need a generated table snapshot.
 
 ## Tech Stack
 
@@ -169,7 +171,7 @@ Change this id before publishing if you have a final App Store or Play Store bun
 
 Default verb data lives in `public/data/verbs.json`.
 
-Structured learning content lives in `public/data/learningUnits.json`. This file is the foundation for the planned Theory and Practice phases. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
+Structured learning content lives in `public/data/learningUnits.json`. Theory renders this file in the app. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
 
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 

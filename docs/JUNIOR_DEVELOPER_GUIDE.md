@@ -45,11 +45,12 @@ SmartTense is moving from a conjugation table into a guided learning tool.
 The current stable surfaces are:
 
 - `Home`: dashboard and recommendations.
+- `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
 - `Individual`: focused affirmative practice.
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration and data administration.
 
-The next planned surfaces are Theory and Practice, powered by `public/data/learningUnits.json`.
+The next planned surface is Practice, powered by `public/data/learningUnits.json`.
 
 ## Adding A Learning Unit
 
@@ -64,6 +65,17 @@ npm.cmd test
 ```
 
 If tests fail, read the validation error and compare the unit with `docs/LEARNING_CONTENT_SCHEMA.md`.
+
+## Updating Theory
+
+Theory is rendered in `src/App.jsx` by `TheoryPage` and `LearningSection`.
+
+Keep Theory read-only until the Practice phase starts:
+
+- show explanations and examples;
+- allow expanding starter answers;
+- do not add scoring or answer input here;
+- keep mobile layout compact.
 
 ## Adding Or Editing Verbs
 
