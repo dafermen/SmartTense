@@ -25,6 +25,7 @@ The app is designed for two audiences:
 - Tense groups: Present, Past, Future, and Conditional.
 - English and Spanish interface, with Spanish and French learner-language guides.
 - Responsive layout optimized for desktop and mobile.
+- Speaking and writing workspace for production practice with local revision tracking.
 - Local JSON verb data with hardened import support for custom verb lists.
 - Learning content import/export in Settings, with validation and preview before applying.
 - CSV and JSON export from Complete.
@@ -39,7 +40,8 @@ The app is designed for two audiences:
 5. Open a "Why this form?" panel when you want the pattern, reason, auxiliary, and verb-form explanation for a generated sentence.
 6. Open Complete when you want the full table and comparison across sentence forms.
 7. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
-8. Export CSV or JSON from Complete if you need a generated table snapshot.
+8. Open Production to respond to speaking or writing prompts and track each attempt by status.
+9. Export CSV or JSON from Complete if you need a generated table snapshot.
 
 ## Tech Stack
 
@@ -203,7 +205,10 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 - `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, contexts, vocabulary, examples, and exercises.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
+- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: roadmap ejecutivo + tareas operativas por fases con Gantt interno, basado en el documento pedagógico aportado.
+- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: roadmap ejecutivo y operativo con criterios de salida por fase.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
+- `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`: phased execution roadmap with executive goals, operational tasks, and an internal Gantt plan.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.
 
 ## Current Validation

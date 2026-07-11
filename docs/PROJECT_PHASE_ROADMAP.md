@@ -2,7 +2,8 @@
 
 Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.
 
-La version ejecutiva + operativa detallada esta en [DEVELOPMENT_PHASE_EXECUTION_PLAN.md](DEVELOPMENT_PHASE_EXECUTION_PLAN.md).
+La version ejecutiva + operativa detallada esta en [DEVELOPMENT_PHASE_EXECUTION_PLAN.md](DEVELOPMENT_PHASE_EXECUTION_PLAN.md).  
+Para la version recomendada con fases ejecutivas y tareas operativas derivadas del documento adjunto, ver [PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md](PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md).
 
 La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
 
@@ -17,7 +18,8 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 4 - Ruta de aprendizaje | Cerrada | Progreso local por unidad y Home recomienda el siguiente paso | `npm test`, `npm run build` |
 | Fase 5 - Vocabulario y contextos | Cerrada | Contextos, vocabulario y practica filtrable por contexto | `npm test`, `npm run build` |
 | Fase 6 - Administracion de contenido | Cerrada | Import/export, preview y validacion de contenido de aprendizaje en Settings | `npm test`, `npm run build` |
-| Fase 7 - Speaking, writing y revision | Pendiente | Prompts y cola de revision | No iniciada |
+| Fase 7 - Speaking, writing y revision | Cerrada | Workspace Production con speaking/writing, estado de intento y filtros | `src/data/productionPrompts.js`, `App.jsx`, `src/i18n.js` |
+| Fase 8 - Expansión de unidades de tiempo | En curso | Nuevas unidades de past/future/conditional sin tocar core | Fase 8 activa: nueva unidad en diseño |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
@@ -231,6 +233,32 @@ Entregable:
 
 - El usuario puede completar una tarea corta de speaking/writing y guardarla para revision.
 
+Estado:
+
+- Cerrada para MVP. Production está activo con:
+  - prompts iniciales (hablar y escribir),
+  - intentos en cola con estados `draft`, `done`, `needsReview`, `approved`,
+  - filtros por modo y estado,
+  - registro local y edición de notas,
+  - confirmación al editar/eliminar.
+
+### Fase 8 - Expansion De Unidades
+
+Objetivo ejecutivo:
+
+Extender la ruta de aprendizaje a nuevos tiempos y unidades sin reconstruir la arquitectura actual.
+
+Tareas operativas:
+
+- Diseñar nueva unidad pedagógica para past/future/conditional usando el mismo schema de `learningUnits`.
+- Consolidar patrones de ejercicios de transferencia entre tiempos.
+- Reutilizar la lógica de contextos, filtros y progreso por unidad ya construida.
+- Mantener rendimiento con tablas, paginación y filtrado para alta escala de contenido.
+
+Estado:
+
+- En curso.
+
 ## Gantt Interno
 
 Fechas internas de referencia. Se pueden ajustar segun prioridad, tiempo disponible y feedback del usuario.
@@ -277,9 +305,13 @@ gantt
     Preview y validacion                    :done, p6b, 2026-07-11, 1d
 
     section Produccion
-    Fase 7 - Speaking y writing             :p7, 2026-07-12, 12d
+    Fase 7 - Speaking y writing             :done, p7, 2026-07-12, 12d
     Prompts y rubricas                      :p7a, 2026-07-12, 6d
     Cola de revision                        :p7b, after p7a, 6d
+    Fase 8 - Expansion de unidades          :active, p8, 2026-07-12, 10d
+    Unit 2/3 y validaciones por escala      :p8a, after p8, 4d
+    Rendimiento y UX mobile                  :p8b, after p8a, 3d
+    Ruta de progreso multiunidad             :p8c, after p8b, 3d
 ```
 
 ## Releases Sugeridos
@@ -312,12 +344,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 7:
+Continuar con Fase 8:
 
-1. Crear prompts simples de speaking y writing desde `learningUnits`.
-2. Agregar rubricas basicas de autoevaluacion.
-3. Guardar intentos localmente por unidad.
-4. Agregar cola de revision para errores frecuentes.
-5. Mantener la UI minima y enfocada en produccion guiada.
+1. Diseñar la primera unidad de Past/Future/Conditional en JSON (objetivos, estructuras, ejemplos, ejercicios).
+2. Hacer que Practice cubra transferencia entre tiempos sin perder usabilidad.
+3. Cerrar validadores de rendimiento para alta cardinalidad (filtros + paginación).
+4. Extender Home y Learning Path para navegación multiunidad.
+5. Medir fricción móvil antes de abrir más unidades.
 
-Este paso debe llevar SmartTense de reconocimiento/practica controlada hacia produccion guiada sin agregar cuentas ni backend.
+Este paso debe llevar a una plataforma multiunidad y estable en mobile, sin cambiar el modelo técnico actual.

@@ -9,13 +9,14 @@ import { ALL_CONTEXTS, getUnitContexts, getVocabularyItems, filterByContext } fr
 import { getNextLearningStep, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
 import { getPracticeExercises, scorePracticeAnswer } from "./practice.js";
+import { PRODUCTION_PROMPTS, PRODUCTION_STATUSES } from "./data/productionPrompts.js";
 
 const INITIAL_ALERT_MS = 6000;
 const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "theory", "practice", "individual", "complete", "settings", "documentation", "about"];
+const MENU_ITEMS = ["home", "theory", "practice", "individual", "complete", "production", "settings", "documentation", "about"];
 const INDIVIDUAL_TENSE_GROUPS = [
   { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
   { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
@@ -26,6 +27,7 @@ const INDIVIDUAL_DEFAULT_TENSE_IDS = ["simplePresent"];
 const COMPLETE_FORM_COLUMNS = ["affirmative", "negative", "questionPositive", "questionNegative"];
 const DATA_MANAGER_FIELDS = ["id", "label", "meaningEs", "base", "third", "past", "participle", "gerund", "object", "objectEs", "type"];
 const DATA_TABLE_PAGE_SIZES = [10, 25, 50, 100];
+const PRODUCTION_MODES = ["all", "speaking", "writing"];
 const EMPTY_VERB_FORM = {
   id: "",
   label: "",
@@ -75,6 +77,14 @@ export default function App() {
   const [visitedVerbIds, setVisitedVerbIds] = useState(storedSettings.visitedVerbIds || []);
   const [unitProgress, setUnitProgress] = useState(storedSettings.unitProgress || {});
   const [selectedContextTag, setSelectedContextTag] = useState(storedSettings.selectedContextTag || ALL_CONTEXTS);
+  const [productionDraftPromptId, setProductionDraftPromptId] = useState(storedSettings.productionDraftPromptId || PRODUCTION_PROMPTS[0]?.id || "");
+  const [productionModeFilter, setProductionModeFilter] = useState(storedSettings.productionModeFilter || "all");
+  const [productionStatusFilter, setProductionStatusFilter] = useState(storedSettings.productionStatusFilter || "all");
+  const [productionResponse, setProductionResponse] = useState(storedSettings.productionResponse || "");
+  const [productionReview, setProductionReview] = useState(storedSettings.productionReview || "");
+  const [productionStatus, setProductionStatus] = useState(storedSettings.productionStatus || "draft");
+  const [productionEditingAttemptId, setProductionEditingAttemptId] = useState(null);
+  const [productionAttempts, setProductionAttempts] = useState(storedSettings.productionAttempts || {});
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -266,6 +276,28 @@ export default function App() {
     () => getUnitProgress(primaryLearningUnit?.id, unitProgress),
     [primaryLearningUnit?.id, unitProgress]
   );
+  const productionPrompts = useMemo(() => PRODUCTION_PROMPTS, []);
+  const currentProductionPrompt = useMemo(
+    () => productionPrompts.find((prompt) => prompt.id === productionDraftPromptId) || productionPrompts[0] || null,
+    [productionPrompts, productionDraftPromptId]
+  );
+  const productionQueueRows = useMemo(() => {
+    const rows = [];
+    for (const prompt of productionPrompts) {
+      const attempts = productionAttempts[prompt.id] || [];
+      for (const attempt of attempts) {
+        rows.push({ ...attempt, promptId: prompt.id, promptTitle: prompt.title, promptMode: prompt.mode, promptTenseId: prompt.tenseId, prompt });
+      }
+    }
+    return rows.sort((a, b) => new Date(b.updatedAt || "").valueOf() - new Date(a.updatedAt || "").valueOf());
+  }, [productionAttempts, productionPrompts]);
+  const filteredProductionRows = useMemo(() => {
+    return productionQueueRows.filter((row) => {
+      if (productionModeFilter !== "all" && row.promptMode !== productionModeFilter) return false;
+      if (productionStatusFilter !== "all" && row.status !== productionStatusFilter) return false;
+      return true;
+    });
+  }, [productionModeFilter, productionQueueRows, productionStatusFilter]);
   const nextLearningStep = useMemo(
     () => getNextLearningStep(primaryLearningUnit, unitProgress),
     [primaryLearningUnit, unitProgress]
@@ -285,6 +317,12 @@ export default function App() {
     if (unitContexts.some((context) => context.id === selectedContextTag)) return;
     setSelectedContextTag(ALL_CONTEXTS);
   }, [selectedContextTag, unitContexts]);
+
+  useEffect(() => {
+    if (!productionPrompts.length) return;
+    if (productionDraftPromptId && productionPrompts.some((prompt) => prompt.id === productionDraftPromptId)) return;
+    setProductionDraftPromptId(productionPrompts[0].id);
+  }, [productionDraftPromptId, productionPrompts]);
 
   useEffect(() => {
     if (activePage !== "theory" || !primaryLearningUnit?.id) return;
@@ -316,9 +354,17 @@ export default function App() {
       completeFormColumns,
       visitedVerbIds,
       unitProgress,
-      selectedContextTag
+      selectedContextTag,
+      productionDraftPromptId,
+      productionModeFilter,
+      productionStatusFilter,
+      productionResponse,
+      productionReview,
+      productionStatus,
+      productionEditingAttemptId,
+      productionAttempts
     });
-  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, selectedContextTag, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds]);
+  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, productionDraftPromptId, productionEditingAttemptId, productionModeFilter, productionReview, productionResponse, productionStatus, productionStatusFilter, selectedContextTag, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds, productionAttempts]);
 
   function showTimedAlert(message, type = "success") {
     setAlert({ message, type });
@@ -630,6 +676,130 @@ export default function App() {
     });
   }
 
+  function buildProductionAttempt(promptId, response, reviewText, status) {
+    return {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      promptId,
+      response,
+      review: reviewText,
+      status,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  function handleProductionPromptChange(promptId) {
+    setProductionDraftPromptId(promptId);
+    setProductionEditingAttemptId(null);
+    setProductionResponse("");
+    setProductionReview("");
+    setProductionStatus("draft");
+  }
+
+  function handleSaveProductionAttempt() {
+    if (!currentProductionPrompt) return;
+    if (!productionResponse.trim()) {
+      showTimedAlert(t("productionAttemptInvalid"), "error");
+      return;
+    }
+
+    if (productionEditingAttemptId) {
+      if (!window.confirm(t("productionUpdateAttemptConfirm"))) return;
+      setProductionAttempts((current) => {
+        const next = cloneProductionAttempts(current);
+        next[productionDraftPromptId] = (next[productionDraftPromptId] || []).map((attempt) => {
+          if (attempt.id !== productionEditingAttemptId) return attempt;
+          return {
+            ...attempt,
+            response: productionResponse.trim(),
+            review: productionReview.trim(),
+            status: productionStatus,
+            updatedAt: new Date().toISOString()
+          };
+        });
+        return next;
+      });
+      showTimedAlert(t("productionAttemptUpdated"));
+    } else {
+      if (!window.confirm(t("productionSaveAttemptConfirm"))) return;
+      setProductionAttempts((current) => {
+        const next = cloneProductionAttempts(current);
+        const newAttempt = buildProductionAttempt(
+          currentProductionPrompt.id,
+          productionResponse.trim(),
+          productionReview.trim(),
+          productionStatus
+        );
+        next[currentProductionPrompt.id] = [newAttempt, ...(next[currentProductionPrompt.id] || [])];
+        return next;
+      });
+      showTimedAlert(t("productionAttemptSaved"));
+    }
+
+    setProductionEditingAttemptId(null);
+    setProductionResponse("");
+    setProductionReview("");
+    setProductionStatus("draft");
+  }
+
+  function handleEditProductionAttempt(promptId, attempt) {
+    setProductionDraftPromptId(promptId);
+    setProductionEditingAttemptId(attempt.id);
+    setProductionResponse(attempt.response || "");
+    setProductionReview(attempt.review || "");
+    setProductionStatus(attempt.status || "draft");
+  }
+
+  function handleCancelProductionEdit() {
+    setProductionEditingAttemptId(null);
+    setProductionResponse("");
+    setProductionReview("");
+    setProductionStatus("draft");
+    showTimedAlert(t("productionEditCanceled"));
+  }
+
+  function handleDeleteProductionAttempt(promptId, attemptId) {
+    if (!window.confirm(t("productionDeleteAttemptConfirm"))) return;
+
+    setProductionAttempts((current) => {
+      const next = cloneProductionAttempts(current);
+      const promptAttempts = (next[promptId] || []).filter((attempt) => attempt.id !== attemptId);
+      if (promptAttempts.length === 0) {
+        delete next[promptId];
+      } else {
+        next[promptId] = promptAttempts;
+      }
+      return next;
+    });
+
+    if (productionEditingAttemptId === attemptId) {
+      setProductionEditingAttemptId(null);
+      setProductionResponse("");
+      setProductionReview("");
+      setProductionStatus("draft");
+    }
+
+    showTimedAlert(t("productionAttemptDeleted"));
+  }
+
+  function handleUpdateProductionAttemptStatus(promptId, attemptId, nextStatus) {
+    if (!window.confirm(t("productionStatusUpdateConfirm"))) return;
+
+    setProductionAttempts((current) => {
+      const next = cloneProductionAttempts(current);
+      next[promptId] = (next[promptId] || []).map((attempt) => (
+        attempt.id !== attemptId ? attempt : { ...attempt, status: nextStatus, updatedAt: new Date().toISOString() }
+      ));
+      return next;
+    });
+
+    showTimedAlert(t("productionStatusUpdated"));
+  }
+
+  function cloneProductionAttempts(value) {
+    return JSON.parse(JSON.stringify(value || {}));
+  }
+
   function renderAlert() {
     if (!alert) return null;
 
@@ -657,6 +827,7 @@ export default function App() {
               <button type="button" onClick={() => setActivePage("practice")}>{t("openPractice")}</button>
               <button type="button" onClick={() => setActivePage("individual")}>{t("practiceIndividual")}</button>
               <button type="button" onClick={() => setActivePage("complete")}>{t("viewComplete")}</button>
+              <button type="button" onClick={() => setActivePage("production")}>{t("production")}</button>
             </div>
           </article>
 
@@ -1004,6 +1175,164 @@ export default function App() {
     );
   }
 
+  function renderProductionView() {
+    const modeFilterOptions = PRODUCTION_MODES.map((mode) => (
+      <option key={mode} value={mode}>
+        {mode === "all" ? t("allModes") : t(mode)}
+      </option>
+    ));
+
+    const statusFilterOptions = ["all", ...PRODUCTION_STATUSES].map((status) => (
+      <option key={status} value={status}>
+        {status === "all" ? t("allStatuses") : t(status)}
+      </option>
+    ));
+
+    return (
+      <section className="settings-page" aria-label={t("production")}>
+        <div className="settings-header">
+          <div>
+            <p className="eyebrow">{t("production")}</p>
+            <h2>{t("productionWorkspace")}</h2>
+            <p>{t("productionIntro")}</p>
+          </div>
+          <div className="settings-actions">
+            <p className="settings-note">{t("productionDrafts")}: {filteredProductionRows.length}</p>
+          </div>
+        </div>
+
+        <section className="settings-grid">
+          <article className="settings-card">
+            <p className="eyebrow">{t("productionComposer")}</p>
+            <h3>{t("createNewAttempt")}</h3>
+
+            {currentProductionPrompt ? (
+              <div className="production-composer">
+                <SelectField
+                  label={t("productionPrompt")}
+                  value={currentProductionPrompt.id}
+                  onChange={handleProductionPromptChange}
+                  variant="light"
+                >
+                  {productionPrompts.map((prompt) => (
+                    <option key={prompt.id} value={prompt.id}>
+                      {prompt.title}
+                    </option>
+                  ))}
+                </SelectField>
+
+                <div className="production-prompt-meta">
+                  <span>{t("mode")}: {t(currentProductionPrompt.mode)}</span>
+                  <span>{t("tenseCol")}: {tenseLabel(currentProductionPrompt.tenseId, interfaceLanguage)}</span>
+                  <span>{t("durationMinutes")}: {currentProductionPrompt.suggestedTimeMinutes || 1}</span>
+                </div>
+
+                <p className="production-prompt-text">{currentProductionPrompt.prompt}</p>
+
+                {currentProductionPrompt.rubric.length > 0 && (
+                  <div className="production-rubric">
+                    <p>{t("productionRubric")}</p>
+                    <ul>
+                      {currentProductionPrompt.rubric.map((criterion) => <li key={criterion}>{criterion}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                <label className="field field-light">
+                  <span>{t("productionStatus")}</span>
+                  <select value={productionStatus} onChange={(event) => setProductionStatus(event.target.value)}>
+                    {PRODUCTION_STATUSES.map((status) => <option key={status} value={status}>{t(status)}</option>)}
+                  </select>
+                </label>
+
+                <label className="field field-light">
+                  <span>{t("productionResponseLabel")}</span>
+                  <textarea value={productionResponse} onChange={(event) => setProductionResponse(event.target.value)} rows={6} />
+                </label>
+
+                <label className="field field-light">
+                  <span>{t("productionReview")}</span>
+                  <textarea value={productionReview} onChange={(event) => setProductionReview(event.target.value)} rows={4} />
+                </label>
+
+                <div className="settings-actions settings-actions-wrap">
+                  <button
+                    type="button"
+                    onClick={handleSaveProductionAttempt}
+                  >
+                    {productionEditingAttemptId ? t("productionUpdateAttempt") : t("productionSaveAttempt")}
+                  </button>
+                  {productionEditingAttemptId && (
+                    <button type="button" onClick={handleCancelProductionEdit}>
+                      {t("productionCancel")}
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="empty-filter-message">{t("productionPromptsEmpty")}</p>
+            )}
+          </article>
+
+          <article className="settings-card">
+            <p className="eyebrow">{t("productionQueue")}</p>
+            <h3>{t("productionAttempts")}</h3>
+
+            <div className="settings-control-grid">
+              <SelectField label={t("productionModeFilter")} value={productionModeFilter} onChange={setProductionModeFilter} variant="light">{modeFilterOptions}</SelectField>
+              <SelectField label={t("productionStatusFilter")} value={productionStatusFilter} onChange={setProductionStatusFilter} variant="light">{statusFilterOptions}</SelectField>
+            </div>
+
+            {filteredProductionRows.length === 0 ? (
+              <p className="empty-filter-message">{t("productionQueueEmpty")}</p>
+            ) : (
+              <div className="production-attempt-list">
+                {filteredProductionRows.map((attempt) => (
+                  <article className="production-attempt" key={`${attempt.promptId}-${attempt.id}`}>
+                    <div className="production-attempt-header">
+                      <div>
+                        <h4>{attempt.promptTitle}</h4>
+                        <p className="eyebrow">{t(attempt.promptMode)} · {tenseLabel(attempt.promptTenseId, interfaceLanguage)} · {t("status")} {t(attempt.status)}</p>
+                      </div>
+                      <label className="production-attempt-status">
+                        <span>{t("status")}</span>
+                        <select
+                          value={attempt.status}
+                          onChange={(event) => handleUpdateProductionAttemptStatus(attempt.promptId, attempt.id, event.target.value)}
+                        >
+                          {PRODUCTION_STATUSES.map((status) => <option key={status} value={status}>{t(status)}</option>)}
+                        </select>
+                      </label>
+                    </div>
+                    <p className="production-attempt-response">{attempt.response}</p>
+                    {attempt.review && <p className="production-review-note"><strong>{t("productionReview")}:</strong> {attempt.review}</p>}
+                    <p className="production-attempt-time">{new Date(attempt.updatedAt).toLocaleString()}</p>
+                    <div className="row-action-group">
+                      <button
+                        type="button"
+                        className="compact-action"
+                        onClick={() => handleEditProductionAttempt(attempt.promptId, attempt)}
+                      >
+                        {t("editRecord")}
+                      </button>
+                      <button
+                        type="button"
+                        className="compact-action danger-action"
+                        onClick={() => handleDeleteProductionAttempt(attempt.promptId, attempt.id)}
+                      >
+                        {t("deleteDataConfirm")}
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </article>
+        </section>
+      </section>
+    );
+  }
+
   function renderCompleteView() {
     return (
       <>
@@ -1274,6 +1603,7 @@ export default function App() {
         {activePage === "practice" && renderPracticeView()}
         {activePage === "individual" && renderIndividualView()}
         {activePage === "complete" && renderCompleteView()}
+        {activePage === "production" && renderProductionView()}
         {activePage === "settings" && renderSettingsView()}
         {activePage === "documentation" && <DocumentationPage t={t} learnerLanguage={learnerLanguage} />}
         {activePage === "about" && <AboutPage t={t} />}

@@ -55,6 +55,23 @@ Practice is a starter workflow. It saves only local unit progress in this browse
 
 Completing all starter exercises marks the current unit's Practice step as complete in this browser.
 
+### Production
+
+Production is the speaking and writing workspace. Use it to practice prompts and review progress:
+
+- Select a Speaking or Writing prompt.
+- Write your response in the answer area.
+- Add a quick self-review note (optional).
+- Save as:
+  - Draft
+  - Done
+  - Needs review
+  - Approved
+- Use filters to show only the attempts you need.
+- Edit, update, or delete an attempt and cancel editing when needed.
+
+The attempt queue is local to this browser session. This keeps your study data private and removes the need for logins.
+
 ### Individual
 
 Individual is focused practice. It shows affirmative sentences only.
@@ -183,4 +200,4 @@ Learning path progress is also local. SmartTense tracks whether you have opened 
 
 SmartTense now includes structured Theory and Practice screens powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, vocabulary, contexts, and starter exercises.
 
-The current visible learning flow is Home -> Theory -> Practice -> Individual -> Complete -> Settings. Home recommends the next step based on your local unit progress.
+The current visible learning flow is Home -> Theory -> Practice -> Individual -> Production -> Complete -> Settings. Home recommends the next step based on your local unit progress.

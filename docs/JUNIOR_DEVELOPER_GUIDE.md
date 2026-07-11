@@ -55,10 +55,21 @@ The current stable surfaces are:
 - `Practice`: starter exercises with local answer checking.
 - `Learning path`: local Theory/Practice progress for the active unit.
 - `Individual`: focused affirmative practice.
+- `Production`: speaking and writing practice with status-based queue.
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration, verb data administration, and learning-content import/export.
 
-The next planned surface is speaking and writing practice. Keep any larger authoring UI separate from the small learning-content admin helpers.
+Production is now active. It supports drafting attempts, local statuses, filtering, edit, and delete in the queue.
+
+Keep any larger authoring UI separate from the small learning-content admin helpers.
+
+## Updating Production
+
+1. Open `Production` and pick a Speaking or Writing prompt.
+2. Write a response and choose a status (`Draft`, `Done`, `Needs review`, `Approved`).
+3. Save the attempt.
+4. Filter queue by mode/status for review.
+5. Use Edit to update a single attempt and Confirm to apply the change.
 
 ## Adding A Learning Unit
 
@@ -132,6 +143,14 @@ Current behavior:
 - keep imports local to the browser until a developer updates `public/data/learningUnits.json`.
 
 When editing this flow, update `tests/learningContentAdmin.test.js` and keep validation in `src/data/learningContentValidation.js` as the final gate.
+
+## Updating Production Prompts and Attempts
+
+1. Edit prompts in `src/data/productionPrompts.js`.
+2. Keep prompt text short and practical (daily habits, work context, speaking tasks, writing tasks).
+3. Keep `mode`, `tenseId`, and `rubric` aligned with available labels in the UI.
+4. Update status labels in `src/i18n.js` and `PRODUCTION_STATUSES` together.
+5. Run `npm cmd test` and `npm cmd run build` after any structural prompt changes.
 
 ## Updating Learning Path
 
