@@ -19,15 +19,10 @@ npm.cmd run dev
 Run checks before committing:
 
 ```powershell
-npm.cmd test
-npm.cmd run build
+npm.cmd run release:check
 ```
 
-For changes that touch navigation, responsive layout, Settings, or high-volume data, also run:
-
-```powershell
-npm.cmd run test:e2e:mobile
-```
+The release check already includes the mobile smoke test for navigation, responsive layout, Settings, and high-volume data.
 
 Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 
@@ -81,7 +76,7 @@ SmartTense uses a phase-driven execution model. Before and after bigger changes,
    - `docs/DEVELOPER_GUIDE.md` for architecture and file ownership.
 3. Implement the phase tasks with minimal scope.
 4. Update evidence in `docs/PHASE_EXECUTION_LOG.md` and adjust the phase plan/Gantt if needed.
-5. Run checks (`npm.cmd test`, `npm.cmd run build`) before commit. For UI/navigation changes, also run `npm.cmd run test:e2e:mobile`.
+5. Run checks (`npm.cmd run release:check`) before commit.
 
 Keep phase docs current when a deliverable is completed so the next teammate can continue safely.
 

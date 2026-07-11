@@ -311,6 +311,12 @@ npm run build
 Creates the production web build in `dist/`.
 
 ```bash
+npm run release:check
+```
+
+Runs the full local release gate: whitespace check, smoke script syntax check, unit tests, production build, and mobile smoke.
+
+```bash
 npm run preview
 ```
 
@@ -345,7 +351,7 @@ Add tests when changing:
 - Learner-language translations or usage notes.
 - Import/export behavior that can be isolated from the browser.
 
-The current automated tests focus on the grammar engine and JSON validation because those areas are easiest to regress silently. For critical UI/navigation changes, run `npm run test:e2e:mobile` in addition to `npm run build`.
+The current automated tests focus on the grammar engine and JSON validation because those areas are easiest to regress silently. For critical UI/navigation changes and phase milestones, run `npm run release:check`.
 
 Recommended responsive checks:
 

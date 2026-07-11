@@ -21,14 +21,7 @@ git remote -v
 Before pushing a UI, documentation, Settings data export, source data, or phase plan change:
 
 ```bash
-npm test
-npm run build
-```
-
-For UI/navigation, Settings, or phase-QA changes, also run:
-
-```bash
-npm run test:e2e:mobile
+npm run release:check
 ```
 
 The mobile smoke fails if critical screens do not render, Settings pagination breaks, or the internal readiness/density gates are exceeded.
@@ -157,13 +150,11 @@ For GitHub Pages, keep these protections in the app itself:
 Run locally before pushing:
 
 ```bash
-npm test
-npm run test:e2e:mobile
-npm run build
+npm run release:check
 npm audit --audit-level=moderate
 ```
 
-Then push to `main` and verify the GitHub Actions deployment. If Chrome is not available locally, record that `npm run test:e2e:mobile` was skipped and keep `npm test` plus `npm run build` green before pushing. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
+Then push to `main` and verify the GitHub Actions deployment. If Chrome is not available locally, record that `npm run release:check` could not complete and keep `npm test` plus `npm run build` green before pushing. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
 
 If `public/data/learningUnits.json`, Theory, Practice, Production prompts, learning contexts, learning-content administration, learning path, or form explanations changed, confirm the relevant validation/conjugation/practice/production/context/content-admin/learning-path tests pass and run the production build before pushing.
 

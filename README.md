@@ -230,9 +230,7 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 Before publishing a change, run:
 
 ```bash
-npm test
-npm run test:e2e:mobile
-npm run build
+npm run release:check
 ```
 
 For phase milestones and critical UI changes, also follow `docs/RELEASE_CHECKLIST.md`.

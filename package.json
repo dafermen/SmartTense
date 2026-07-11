@@ -8,6 +8,7 @@
     "test": "node --test",
     "test:e2e:mobile": "node scripts/mobile-smoke.cjs",
     "build": "vite build",
+    "release:check": "git diff --check && node --check scripts/mobile-smoke.cjs && npm test && npm run build && npm run test:e2e:mobile",
     "preview": "vite preview --host 127.0.0.1",
     "cap:sync": "npm run build && cap sync",
     "cap:open:ios": "cap open ios",

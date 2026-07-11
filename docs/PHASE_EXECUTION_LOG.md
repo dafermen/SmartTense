@@ -100,6 +100,9 @@ Fecha base: 11/07/2026.
 ## Seguimiento fase 9 (cierre)
 
 - **Resultado:** Fase 9 cerrada con smoke E2E mobile repetible, quality gates, accesibilidad basica automatizada, checklist de release y criterio explicito para no agregar virtualizacion prematura.
+- **Ajuste operativo post-cierre:** se agrego `npm run release:check` para ejecutar el checklist local completo sin abrir una nueva fase tecnica.
+- **Evidencia del ajuste operativo:** `npm run release:check` OK; incluye `git diff --check`, `node --check scripts/mobile-smoke.cjs`, `npm test`, `npm run build` y `npm run test:e2e:mobile`.
+- **Metricas del ajuste operativo:** Home `571ms`, Settings `145ms`, 25 filas visibles, accesibilidad basica OK y quality gates `passed: true`.
 - **Siguiente fase:** pendiente de definicion de producto. No se abre una Fase 10 tecnica sin nuevo alcance MVP.
 
 ## Fases 0 a 7 (cierres previos)

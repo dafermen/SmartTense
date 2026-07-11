@@ -4,6 +4,14 @@ Use this checklist before pushing a phase milestone or any change that touches n
 
 ## Required Commands
 
+Run the full release check:
+
+```bash
+npm run release:check
+```
+
+That command runs:
+
 ```bash
 git diff --check
 node --check scripts/mobile-smoke.cjs
