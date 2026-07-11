@@ -2,6 +2,8 @@
 
 Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.
 
+La version ejecutiva + operativa detallada esta en [DEVELOPMENT_PHASE_EXECUTION_PLAN.md](DEVELOPMENT_PHASE_EXECUTION_PLAN.md).
+
 La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
 
 ## Estado Ejecutivo De Fases
