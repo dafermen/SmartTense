@@ -99,6 +99,13 @@
               "prompt": "Change to a question: He works in IT.",
               "answer": "Does he work in IT?",
               "explanation": "Use does + subject + base verb for he/she/it questions."
+            },
+            {
+              "id": "present-simple-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: Dario checks his email every morning.",
+              "answer": "simple present",
+              "explanation": "Every morning signals a repeated routine, so Simple Present is the best tense."
             }
           ]
         }

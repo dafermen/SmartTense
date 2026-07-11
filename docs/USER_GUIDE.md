@@ -33,6 +33,19 @@ Theory includes:
 
 Use Theory when you want to understand the rule before opening Individual or Complete.
 
+### Practice
+
+Practice shows starter exercises from the current learning unit. Type your answer and press Check answer to get immediate feedback.
+
+The first Practice MVP supports:
+
+- fill-in-the-blank style answers;
+- sentence transformation answers;
+- local scoring in this browser session;
+- reset for the current practice draft.
+
+Practice is a starter workflow. It does not yet save long-term unit progress.
+
 ### Individual
 
 Individual is focused practice. It shows affirmative sentences only.
@@ -125,7 +138,7 @@ SmartTense is designed to save space on phones:
 
 Recommended mobile flow:
 
-1. Start on Home and choose Theory, Individual, or Complete.
+1. Start on Home and choose Theory, Practice, Individual, or Complete.
 2. Use only the filters you need.
 3. Collapse Display options after changing them.
 4. In Individual, select only the tense groups and subjects you want to practice now.
@@ -151,4 +164,4 @@ Progress is local to the browser and can be reset from Settings. It counts verbs
 
 SmartTense now includes a structured Theory screen powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, and starter exercises.
 
-The current visible learning flow is Home -> Theory -> Individual -> Complete -> Settings. Interactive Practice is planned as a later phase so it can be added cleanly without overcrowding the current interface.
+The current visible learning flow is Home -> Theory -> Practice -> Individual -> Complete -> Settings. Practice now gives immediate local feedback for starter exercises.

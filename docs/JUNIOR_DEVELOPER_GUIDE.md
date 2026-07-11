@@ -32,6 +32,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `src/data/defaultData.js`: built-in tense, subject, and fallback verb data.
 - `src/data/validation.js`: validation for verb JSON.
 - `src/data/learningContentValidation.js`: validation for learning units.
+- `src/practice.js`: practice exercise extraction, answer normalization, and scoring.
 - `public/data/verbs.json`: default verb database loaded by the app.
 - `public/data/learningUnits.json`: first structured learning-content database.
 - `src/styles.css`: visual layout and responsive behavior.
@@ -47,6 +48,7 @@ The current stable surfaces are:
 - `Home`: dashboard and recommendations.
 - `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
 - `Why this form?`: compact explanations attached to generated sentence rows.
+- `Practice`: starter exercises with local answer checking.
 - `Individual`: focused affirmative practice.
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration and data administration.
@@ -88,6 +90,18 @@ Rules for safe edits:
 - Do not create a second conjugation engine.
 - Update `tests/conjugation.test.js` when the explanation shape or wording changes.
 - Keep the UI collapsed by default so Complete and Individual stay compact.
+
+## Updating Practice
+
+Practice is rendered in `src/App.jsx` by `PracticePage`.
+
+The pure logic lives in `src/practice.js`:
+
+- `getPracticeExercises`
+- `normalizePracticeAnswer`
+- `scorePracticeAnswer`
+
+When editing Practice, add tests in `tests/practice.test.js` and keep scoring local. Do not add accounts, server storage, or long-term progress until the Learning Path phase.
 
 ## Adding Or Editing Verbs
 

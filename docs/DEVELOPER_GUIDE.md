@@ -60,6 +60,20 @@ Each explanation includes a pattern, reason, subject, auxiliary, verb form, and 
 
 Keep explanations concise. They should explain the existing generated row; they should not create a separate grammar engine.
 
+### Practice
+
+Practice renders starter exercises from the active learning unit. It uses `src/practice.js` for answer extraction, normalization, and scoring.
+
+Current MVP behavior:
+
+- reads `exercises` sections from `public/data/learningUnits.json`;
+- accepts typed answers;
+- checks answers locally;
+- shows immediate correct/try-again feedback;
+- resets the current browser-session practice draft.
+
+Do not add complex persistence or speaking/writing flows here yet. Those belong to later phases.
+
 ### Individual
 
 Individual is affirmative-only practice. It builds rows from selected subjects and selected Individual tenses. Tense and subject controls are multi-select; group labels toggle entire groups.
@@ -84,6 +98,7 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 10. The same generated row model supports Home preview, Individual affirmative cards, Complete desktop table, and mobile cards.
 11. `public/data/learningUnits.json` stores Theory/Practice content and is protected by `validateLearningContent`.
 12. Theory renders the first matching learning unit for Present Simple from validated JSON.
+13. Practice extracts starter exercises from the same unit and scores typed answers with `src/practice.js`.
 
 ## Important Source Files
 
@@ -195,6 +210,7 @@ Add tests when changing:
 
 - Conjugation output.
 - Form explanations.
+- Practice answer normalization and scoring.
 - Learning level filtering.
 - JSON validation.
 - Learning content validation.
@@ -254,6 +270,16 @@ npm test
 ```
 
 The validator rejects unknown fields, unsafe strings, unsupported section types, unsupported exercise kinds, duplicate IDs, and oversized collections.
+
+## Updating Practice
+
+Practice is intentionally simple.
+
+1. Add exercises to `public/data/learningUnits.json`.
+2. Keep each answer exact and learner-readable.
+3. Update `src/practice.js` only when scoring rules must change.
+4. Add or update tests in `tests/practice.test.js`.
+5. Keep UI feedback immediate and local.
 
 ## Security Notes
 

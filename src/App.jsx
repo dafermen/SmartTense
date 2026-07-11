@@ -5,13 +5,14 @@ import { validateLearningContent } from "./data/learningContentValidation.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
+import { getPracticeExercises, scorePracticeAnswer } from "./practice.js";
 
 const INITIAL_ALERT_MS = 6000;
 const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "theory", "individual", "complete", "settings", "documentation", "about"];
+const MENU_ITEMS = ["home", "theory", "practice", "individual", "complete", "settings", "documentation", "about"];
 const INDIVIDUAL_TENSE_GROUPS = [
   { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
   { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
@@ -74,6 +75,8 @@ export default function App() {
     return !window.matchMedia(MOBILE_MENU_QUERY).matches;
   });
   const [alert, setAlert] = useState(null);
+  const [practiceAnswers, setPracticeAnswers] = useState({});
+  const [practiceResults, setPracticeResults] = useState({});
   const fileInputRef = useRef(null);
   const settingsFileInputRef = useRef(null);
   const [dataDraft, setDataDraft] = useState(() => cloneVerbData(DEFAULT_DATA));
@@ -241,6 +244,7 @@ export default function App() {
     () => learningContent.units.find((unit) => unit.tenseIds.includes("simplePresent")) || learningContent.units[0],
     [learningContent.units]
   );
+  const practiceExercises = useMemo(() => getPracticeExercises(primaryLearningUnit), [primaryLearningUnit]);
 
   useEffect(() => {
     if (!currentVerb?.id) return;
@@ -544,6 +548,7 @@ export default function App() {
             </div>
             <div className="dashboard-actions compact-home-actions" aria-label={t("homeActions")}>
               <button type="button" onClick={() => setActivePage("theory")}>{t("openTheory")}</button>
+              <button type="button" onClick={() => setActivePage("practice")}>{t("openPractice")}</button>
               <button type="button" onClick={() => setActivePage("individual")}>{t("practiceIndividual")}</button>
               <button type="button" onClick={() => setActivePage("complete")}>{t("viewComplete")}</button>
             </div>
@@ -898,6 +903,36 @@ export default function App() {
     );
   }
 
+  function renderPracticeView() {
+    return (
+      <PracticePage
+        unit={primaryLearningUnit}
+        exercises={practiceExercises}
+        answers={practiceAnswers}
+        results={practiceResults}
+        t={t}
+        onAnswerChange={(exerciseId, value) => {
+          setPracticeAnswers((current) => ({ ...current, [exerciseId]: value }));
+          setPracticeResults((current) => {
+            const next = { ...current };
+            delete next[exerciseId];
+            return next;
+          });
+        }}
+        onCheck={(exercise) => {
+          setPracticeResults((current) => ({
+            ...current,
+            [exercise.id]: scorePracticeAnswer(exercise.answer, practiceAnswers[exercise.id])
+          }));
+        }}
+        onReset={() => {
+          setPracticeAnswers({});
+          setPracticeResults({});
+        }}
+      />
+    );
+  }
+
   function renderIndividualView() {
     const individualRowsByTense = selectedIndividualTenses
       .map((tense) => ({
@@ -1080,6 +1115,7 @@ export default function App() {
         {renderAlert()}
         {activePage === "home" && renderDashboard()}
         {activePage === "theory" && renderTheoryView()}
+        {activePage === "practice" && renderPracticeView()}
         {activePage === "individual" && renderIndividualView()}
         {activePage === "complete" && renderCompleteView()}
         {activePage === "settings" && renderSettingsView()}
@@ -1237,6 +1273,68 @@ function LearningSection({ section, t }) {
     default:
       return null;
   }
+}
+
+function PracticePage({ unit, exercises, answers, results, t, onAnswerChange, onCheck, onReset }) {
+  const correctCount = Object.values(results).filter((result) => result.isCorrect).length;
+
+  return (
+    <section className="practice-page">
+      <div className="practice-header">
+        <div>
+          <p className="eyebrow">{t("practice")}</p>
+          <h2>{unit?.title || t("practiceTitle")}</h2>
+          <p>{t("practiceIntro")}</p>
+        </div>
+        <div className="practice-score">
+          <span>{correctCount}/{exercises.length}</span>
+          <small>{t("correctAnswers")}</small>
+        </div>
+      </div>
+
+      {exercises.length === 0 ? (
+        <p className="empty-filter-message">{t("noPracticeExercises")}</p>
+      ) : (
+        <div className="practice-list">
+          {exercises.map((exercise, index) => {
+            const result = results[exercise.id];
+
+            return (
+              <article className={`practice-card ${result?.isCorrect ? "correct" : result ? "incorrect" : ""}`} key={exercise.id}>
+                <div className="practice-card-heading">
+                  <div>
+                    <p className="eyebrow">{exercise.sectionTitle || t("practice")}</p>
+                    <h3>{index + 1}. {exercise.prompt}</h3>
+                  </div>
+                  <span className="pattern-pill">{exercise.kind}</span>
+                </div>
+                <label className="field field-light">
+                  <span>{t("yourAnswer")}</span>
+                  <input value={answers[exercise.id] || ""} onChange={(event) => onAnswerChange(exercise.id, event.target.value)} />
+                </label>
+                <div className="practice-actions">
+                  <button type="button" onClick={() => onCheck(exercise)}>{t("checkAnswer")}</button>
+                </div>
+                {result && (
+                  <div className="practice-feedback">
+                    <strong>{result.isCorrect ? t("correct") : t("tryAgain")}</strong>
+                    <p>{t("expectedAnswer")}: {result.expectedAnswer}</p>
+                    <p>{exercise.explanation}</p>
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {exercises.length > 0 && (
+        <div className="practice-footer">
+          <button type="button" onClick={onReset}>{t("resetPractice")}</button>
+        </div>
+      )}
+    </section>
+  );
 }
 
 function DocumentationPage({ t, learnerLanguage }) {

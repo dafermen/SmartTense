@@ -11,7 +11,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 0 - Arquitectura de contenido | Cerrada | `public/data/learningUnits.json`, validador, pruebas y esquema documentado | `npm test` con validacion de contenido |
 | Fase 1 - Theory | Cerrada | Pagina Theory renderizada desde JSON, enlazada desde Home y menu | `npm test`, `npm run build`; navegador interno no disponible para captura automatizada |
 | Fase 2 - Explicaciones inteligentes | Cerrada | Panel compacto `Why this form?` con patron, razon, auxiliar y forma verbal | `npm test`, `npm run build` |
-| Fase 3 - Motor de practica | Pendiente | Ejercicios interactivos con feedback | No iniciada |
+| Fase 3 - Motor de practica | Cerrada | Pagina Practice con ejercicios iniciales, scoring local y feedback inmediato | `npm test`, `npm run build` |
 | Fase 4 - Ruta de aprendizaje | Pendiente | Home recomienda el siguiente paso dentro de una unidad | No iniciada |
 | Fase 5 - Vocabulario y contextos | Pendiente | Ejemplos y practica por contexto | No iniciada |
 | Fase 6 - Administracion de contenido | Pendiente | Authoring tools para unidades y vocabulario | No iniciada |
@@ -136,6 +136,10 @@ Entregable:
 
 - Present Simple tiene al menos tres tipos de ejercicios funcionales con feedback.
 
+Estado:
+
+- Cerrada para MVP. Practice renderiza ejercicios desde `learningUnits`, permite escribir respuestas, normaliza/scoring localmente y muestra feedback inmediato. El contenido inicial incluye completar y transformar; mas tipos quedan para iteraciones posteriores de Practice.
+
 ### Fase 4 - Ruta De Aprendizaje
 
 Objetivo ejecutivo:
@@ -239,13 +243,13 @@ gantt
     Panel Why this form                     :done, p2b, 2026-07-11, 1d
 
     section Practica
-    Fase 3 - Practice engine                :p3, 2026-07-12, 15d
-    Modelo de ejercicios                    :p3a, 2026-07-12, 7d
-    Feedback y scoring                      :p3b, after p3a, 8d
+    Fase 3 - Practice engine                :done, p3, 2026-07-11, 1d
+    Modelo de ejercicios                    :done, p3a, 2026-07-11, 1d
+    Feedback y scoring                      :done, p3b, 2026-07-11, 1d
 
     section Ruta
-    Fase 4 - Learning path                  :p4, after p3, 12d
-    Modelo de progreso                      :p4a, after p3, 5d
+    Fase 4 - Learning path                  :p4, 2026-07-12, 12d
+    Modelo de progreso                      :p4a, 2026-07-12, 5d
     Recomendaciones en Home                 :p4b, after p4a, 7d
 
     section Expansion
@@ -294,12 +298,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 3:
+Continuar con Fase 4:
 
-1. Crear una pagina `Practice`.
-2. Implementar un modelo minimo de ejercicios desde `learningUnits`.
-3. Iniciar con completar espacios y transformar oraciones.
-4. Agregar feedback inmediato y pruebas de scoring.
-5. Mantener la experiencia compacta y sin persistencia compleja al inicio.
+1. Agregar estado de unidad: no iniciada, en progreso y completada.
+2. Conectar Home con el siguiente paso recomendado.
+3. Definir criterios locales de completitud para Theory y Practice.
+4. Agregar reset de progreso por unidad en Settings.
+5. Mantener el progreso local y simple.
 
-Este paso debe convertir el contenido y las explicaciones en practica activa, sin ampliar todavia a speaking/writing.
+Este paso debe convertir las pantallas ya creadas en una ruta guiada sin agregar cuentas ni backend.

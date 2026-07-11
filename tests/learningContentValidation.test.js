@@ -22,6 +22,16 @@ test("bundled Present Simple unit has the sections needed by Theory", () => {
   );
 });
 
+test("bundled Present Simple practice includes three exercise kinds", () => {
+  const unit = learningContent.units.find((entry) => entry.id === "present-simple-foundation");
+  const exerciseSection = unit.sections.find((section) => section.type === "exercises");
+
+  assert.deepEqual(
+    new Set(exerciseSection.exercises.map((exercise) => exercise.kind)),
+    new Set(["fillBlank", "transform", "chooseTense"])
+  );
+});
+
 test("rejects empty learning unit collections", () => {
   assert.throws(() => validateLearningContent({ schemaVersion: 1, units: [] }), /Invalid learning content/);
 });
