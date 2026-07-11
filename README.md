@@ -178,6 +178,7 @@ For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 - `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.
+- `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.
 
