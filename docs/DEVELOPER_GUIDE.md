@@ -236,6 +236,8 @@ Holds the local starter prompts used in Production.
 - constant `PRODUCTION_STATUSES`;
 - no persistence or network calls in this file.
 
+Update `tests/productionPrompts.test.js` when prompt shape, supported statuses, or tense links change.
+
 ### `public/data/learningUnits.json`
 
 Stores learning units as data. The first unit is `present-simple-foundation`, which includes:

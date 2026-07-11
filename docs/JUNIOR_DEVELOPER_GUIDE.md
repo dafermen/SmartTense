@@ -164,7 +164,8 @@ When editing this flow, update `tests/learningContentAdmin.test.js` and keep val
 2. Keep prompt text short and practical (daily habits, work context, speaking tasks, writing tasks).
 3. Keep `mode`, `tenseId`, and `rubric` aligned with available labels in the UI.
 4. Update status labels in `src/i18n.js` and `PRODUCTION_STATUSES` together.
-5. Run `npm cmd test` and `npm cmd run build` after any structural prompt changes.
+5. Update `tests/productionPrompts.test.js` when prompt structure, statuses, or tense links change.
+6. Run `npm.cmd test` and `npm.cmd run build` after any structural prompt changes.
 
 ## Updating Learning Path
 
