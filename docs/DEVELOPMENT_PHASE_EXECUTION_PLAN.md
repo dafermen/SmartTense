@@ -170,7 +170,7 @@ Estado: **Cerrada**
 **Criterio de cierre:**
 - `npm test`, `npm run build` y `npm run test:e2e:mobile` verdes con evidencia registrada.
 
-Estado: **En curso**. F9a entregada con el script `scripts/mobile-smoke.cjs`.
+Estado: **En curso**. F9a y F9b entregadas con el script `scripts/mobile-smoke.cjs` y quality gates internos.
 
 ## Plan Gantt Interno
 
@@ -198,12 +198,12 @@ gantt
     Fase 8 Expansion de Unidades                 :done, p8, 2026-07-13, 10d
     Fase 9 Calidad, metricas y robustez          :active, p9, after p8, 5d
     E2E mobile repetible                          :done, p9a, after p8, 1d
-    Metricas y checklist                          :p9b, after p9a, 4d
+    Metricas y umbrales                           :done, p9b, after p9a, 1d
+    Accesibilidad y checklist                     :p9c, after p9b, 3d
 ```
 
 ## Hoja de Ruta de Ejecutable Inmediato
 
-1. Definir metricas de experiencia y umbrales internos.
-2. Revisar accesibilidad y textos de pantallas criticas.
-3. Preparar checklist de release interna por pantalla.
-4. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
+1. Revisar accesibilidad y textos de pantallas criticas.
+2. Preparar checklist de release interna por pantalla.
+3. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.

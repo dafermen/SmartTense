@@ -10,6 +10,19 @@ const cdpPort = Number(process.env.SMARTTENSE_CDP_PORT || 9400 + Math.floor(Math
 const viteBin = path.join(projectRoot, "node_modules", "vite", "bin", "vite.js");
 const chromePath = findChromePath();
 const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "smarttense-mobile-smoke-"));
+const REQUIRED_SCREENS = ["Home", "Theory", "Practice", "Individual", "Complete", "Production", "Settings"];
+// Conservative local QA gates. They catch obvious regressions without turning
+// normal machine variance into noise.
+const QA_THRESHOLDS = {
+  homeReadyMs: readPositiveNumber("SMARTTENSE_QA_HOME_READY_MS", 5000),
+  settingsReadyMs: readPositiveNumber("SMARTTENSE_QA_SETTINGS_READY_MS", 2000),
+  syntheticVerbCount: 500,
+  visibleRows: 25,
+  viewportWidth: 390,
+  viewportHeight: 844,
+  maxActiveButtons: readPositiveNumber("SMARTTENSE_QA_MAX_ACTIVE_BUTTONS", 140),
+  minBodyChars: readPositiveNumber("SMARTTENSE_QA_MIN_BODY_CHARS", 1200)
+};
 
 if (typeof fetch !== "function" || typeof WebSocket !== "function") {
   console.error("This smoke test requires a recent Node.js runtime with global fetch and WebSocket.");
@@ -19,6 +32,11 @@ if (typeof fetch !== "function" || typeof WebSocket !== "function") {
 if (!chromePath) {
   console.error("Chrome was not found. Set SMARTTENSE_CHROME_PATH to the Chrome executable path.");
   process.exit(1);
+}
+
+function readPositiveNumber(name, fallback) {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
 function findChromePath() {
@@ -63,7 +81,7 @@ function makeVerbs(count) {
 const syntheticData = {
   schemaVersion: 1,
   updatedAt: "2026-07-11-synthetic-qa",
-  verbs: makeVerbs(500)
+  verbs: makeVerbs(QA_THRESHOLDS.syntheticVerbCount)
 };
 const syntheticBody = Buffer.from(JSON.stringify(syntheticData), "utf8").toString("base64");
 
@@ -225,6 +243,40 @@ async function clickAndWait(cdp, label, expression) {
   await waitFor(cdp, expression);
 }
 
+function assertQualityGates(result) {
+  const failures = [];
+  const { durations, metrics, syntheticVerbCount, screens } = result;
+
+  if (durations.homeMs > QA_THRESHOLDS.homeReadyMs) {
+    failures.push(`Home ready time ${durations.homeMs}ms exceeded ${QA_THRESHOLDS.homeReadyMs}ms`);
+  }
+  if (durations.settingsMs > QA_THRESHOLDS.settingsReadyMs) {
+    failures.push(`Settings ready time ${durations.settingsMs}ms exceeded ${QA_THRESHOLDS.settingsReadyMs}ms`);
+  }
+  if (syntheticVerbCount !== QA_THRESHOLDS.syntheticVerbCount) {
+    failures.push(`Synthetic verb count ${syntheticVerbCount} did not match ${QA_THRESHOLDS.syntheticVerbCount}`);
+  }
+  if (screens.length !== REQUIRED_SCREENS.length || REQUIRED_SCREENS.some((screen) => !screens.includes(screen))) {
+    failures.push(`Screen coverage did not include every required screen: ${REQUIRED_SCREENS.join(", ")}`);
+  }
+  if (metrics.visibleRows !== QA_THRESHOLDS.visibleRows) {
+    failures.push(`Visible table rows ${metrics.visibleRows} did not match ${QA_THRESHOLDS.visibleRows}`);
+  }
+  if (metrics.viewport.width !== QA_THRESHOLDS.viewportWidth || metrics.viewport.height !== QA_THRESHOLDS.viewportHeight) {
+    failures.push(`Viewport ${metrics.viewport.width}x${metrics.viewport.height} did not match ${QA_THRESHOLDS.viewportWidth}x${QA_THRESHOLDS.viewportHeight}`);
+  }
+  if (metrics.activeButtons > QA_THRESHOLDS.maxActiveButtons) {
+    failures.push(`Active buttons ${metrics.activeButtons} exceeded ${QA_THRESHOLDS.maxActiveButtons}`);
+  }
+  if (metrics.bodyChars < QA_THRESHOLDS.minBodyChars) {
+    failures.push(`Body text length ${metrics.bodyChars} was below ${QA_THRESHOLDS.minBodyChars}`);
+  }
+
+  if (failures.length > 0) {
+    throw new Error(`Mobile smoke quality gates failed:\n${failures.join("\n")}`);
+  }
+}
+
 async function main() {
   const server = startDevServer();
   let chrome;
@@ -321,14 +373,21 @@ async function main() {
       throw new Error(`Browser problems detected:\\n${browserProblems.join("\\n")}`);
     }
 
-    console.log(JSON.stringify({
+    const result = {
       viewport: "390x844",
       syntheticVerbCount: syntheticData.verbs.length,
-      screens: ["Home", "Theory", "Practice", "Individual", "Complete", "Production", "Settings"],
+      screens: REQUIRED_SCREENS,
       paginationOk: true,
       durations: { homeMs, settingsMs },
-      metrics
-    }, null, 2));
+      metrics,
+      qualityGates: {
+        passed: true,
+        thresholds: QA_THRESHOLDS
+      }
+    };
+
+    assertQualityGates(result);
+    console.log(JSON.stringify(result, null, 2));
   } finally {
     if (cdp) {
       try {

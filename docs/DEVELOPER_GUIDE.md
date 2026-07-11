@@ -296,6 +296,12 @@ Optional environment variables:
 
 - `SMARTTENSE_E2E_PORT`: Vite port used by the smoke test. Default: `5174`.
 - `SMARTTENSE_CDP_PORT`: Chrome DevTools Protocol port. Default: random port around `9400`.
+- `SMARTTENSE_QA_HOME_READY_MS`: maximum allowed Home ready time. Default: `5000`.
+- `SMARTTENSE_QA_SETTINGS_READY_MS`: maximum allowed Settings ready time after navigation. Default: `2000`.
+- `SMARTTENSE_QA_MAX_ACTIVE_BUTTONS`: maximum active buttons in the final Settings state. Default: `140`.
+- `SMARTTENSE_QA_MIN_BODY_CHARS`: minimum rendered text size in the final Settings state. Default: `1200`.
+
+The smoke also enforces fixed gates for viewport `390x844`, 500 synthetic verbs, all seven critical screens, and 25 visible Settings table rows.
 
 ```bash
 npm run build

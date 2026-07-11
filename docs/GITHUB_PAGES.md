@@ -31,6 +31,8 @@ For UI/navigation, Settings, or phase-QA changes, also run:
 npm run test:e2e:mobile
 ```
 
+The mobile smoke fails if critical screens do not render, Settings pagination breaks, or the internal readiness/density gates are exceeded.
+
 If Settings was used to edit verbs, export the database first and intentionally update `public/data/verbs.json` plus `src/data/defaultData.js` before committing. Then commit and push:
 
 ```bash

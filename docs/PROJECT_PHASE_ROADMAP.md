@@ -280,7 +280,7 @@ Tareas operativas:
 
 Estado:
 
-- En curso. F9a esta entregada con `npm run test:e2e:mobile`.
+- En curso. F9a y F9b estan entregadas con `npm run test:e2e:mobile` y quality gates internos para tiempos, volumen, viewport y densidad de tabla.
 
 ## Gantt Interno
 
@@ -338,7 +338,8 @@ gantt
     section Calidad
     Fase 9 - QA mobile repetible             :active, p9, after p8c, 5d
     E2E mobile CDP                            :done, p9a, after p8c, 1d
-    Metricas y release checklist              :p9b, after p9a, 4d
+    Metricas internas                         :done, p9b, after p9a, 1d
+    Accesibilidad y release checklist         :p9c, after p9b, 3d
 ```
 
 ## Releases Sugeridos
@@ -373,9 +374,8 @@ gantt
 
 Continuar con Fase 9:
 
-1. Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion mobile.
-2. Revisar accesibilidad y textos de pantallas criticas.
-3. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
-4. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
+1. Revisar accesibilidad y textos de pantallas criticas.
+2. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
+3. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
 
 Este paso debe convertir la plataforma multiunidad en un flujo medible y repetible, sin cambiar el modelo tecnico actual.

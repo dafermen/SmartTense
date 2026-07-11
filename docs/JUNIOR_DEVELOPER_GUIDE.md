@@ -49,6 +49,8 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `scripts/mobile-smoke.cjs`: local Chrome/Vite mobile smoke test for critical screens.
 - `docs/`: user, developer, data, publishing, and roadmap docs.
 
+The mobile smoke has internal quality gates for Home ready time, Settings ready time, viewport size, 500-verb volume, and 25 visible Settings rows. If it fails, read the failure message before changing thresholds.
+
 ## Current Product Direction
 
 SmartTense is moving from a conjugation table into a guided learning tool.

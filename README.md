@@ -127,7 +127,7 @@ Run the mobile smoke test for critical screens and high-volume Settings data:
 npm run test:e2e:mobile
 ```
 
-This starts Vite, opens Chrome headless at `390x844`, uses 500 synthetic verbs in the browser, and checks Home, Theory, Practice, Individual, Complete, Production, Settings, and Settings pagination.
+This starts Vite, opens Chrome headless at `390x844`, uses 500 synthetic verbs in the browser, and checks Home, Theory, Practice, Individual, Complete, Production, Settings, Settings pagination, and conservative quality gates for readiness time and visible table density.
 
 Create a production web build:
 
