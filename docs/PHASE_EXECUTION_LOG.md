@@ -4,11 +4,42 @@ Fecha base: 11/07/2026.
 
 ## Fase actual
 
-- **Fase activa:** Fase 8 - Expansion de unidades de tiempo (cerrada).
-- **Objetivo de la fase:** agregar una unidad nueva de tiempos y reforzar la navegacion mobile sin romper el core.
-- **Estado:** cerrada. Siguiente tramo recomendado: Fase 9 - Calidad, metricas y robustez.
+- **Fase activa:** Fase 9 - Calidad, metricas y robustez (en curso).
+- **Objetivo de la fase:** convertir la validacion mobile y de pantallas criticas en evidencia repetible, medible y facil de ejecutar.
+- **Estado:** en curso. Primer bloque F9a entregado: smoke E2E mobile repetible.
 
-## Fase 8 (actual)
+## Fase 9 (actual)
+
+- **Estado operativo:** en curso.
+- **Checkpoint F9a - E2E mobile repetible (11/07/2026):**
+  - Se agrego `scripts/mobile-smoke.cjs`.
+  - Se agrego el comando `npm run test:e2e:mobile`.
+  - El script levanta Vite, abre Chrome headless con viewport `390x844`, intercepta `public/data/verbs.json` y usa 500 verbos sinteticos.
+  - El recorrido valida Home, Theory, Practice, Individual, Complete, Production y Settings.
+  - Settings valida paginacion de `Showing 1-25 of 500` a `Showing 26-50 of 500`.
+  - El script no agrega dependencias nuevas y mantiene la verificacion local/simple para MVP.
+- **Tareas puntuales:**
+  - Convertir recorridos mobile CDP en prueba E2E repetible. **completada**.
+  - Definir metricas de experiencia y umbrales internos. **pendiente**.
+  - Revisar accesibilidad y textos de pantallas criticas. **pendiente**.
+  - Preparar checklist de release interna por pantalla. **pendiente**.
+- **Criterio de salida definido para cierre de fase:**
+  - E2E mobile repetible disponible desde npm.
+  - `npm test`, `npm run build` y `npm run test:e2e:mobile` verdes.
+  - Evidencia documentada con pantallas cubiertas, volumen usado y metricas basicas.
+  - Siguiente bloque de calidad definido sin introducir features fuera del MVP.
+- **Evidencia ejecutada hoy:**
+  - `git diff --check` OK.
+  - `node --check scripts/mobile-smoke.cjs` OK.
+  - `npm test` OK (50 pruebas, 0 fallos).
+  - `npm run build` OK.
+  - `npm run test:e2e:mobile` OK.
+  - Viewport validado: `390x844`.
+  - Volumen validado: 500 verbos sinteticos.
+  - Pantallas validadas: Home, Theory, Practice, Individual, Complete, Production, Settings.
+  - Metricas observadas en E2E: Home `622ms`, Settings `181ms`, 25 filas visibles en tabla.
+
+## Fase 8 (cerrada)
 
 - **Estado operativo:** cerrada.
 - **Checkpoint de ejecucion (11/07/2026):**
@@ -54,8 +85,8 @@ Fecha base: 11/07/2026.
 
 - **Resultado del siguiente paso:** Fase 8 cerrada con unidad adicional, Production alineado, smoke mobile y prueba de alto volumen.
 - **Pendiente para Fase 9:**
-  - Convertir los recorridos CDP en pruebas E2E repetibles si el proyecto adopta Playwright o una suite equivalente.
   - Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion en mobile.
+  - Revisar accesibilidad y textos de pantallas criticas.
 
 ## Fases 0 a 7 (cierres previos)
 

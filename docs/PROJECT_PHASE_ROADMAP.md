@@ -24,6 +24,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 6 - Administracion de contenido | Cerrada | Import/export, preview y validacion de contenido de aprendizaje en Settings | `npm test`, `npm run build` |
 | Fase 7 - Speaking, writing y revision | Cerrada | Workspace Production con speaking/writing, estado de intento y filtros | `src/data/productionPrompts.js`, `App.jsx`, `src/i18n.js` |
 | Fase 8 - Expansión de unidades de tiempo | Cerrada | Unidad past/future/conditional, ejercicios de transferencia y Production alineado | `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen con 500 verbos |
+| Fase 9 - Calidad, metricas y robustez | En curso | E2E mobile repetible para pantallas criticas y alto volumen | `npm run test:e2e:mobile` |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
@@ -263,6 +264,24 @@ Estado:
 
 - Cerrada. La unidad adicional, los ejercicios de transferencia, Production y la validacion mobile/alto volumen quedaron documentados en `docs/PHASE_EXECUTION_LOG.md`.
 
+### Fase 9 - Calidad, Metricas Y Robustez
+
+Objetivo ejecutivo:
+
+Convertir los recorridos criticos de la app en evidencia repetible y medible, sin agregar features fuera del MVP.
+
+Tareas operativas:
+
+- Mantener un smoke E2E mobile ejecutable desde npm.
+- Validar Home, Theory, Practice, Individual, Complete, Production y Settings en viewport mobile.
+- Simular alto volumen con 500 verbos, que es el limite actual del validador.
+- Definir metricas y umbrales internos para proximos cierres.
+- Preparar checklist de release interna por pantalla.
+
+Estado:
+
+- En curso. F9a esta entregada con `npm run test:e2e:mobile`.
+
 ## Gantt Interno
 
 Fechas internas de referencia. Se pueden ajustar segun prioridad, tiempo disponible y feedback del usuario.
@@ -316,6 +335,10 @@ gantt
     Unit 2/3 y validaciones por escala      :done, p8a, after p8, 4d
     Rendimiento y UX mobile                  :done, p8b, after p8a, 3d
     Ruta de progreso multiunidad             :done, p8c, after p8b, 3d
+    section Calidad
+    Fase 9 - QA mobile repetible             :active, p9, after p8c, 5d
+    E2E mobile CDP                            :done, p9a, after p8c, 1d
+    Metricas y release checklist              :p9b, after p9a, 4d
 ```
 
 ## Releases Sugeridos
@@ -350,10 +373,9 @@ gantt
 
 Continuar con Fase 9:
 
-1. Convertir los recorridos mobile CDP en pruebas E2E repetibles.
-2. Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion mobile.
-3. Revisar accesibilidad y textos de pantallas criticas.
-4. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
-5. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
+1. Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion mobile.
+2. Revisar accesibilidad y textos de pantallas criticas.
+3. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
+4. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
 
 Este paso debe convertir la plataforma multiunidad en un flujo medible y repetible, sin cambiar el modelo tecnico actual.

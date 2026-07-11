@@ -23,6 +23,12 @@ npm.cmd test
 npm.cmd run build
 ```
 
+For changes that touch navigation, responsive layout, Settings, or high-volume data, also run:
+
+```powershell
+npm.cmd run test:e2e:mobile
+```
+
 Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 
 ## Where Things Live
@@ -40,6 +46,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `public/data/learningUnits.json`: first structured learning-content database.
 - `src/styles.css`: visual layout and responsive behavior.
 - `tests/`: automated tests.
+- `scripts/mobile-smoke.cjs`: local Chrome/Vite mobile smoke test for critical screens.
 - `docs/`: user, developer, data, publishing, and roadmap docs.
 
 ## Current Product Direction
@@ -71,7 +78,7 @@ SmartTense uses a phase-driven execution model. Before and after bigger changes,
    - `docs/DEVELOPER_GUIDE.md` for architecture and file ownership.
 3. Implement the phase tasks with minimal scope.
 4. Update evidence in `docs/PHASE_EXECUTION_LOG.md` and adjust the phase plan/Gantt if needed.
-5. Run checks (`npm.cmd test`, `npm.cmd run build`) before commit.
+5. Run checks (`npm.cmd test`, `npm.cmd run build`) before commit. For UI/navigation changes, also run `npm.cmd run test:e2e:mobile`.
 
 Keep phase docs current when a deliverable is completed so the next teammate can continue safely.
 

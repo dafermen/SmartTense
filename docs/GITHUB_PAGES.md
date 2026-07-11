@@ -25,6 +25,12 @@ npm test
 npm run build
 ```
 
+For UI/navigation, Settings, or phase-QA changes, also run:
+
+```bash
+npm run test:e2e:mobile
+```
+
 If Settings was used to edit verbs, export the database first and intentionally update `public/data/verbs.json` plus `src/data/defaultData.js` before committing. Then commit and push:
 
 ```bash
@@ -149,11 +155,12 @@ Run locally before pushing:
 
 ```bash
 npm test
+npm run test:e2e:mobile
 npm run build
 npm audit --audit-level=moderate
 ```
 
-Then push to `main` and verify the GitHub Actions deployment. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
+Then push to `main` and verify the GitHub Actions deployment. If Chrome is not available locally, record that `npm run test:e2e:mobile` was skipped and keep `npm test` plus `npm run build` green before pushing. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
 
 If `public/data/learningUnits.json`, Theory, Practice, Production prompts, learning contexts, learning-content administration, learning path, or form explanations changed, confirm the relevant validation/conjugation/practice/production/context/content-admin/learning-path tests pass and run the production build before pushing.
 

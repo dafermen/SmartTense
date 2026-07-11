@@ -123,7 +123,7 @@ Lo que aporta el documento pedagógico al proyecto:
 **Criterio de salida:**
 - Al menos un bloque adicional completo de teoría + práctica + producción, sin regresiones. Cumplido con `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen de 500 verbos.
 
-### Fase 9 — Calidad, métricas y robustez (Futura)
+### Fase 9 — Calidad, métricas y robustez (En curso)
 **Objetivo ejecutivo:** elevar estabilidad para volumen y uso real.
 
 **Tareas operativas:**
@@ -134,6 +134,9 @@ Lo que aporta el documento pedagógico al proyecto:
 
 **Criterio de salida:**
 - Flujo estable con regresiones controladas y evidencia medible en pruebas.
+
+**Estado actual:**
+- F9a entregada con `npm run test:e2e:mobile`, que valida Home, Theory, Practice, Individual, Complete, Production y Settings en viewport mobile `390x844` con 500 verbos sinteticos.
 
 ## Dependencias técnicas transversales
 
@@ -170,7 +173,10 @@ gantt
   F8c - Performance + mobile            :done, f8c, after f8b, 3d
   F8d - Ajuste UX y cierre              :done, f8d, after f8c, 3d
   section Calidad
-  F9 - QA y medición                    :f9, after f8d, 5d
+  F9 - QA y medición                    :active, f9, after f8d, 5d
+  F9a - E2E mobile repetible             :done, f9a, after f8d, 1d
+  F9b - Metricas y umbrales              :f9b, after f9a, 1d
+  F9c - Accesibilidad y release checklist :f9c, after f9b, 3d
 ```
 
 ## Cierre de fase y validación continua
@@ -183,9 +189,8 @@ Cada fase termina con:
 
 ## Ruta de trabajo recomendada (próximo tramo)
 
-1. F9a: convertir recorridos CDP de mobile en pruebas E2E repetibles.
-2. F9b: definir metricas de experiencia y registrar umbrales internos.
-3. F9c: revisar accesibilidad y textos de pantallas criticas.
-4. F9d: preparar checklist de release interna con evidencias por pantalla.
-5. F9e: evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
+1. F9b: definir metricas de experiencia y registrar umbrales internos.
+2. F9c: revisar accesibilidad y textos de pantallas criticas.
+3. F9d: preparar checklist de release interna con evidencias por pantalla.
+4. F9e: evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
 

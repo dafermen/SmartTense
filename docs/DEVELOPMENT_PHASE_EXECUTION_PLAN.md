@@ -155,6 +155,23 @@ Estado: **Cerrada**
 
 Estado: **Cerrada**
 
+### Fase 9 - Calidad, Metricas Y Robustez
+
+**Objetivo ejecutivo:** hacer repetible la validacion de pantallas criticas y registrar evidencia medible para release interna.
+**Alcance MVP:** smoke E2E mobile local, metricas basicas y checklist de pantallas.
+
+**Tareas operativas:**
+- Mantener `npm run test:e2e:mobile` como recorrido mobile de referencia.
+- Validar Home, Theory, Practice, Individual, Complete, Production y Settings.
+- Usar 500 verbos sinteticos para cubrir alto volumen sin tocar la data fuente.
+- Definir metricas de experiencia y umbrales internos.
+- Preparar checklist de release interna.
+
+**Criterio de cierre:**
+- `npm test`, `npm run build` y `npm run test:e2e:mobile` verdes con evidencia registrada.
+
+Estado: **En curso**. F9a entregada con el script `scripts/mobile-smoke.cjs`.
+
 ## Plan Gantt Interno
 
 ```mermaid
@@ -179,13 +196,14 @@ gantt
     Modelo de prompts y filtros                   :p7a, 2026-07-12, 6d
     Guardado local + cola de revision             :p7b, after p7a, 6d
     Fase 8 Expansion de Unidades                 :done, p8, 2026-07-13, 10d
-    Fase 9 Calidad, metricas y robustez          :p9, after p8, 5d
+    Fase 9 Calidad, metricas y robustez          :active, p9, after p8, 5d
+    E2E mobile repetible                          :done, p9a, after p8, 1d
+    Metricas y checklist                          :p9b, after p9a, 4d
 ```
 
 ## Hoja de Ruta de Ejecutable Inmediato
 
-1. Convertir los recorridos mobile CDP en pruebas E2E repetibles.
-2. Definir metricas de experiencia y umbrales internos.
-3. Revisar accesibilidad y textos de pantallas criticas.
-4. Preparar checklist de release interna por pantalla.
-5. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
+1. Definir metricas de experiencia y umbrales internos.
+2. Revisar accesibilidad y textos de pantallas criticas.
+3. Preparar checklist de release interna por pantalla.
+4. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.

@@ -73,6 +73,8 @@ SmartTense/
       validation.js           JSON import validation
       learningContentValidation.js  Learning content validation
   tests/                      Unit tests for grammar and validation
+  scripts/
+    mobile-smoke.cjs          Chrome/Vite mobile smoke test for critical screens
   docs/                       User, developer, data, and GitHub guides
   .github/workflows/          GitHub Actions workflows
   capacitor.config.json       Capacitor app settings
@@ -118,6 +120,14 @@ Run unit tests:
 ```bash
 npm test
 ```
+
+Run the mobile smoke test for critical screens and high-volume Settings data:
+
+```bash
+npm run test:e2e:mobile
+```
+
+This starts Vite, opens Chrome headless at `390x844`, uses 500 synthetic verbs in the browser, and checks Home, Theory, Practice, Individual, Complete, Production, Settings, and Settings pagination.
 
 Create a production web build:
 
@@ -220,6 +230,7 @@ Before publishing a change, run:
 
 ```bash
 npm test
+npm run test:e2e:mobile
 npm run build
 ```
 

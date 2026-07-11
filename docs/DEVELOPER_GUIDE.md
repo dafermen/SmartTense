@@ -287,6 +287,17 @@ npm test
 Runs unit tests with Node's native test runner.
 
 ```bash
+npm run test:e2e:mobile
+```
+
+Runs the local mobile smoke test. The script starts Vite, opens Chrome headless at `390x844`, replaces `public/data/verbs.json` in the browser with 500 synthetic verbs, and validates Home, Theory, Practice, Individual, Complete, Production, Settings, and Settings pagination. It requires Chrome locally; set `SMARTTENSE_CHROME_PATH` if Chrome is installed in a non-standard path.
+
+Optional environment variables:
+
+- `SMARTTENSE_E2E_PORT`: Vite port used by the smoke test. Default: `5174`.
+- `SMARTTENSE_CDP_PORT`: Chrome DevTools Protocol port. Default: random port around `9400`.
+
+```bash
 npm run build
 ```
 
@@ -327,7 +338,7 @@ Add tests when changing:
 - Learner-language translations or usage notes.
 - Import/export behavior that can be isolated from the browser.
 
-The current automated tests focus on the grammar engine and JSON validation because those areas are easiest to regress silently. For UI layout changes, run `npm run build` and manually verify desktop and mobile breakpoints.
+The current automated tests focus on the grammar engine and JSON validation because those areas are easiest to regress silently. For critical UI/navigation changes, run `npm run test:e2e:mobile` in addition to `npm run build`.
 
 Recommended responsive checks:
 
