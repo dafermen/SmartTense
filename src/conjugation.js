@@ -33,6 +33,7 @@ export function buildRows(verb, subjects, tenses, interfaceLanguage, options = {
         usageNote: buildUsageNote(verb, tense.id, learnerLanguage),
         ...displayForms,
         translations: buildSentenceTranslations(displayForms, verb, subject, tense, learnerLanguage),
+        explanations: buildFormExplanations(verb, subject, tense),
         breakdown: {
           affirmative: buildSentenceParts(forms.affirmative, subject, "statement"),
           negative: buildSentenceParts(forms.negative, subject, "statement"),
@@ -314,6 +315,118 @@ function buildSentenceTranslations(_forms, verb, subject, tense, learnerLanguage
 
 function buildSentenceTranslation(verb, subject, tense, form, learnerLanguage) {
   return translateLearnerSentence(verb, subject, tense.id, form, learnerLanguage);
+}
+
+function buildFormExplanations(verb, subject, tense) {
+  return {
+    affirmative: buildFormExplanation(verb, subject, tense, "affirmative"),
+    negative: buildFormExplanation(verb, subject, tense, "negative"),
+    questionPositive: buildFormExplanation(verb, subject, tense, "questionPositive"),
+    questionNegative: buildFormExplanation(verb, subject, tense, "questionNegative")
+  };
+}
+
+function buildFormExplanation(verb, subject, tense, form) {
+  const shape = tenseShape(tense.id);
+  const isQuestion = form === "questionPositive" || form === "questionNegative";
+  const isNegative = form === "negative" || form === "questionNegative";
+
+  return {
+    pattern: explanationPattern(tense.id, form, subject),
+    reason: explanationReason(tense, shape),
+    subject: subject.label,
+    auxiliary: explanationAuxiliary(tense.id, form, subject, verb),
+    verbForm: explanationVerbForm(tense.id, form, subject, verb),
+    note: explanationNote(tense.id, form, subject, verb, { isQuestion, isNegative })
+  };
+}
+
+function tenseShape(tenseId) {
+  const normalized = tenseId.toLowerCase();
+  if (normalized.includes("perfectcontinuous")) return "perfectContinuous";
+  if (normalized.includes("continuous")) return "continuous";
+  if (normalized.includes("perfect")) return "perfect";
+  return "simple";
+}
+
+function explanationPattern(tenseId, form, subject) {
+  const normalized = tenseId.toLowerCase();
+
+  if (tenseId === "simplePresent") {
+    if (form === "affirmative") return subject.third ? "Subject + verb-s/es + complement" : "Subject + base verb + complement";
+    if (form === "negative") return "Subject + do/does + not + base verb + complement";
+    if (form === "questionPositive") return "Do/Does + subject + base verb + complement?";
+    return "Do/Does + subject + not + base verb + complement?";
+  }
+
+  const shape = tenseShape(tenseId);
+  const stem = form === "affirmative" ? "Subject" : form === "negative" ? "Subject + not" : form === "questionPositive" ? "Auxiliary + subject" : "Auxiliary + subject + not";
+  const modal = normalized.includes("future") ? "will" : normalized.includes("conditional") ? "would" : "";
+
+  if (modal && shape === "continuous") return `${stem} + ${modal} + be + verb-ing + complement`;
+  if (modal && shape === "perfect") return `${stem} + ${modal} + have + past participle + complement`;
+  if (modal && shape === "perfectContinuous") return `${stem} + ${modal} + have + been + verb-ing + complement`;
+  if (modal) return `${stem} + ${modal} + base verb + complement`;
+  if (shape === "continuous") return `${stem} + be + verb-ing + complement`;
+  if (shape === "perfect") return `${stem} + have + past participle + complement`;
+  if (shape === "perfectContinuous") return `${stem} + have + been + verb-ing + complement`;
+  if (tenseId === "simplePast") return form === "affirmative" ? "Subject + past verb + complement" : `${stem} + did + base verb + complement`;
+  return `${stem} + main verb + complement`;
+}
+
+function explanationReason(tense, shape) {
+  if (shape === "continuous") return `${tense.en} focuses on an action in progress.`;
+  if (shape === "perfect") return `${tense.en} connects the action to another time point.`;
+  if (shape === "perfectContinuous") return `${tense.en} connects duration or repeated activity to another time point.`;
+  if (tense.group === "future") return `${tense.en} points to a future action or state.`;
+  if (tense.group === "conditional") return `${tense.en} describes a hypothetical or conditional action.`;
+  if (tense.id === "simplePresent") return "Simple Present is used for habits, routines, facts, and schedules.";
+  if (tense.id === "simplePast") return "Simple Past places the action in a finished past time.";
+  return `${tense.en} follows the selected tense pattern.`;
+}
+
+function explanationAuxiliary(tenseId, form, subject, verb) {
+  const isQuestion = form === "questionPositive" || form === "questionNegative";
+  const isNegative = form === "negative" || form === "questionNegative";
+
+  if (tenseId === "simplePresent" && (isQuestion || isNegative) && verb.type !== "be" && verb.type !== "modal") {
+    return subject.third ? "does" : "do";
+  }
+  if (tenseId === "simplePast" && (isQuestion || isNegative) && verb.type !== "be" && verb.type !== "modal") return "did";
+  const normalized = tenseId.toLowerCase();
+  if (normalized.includes("future")) return "will";
+  if (normalized.includes("conditional")) return "would";
+  if (normalized.includes("perfect")) return subject.have || "have";
+  if (normalized.includes("continuous")) return subject.bePresent || subject.bePast || "be";
+  if (verb.type === "be") return "be";
+  if (verb.type === "modal") return verb.base;
+  return "none";
+}
+
+function explanationVerbForm(tenseId, form, subject, verb) {
+  const shape = tenseShape(tenseId);
+  if (tenseId === "simplePresent" && form === "affirmative" && subject.third && verb.type !== "be" && verb.type !== "modal") return "third-person singular";
+  if ((tenseId === "simplePresent" || tenseId === "simplePast") && form !== "affirmative" && verb.type !== "be" && verb.type !== "modal") return "base verb";
+  if (shape === "continuous" || shape === "perfectContinuous") return "-ing form";
+  if (shape === "perfect") return "past participle";
+  if (tenseId.toLowerCase().includes("future") || tenseId.toLowerCase().includes("conditional")) return "base verb";
+  if (tenseId === "simplePast") return "past form";
+  return verb.type === "be" ? "be form" : "main verb";
+}
+
+function explanationNote(tenseId, form, subject, verb, flags) {
+  if (tenseId === "simplePresent" && form === "affirmative" && subject.third && verb.type !== "be" && verb.type !== "modal") {
+    return "The subject is he/she/it, so the affirmative verb needs the third-person form.";
+  }
+  if ((tenseId === "simplePresent" || tenseId === "simplePast") && flags.isNegative && verb.type !== "be" && verb.type !== "modal") {
+    return "Do/does/did carries the tense, so the main verb stays in base form.";
+  }
+  if ((tenseId === "simplePresent" || tenseId === "simplePast") && flags.isQuestion && verb.type !== "be" && verb.type !== "modal") {
+    return "The auxiliary moves before the subject to make the question.";
+  }
+  if (verb.type === "be") return "The verb to be uses its own form and does not need do/does/did.";
+  if (verb.type === "modal") return "Modal verbs keep the following action in base form or use a natural paraphrase.";
+  return "Read the auxiliary and verb form together; they carry the tense meaning.";
 }
 
 function buildSentenceParts(text, subject, sentenceKind) {

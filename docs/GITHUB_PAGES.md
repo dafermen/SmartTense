@@ -150,7 +150,7 @@ npm audit --audit-level=moderate
 
 Then push to `main` and verify the GitHub Actions deployment. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
 
-If `public/data/learningUnits.json` or the Theory page changed, confirm the learning-content validation tests pass and run the production build before pushing.
+If `public/data/learningUnits.json`, Theory, or form explanations changed, confirm the relevant validation/conjugation tests pass and run the production build before pushing.
 
 ## Troubleshooting
 

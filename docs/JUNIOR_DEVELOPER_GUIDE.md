@@ -46,6 +46,7 @@ The current stable surfaces are:
 
 - `Home`: dashboard and recommendations.
 - `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
+- `Why this form?`: compact explanations attached to generated sentence rows.
 - `Individual`: focused affirmative practice.
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration and data administration.
@@ -76,6 +77,17 @@ Keep Theory read-only until the Practice phase starts:
 - allow expanding starter answers;
 - do not add scoring or answer input here;
 - keep mobile layout compact.
+
+## Updating Explanations
+
+Explanations are created in `src/conjugation.js` and attached to each row as `row.explanations`.
+
+Rules for safe edits:
+
+- Keep the explanation tied to the generated sentence.
+- Do not create a second conjugation engine.
+- Update `tests/conjugation.test.js` when the explanation shape or wording changes.
+- Keep the UI collapsed by default so Complete and Individual stay compact.
 
 ## Adding Or Editing Verbs
 

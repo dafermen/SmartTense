@@ -47,6 +47,19 @@ Theory includes:
 
 Do not add answer checking or scoring here. Interactive practice belongs to the later Practice phase.
 
+### Explanations
+
+Generated rows include an `explanations` object for each form:
+
+- `affirmative`
+- `negative`
+- `questionPositive`
+- `questionNegative`
+
+Each explanation includes a pattern, reason, subject, auxiliary, verb form, and short note. The UI renders these inside the compact `Why this form?` panel used by Complete, mobile cards, and Individual.
+
+Keep explanations concise. They should explain the existing generated row; they should not create a separate grammar engine.
+
 ### Individual
 
 Individual is affirmative-only practice. It builds rows from selected subjects and selected Individual tenses. Tense and subject controls are multi-select; group labels toggle entire groups.
@@ -67,9 +80,10 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 6. `getTensesByGroup` filters visible Complete tenses by group and learning level.
 7. `buildRows` generates affirmative, negative, interrogative, and negative interrogative sentences.
 8. `src/learnerLanguages/` adds learner-language translations and usage notes.
-9. The same generated row model supports Home preview, Individual affirmative cards, Complete desktop table, and mobile cards.
-10. `public/data/learningUnits.json` stores Theory/Practice content and is protected by `validateLearningContent`.
-11. Theory renders the first matching learning unit for Present Simple from validated JSON.
+9. `buildRows` also attaches `explanations` for each generated sentence form.
+10. The same generated row model supports Home preview, Individual affirmative cards, Complete desktop table, and mobile cards.
+11. `public/data/learningUnits.json` stores Theory/Practice content and is protected by `validateLearningContent`.
+12. Theory renders the first matching learning unit for Present Simple from validated JSON.
 
 ## Important Source Files
 
@@ -92,6 +106,7 @@ Owns sentence generation. Add or adjust tense behavior here.
 Important functions:
 
 - `buildRows`: returns table-ready row objects.
+- `buildFormExplanation`: builds concise explanation metadata for one sentence form.
 - `getTensesByGroup`: applies learning level and tense group filters.
 - `conjugateRegular`: handles normal verbs.
 - `conjugateBe`: handles `to be`, because it does not follow normal auxiliary rules.
@@ -179,6 +194,7 @@ Opens the native projects in Xcode or Android Studio.
 Add tests when changing:
 
 - Conjugation output.
+- Form explanations.
 - Learning level filtering.
 - JSON validation.
 - Learning content validation.

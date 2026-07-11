@@ -612,6 +612,74 @@ th {
   margin-top: 7px;
 }
 
+.why-form-panel {
+  margin-top: 7px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #253247;
+}
+
+.why-form-panel summary {
+  min-height: 30px;
+  cursor: pointer;
+  list-style: none;
+  padding: 6px 8px;
+  color: #214c83;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.why-form-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.why-form-panel summary::after {
+  content: "+";
+  float: right;
+}
+
+.why-form-panel[open] summary::after {
+  content: "-";
+}
+
+.why-form-panel dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0 8px 8px;
+}
+
+.why-form-panel dl div {
+  min-width: 0;
+}
+
+.why-form-panel dt {
+  color: #667286;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.why-form-panel dd {
+  margin: 2px 0 0;
+  color: #172033;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.why-form-panel p {
+  margin: 0;
+  border-top: 1px solid #e2e8f0;
+  padding: 7px 8px 8px;
+  color: #596579;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .part {
   display: inline-flex;
   align-items: center;
@@ -1558,6 +1626,10 @@ th {
 .complete-table-card .translation {
   margin-top: 3px;
   font-size: 0.78rem;
+}
+
+.complete-table-card .why-form-panel dl {
+  grid-template-columns: 1fr;
 }
 
 .complete-table-card .subject-cell,

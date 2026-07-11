@@ -39,6 +39,8 @@ Individual is focused practice. It shows affirmative sentences only.
 
 Use it when you want less visual noise and want to focus on one or more tenses and subjects. You can enable several tense buttons at the same time, and you can enable several subjects at the same time.
 
+Each generated sentence can show a compact `Why this form?` panel. Open it to see the pattern, reason, auxiliary, and verb form behind the sentence.
+
 Tense groups in Individual:
 
 - Past: Simple, Perfect, Continuous.
@@ -60,6 +62,8 @@ Complete shows the full conjugation table. Each row can include:
 Use Display options to choose which forms are visible. For example, you can hide negative and interrogative forms when you only want to compare subjects and tenses.
 
 On desktop, Subject and Tense stay visible while you scroll horizontally. On mobile, the app uses compact practice cards instead of a wide table.
+
+Use `Why this form?` inside any generated form when you want a short grammar explanation without leaving the table.
 
 ### Settings
 
@@ -116,6 +120,7 @@ SmartTense is designed to save space on phones:
 - Home uses compact cards and two-column sections when the screen is wide enough.
 - Individual keeps affirmative practice compact and grouped by tense.
 - Complete switches from a wide table to mobile practice cards.
+- Explanations stay collapsed until you open `Why this form?`, which keeps the screen compact.
 - Display options are collapsible.
 
 Recommended mobile flow:

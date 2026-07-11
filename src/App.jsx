@@ -868,7 +868,7 @@ export default function App() {
                 </tr>
               </thead>
               <tbody>
-                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} visibleColumns={completeFormColumns} />
+                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} visibleColumns={completeFormColumns} t={t} />
               </tbody>
             </table>
           </div>
@@ -1006,6 +1006,7 @@ export default function App() {
                         <div className="affirmative-sentence">
                           <span className="sentence">{row.affirmative}</span>
                           {showSentenceParts && <SentenceParts parts={row.breakdown.affirmative} />}
+                          <ExplanationPanel explanation={row.explanations.affirmative} t={t} />
                           {showTranslations && row.translations.affirmative && <span className="translation">{row.translations.affirmative}</span>}
                           {row.usageNote && <span className="usage-note">{row.usageNote}</span>}
                         </div>
@@ -1334,7 +1335,7 @@ function VerbProfile({ verb, summary, t }) {
   );
 }
 
-function ConjugationRows({ rows, language, showTranslations, showSentenceParts, visibleColumns = COMPLETE_FORM_COLUMNS }) {
+function ConjugationRows({ rows, language, showTranslations, showSentenceParts, visibleColumns = COMPLETE_FORM_COLUMNS, t }) {
   let activeGroup = "";
 
   return rows.map((row) => {
@@ -1352,12 +1353,13 @@ function ConjugationRows({ rows, language, showTranslations, showSentenceParts, 
         showTranslations={showTranslations}
         showSentenceParts={showSentenceParts}
         visibleColumns={visibleColumns}
+        t={t}
       />
     );
   });
 }
 
-function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts, visibleColumns }) {
+function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts, visibleColumns, t }) {
   return (
     <>
       {showGroup && (
@@ -1376,9 +1378,11 @@ function FragmentRow({ row, language, showGroup, showTranslations, showSentenceP
             key={columnId}
             sentence={row[columnId]}
             parts={row.breakdown[columnId]}
+            explanation={row.explanations[columnId]}
             translation={row.translations[columnId]}
             showTranslations={showTranslations}
             showSentenceParts={showSentenceParts}
+            t={t}
           />
         ))}
       </tr>
@@ -1386,11 +1390,12 @@ function FragmentRow({ row, language, showGroup, showTranslations, showSentenceP
   );
 }
 
-function SentenceCell({ sentence, parts, translation, showTranslations, showSentenceParts }) {
+function SentenceCell({ sentence, parts, explanation, translation, showTranslations, showSentenceParts, t }) {
   return (
     <td>
       <span className="sentence">{sentence}</span>
       {showSentenceParts && <SentenceParts parts={parts} />}
+      <ExplanationPanel explanation={explanation} t={t} />
       {showTranslations && <span className="translation">{translation}</span>}
     </td>
   );
@@ -1414,17 +1419,17 @@ function ConjugationCards({ rows, language, showTranslations, showSentenceParts,
           </div>
         </div>
         <div className="mobile-form-list">
-          <CardLine label={t("affirmative")} value={row.affirmative} translation={row.translations.affirmative} parts={row.breakdown.affirmative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} defaultOpen />
-          <CardLine label={t("negative")} value={row.negative} translation={row.translations.negative} parts={row.breakdown.negative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-          <CardLine label={t("questionPositive")} value={row.questionPositive} translation={row.translations.questionPositive} parts={row.breakdown.questionPositive} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
-          <CardLine label={t("questionNegative")} value={row.questionNegative} translation={row.translations.questionNegative} parts={row.breakdown.questionNegative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} />
+          <CardLine label={t("affirmative")} value={row.affirmative} translation={row.translations.affirmative} parts={row.breakdown.affirmative} explanation={row.explanations.affirmative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} defaultOpen />
+          <CardLine label={t("negative")} value={row.negative} translation={row.translations.negative} parts={row.breakdown.negative} explanation={row.explanations.negative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
+          <CardLine label={t("questionPositive")} value={row.questionPositive} translation={row.translations.questionPositive} parts={row.breakdown.questionPositive} explanation={row.explanations.questionPositive} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
+          <CardLine label={t("questionNegative")} value={row.questionNegative} translation={row.translations.questionNegative} parts={row.breakdown.questionNegative} explanation={row.explanations.questionNegative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
         </div>
       </article>
     );
   });
 }
 
-function CardLine({ label, value, translation, parts, showTranslations, showSentenceParts, defaultOpen = false }) {
+function CardLine({ label, value, translation, parts, explanation, showTranslations, showSentenceParts, t, defaultOpen = false }) {
   return (
     <details className="mobile-form-line" open={defaultOpen}>
       <summary>
@@ -1433,8 +1438,26 @@ function CardLine({ label, value, translation, parts, showTranslations, showSent
       </summary>
       <div className="mobile-form-detail">
         {showSentenceParts && <SentenceParts parts={parts} />}
+        <ExplanationPanel explanation={explanation} t={t} />
         {showTranslations && <p className="card-translation">{translation}</p>}
       </div>
+    </details>
+  );
+}
+
+function ExplanationPanel({ explanation, t }) {
+  if (!explanation) return null;
+
+  return (
+    <details className="why-form-panel">
+      <summary>{t("whyThisForm")}</summary>
+      <dl>
+        <div><dt>{t("pattern")}</dt><dd>{explanation.pattern}</dd></div>
+        <div><dt>{t("reason")}</dt><dd>{explanation.reason}</dd></div>
+        <div><dt>{t("auxiliaryPart")}</dt><dd>{explanation.auxiliary}</dd></div>
+        <div><dt>{t("verbForm")}</dt><dd>{explanation.verbForm}</dd></div>
+      </dl>
+      <p>{explanation.note}</p>
     </details>
   );
 }

@@ -13,6 +13,7 @@ The app is designed for two audiences:
 - Theory view for the first Present Simple learning unit, rendered from structured JSON content.
 - Individual practice view focused on affirmative conjugation only.
 - Complete view with affirmative, negative, interrogative, and negative interrogative forms.
+- Expandable "Why this form?" explanations for generated sentence forms.
 - Toggleable visible columns in Complete so users can reduce visual load.
 - Multi-select tense and subject controls in Individual.
 - Learning levels: Basic, Intermediate, and Advanced.
@@ -30,9 +31,10 @@ The app is designed for two audiences:
 1. Start on Home to see progress, the current verb, a short example, and quick actions.
 2. Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, examples, and starter practice preview.
 3. Open Individual when you want focused affirmative practice with selected tenses and subjects.
-4. Open Complete when you want the full table and comparison across sentence forms.
-5. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
-6. Export CSV or JSON from Complete if you need a generated table snapshot.
+4. Open a "Why this form?" panel when you want the pattern, reason, auxiliary, and verb-form explanation for a generated sentence.
+5. Open Complete when you want the full table and comparison across sentence forms.
+6. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
+7. Export CSV or JSON from Complete if you need a generated table snapshot.
 
 ## Tech Stack
 

@@ -10,7 +10,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | --- | --- | --- | --- |
 | Fase 0 - Arquitectura de contenido | Cerrada | `public/data/learningUnits.json`, validador, pruebas y esquema documentado | `npm test` con validacion de contenido |
 | Fase 1 - Theory | Cerrada | Pagina Theory renderizada desde JSON, enlazada desde Home y menu | `npm test`, `npm run build`; navegador interno no disponible para captura automatizada |
-| Fase 2 - Explicaciones inteligentes | Pendiente | Panel de explicacion por oracion | No iniciada |
+| Fase 2 - Explicaciones inteligentes | Cerrada | Panel compacto `Why this form?` con patron, razon, auxiliar y forma verbal | `npm test`, `npm run build` |
 | Fase 3 - Motor de practica | Pendiente | Ejercicios interactivos con feedback | No iniciada |
 | Fase 4 - Ruta de aprendizaje | Pendiente | Home recomienda el siguiente paso dentro de una unidad | No iniciada |
 | Fase 5 - Vocabulario y contextos | Pendiente | Ejemplos y practica por contexto | No iniciada |
@@ -111,6 +111,10 @@ Tareas operativas:
 Entregable:
 
 - El usuario puede abrir una oracion y ver una explicacion clara de su estructura.
+
+Estado:
+
+- Cerrada. Las filas generadas incluyen `explanations` por forma, y la UI muestra un panel desplegable `Why this form?` en Complete, tarjetas moviles e Individual.
 
 ### Fase 3 - Motor De Practica
 
@@ -230,13 +234,13 @@ gantt
     Vista responsive                        :done, p1b, 2026-07-11, 1d
 
     section Explicaciones
-    Fase 2 - Smart explanations             :p2, 2026-07-12, 10d
-    Metadatos explicativos                  :p2a, 2026-07-12, 5d
-    Panel Why this form                     :p2b, after p2a, 5d
+    Fase 2 - Smart explanations             :done, p2, 2026-07-11, 1d
+    Metadatos explicativos                  :done, p2a, 2026-07-11, 1d
+    Panel Why this form                     :done, p2b, 2026-07-11, 1d
 
     section Practica
-    Fase 3 - Practice engine                :p3, after p2, 15d
-    Modelo de ejercicios                    :p3a, after p2, 7d
+    Fase 3 - Practice engine                :p3, 2026-07-12, 15d
+    Modelo de ejercicios                    :p3a, 2026-07-12, 7d
     Feedback y scoring                      :p3b, after p3a, 8d
 
     section Ruta
@@ -290,12 +294,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 2:
+Continuar con Fase 3:
 
-1. Extender las filas generadas con metadatos explicativos.
-2. Agregar un panel compacto `Why this form?`.
-3. Explicar errores comunes comunes desde los datos de aprendizaje.
-4. Agregar pruebas para los helpers de explicacion.
-5. Mantener Practice interactivo fuera de alcance hasta Fase 3.
+1. Crear una pagina `Practice`.
+2. Implementar un modelo minimo de ejercicios desde `learningUnits`.
+3. Iniciar con completar espacios y transformar oraciones.
+4. Agregar feedback inmediato y pruebas de scoring.
+5. Mantener la experiencia compacta y sin persistencia compleja al inicio.
 
-Este paso debe explicar por que una oracion usa una forma determinada, sin convertir todavia la app en un motor de ejercicios.
+Este paso debe convertir el contenido y las explicaciones en practica activa, sin ampliar todavia a speaking/writing.

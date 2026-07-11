@@ -95,6 +95,27 @@ test("rows include sentence-level Spanish translations and sentence parts", () =
   );
 });
 
+test("rows include concise form explanations", () => {
+  const row = rowFor("write", "he", "simplePresent");
+
+  assert.equal(row.explanations.affirmative.pattern, "Subject + verb-s/es + complement");
+  assert.equal(row.explanations.affirmative.verbForm, "third-person singular");
+  assert.match(row.explanations.affirmative.note, /third-person form/);
+  assert.equal(row.explanations.negative.auxiliary, "does");
+  assert.equal(row.explanations.negative.verbForm, "base verb");
+  assert.match(row.explanations.negative.note, /main verb stays in base form/);
+});
+
+test("form explanations describe perfect and continuous tense shapes", () => {
+  const perfectRow = rowFor("write", "i", "presentPerfect");
+  const continuousRow = rowFor("write", "they", "futureContinuous");
+
+  assert.equal(perfectRow.explanations.affirmative.verbForm, "past participle");
+  assert.match(perfectRow.explanations.affirmative.pattern, /have \+ past participle/);
+  assert.equal(continuousRow.explanations.affirmative.auxiliary, "will");
+  assert.match(continuousRow.explanations.affirmative.pattern, /will \+ be \+ verb-ing/);
+});
+
 test("verb summary exposes key forms for learner profile", () => {
   const verb = DEFAULT_DATA.verbs.find((entry) => entry.id === "write");
 
