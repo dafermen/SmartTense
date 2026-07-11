@@ -1,4 +1,4 @@
-# Registro de ejecucion por fases — SmartTense
+ï»¿# Registro de ejecucion por fases - SmartTense
 
 Fecha base: 11/07/2026.
 
@@ -11,6 +11,9 @@ Fecha base: 11/07/2026.
 ## Fase 8 (actual)
 
 - **Estado operativo:** en curso.
+- **Checkpoint de ejecucion (11/07/2026):**
+  - Se incorporo la unidad `past-future-conditional-foundation` en `public/data/learningUnits.json`.
+  - La unidad nueva incluye teoria, estructuras, errores, ejemplos, vocabulario y 5 ejercicios iniciales: fillBlank, transform, chooseTense, correctMistake, translation.
 - **Tareas puntuales:**
   - DiseÃ±ar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional).
   - Integrar la unidad en Theory y Practice con contexto y filtros.
@@ -27,6 +30,14 @@ Fecha base: 11/07/2026.
   - Validador de contenido y verbos conserva cobertura de escenarios negativos.
   - Settings y Production siguen con confirmacion en edit/eliminar y flujo estable.
 
+## Seguimiento fase 8 (proximo tramo)
+
+- **Resultado del siguiente paso:** Checkpoint 8a entregado con contenido util para Theory y Practice.
+- **Pendiente para cierre completo de Fase 8:**
+  - Revisar rendimiento del flujo en movil con multiples contextos.
+  - Incorporar ejercicios de transferencia entre tiempos (comparacion entre Present, Past, Future y Conditional).
+  - Incluir prompts de speaking/writing alineados con la nueva unidad.
+
 ## Fases 0 a 7 (cierres previos)
 
 - Cierres ejecutados bajo criterio de evidencia:
@@ -36,7 +47,7 @@ Fecha base: 11/07/2026.
 
 ## Riesgos de implementacion
 
-- Si se amplía el schema de `learningUnits` sin migración de validador, la fase se bloquea.
+- Si se amplian el schema de `learningUnits` sin migracion de validador, la fase se bloquea.
 - Si se incrementa densidad visual en mobile, el rendimiento UX cae.
 - Riesgo mitigacion: priorizar mobile-first y validar con recorrido real en pantalla chica antes de ampliar alcance.
 

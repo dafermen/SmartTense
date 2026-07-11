@@ -224,6 +224,211 @@
           ]
         }
       ]
+    },
+    {
+      "id": "past-future-conditional-foundation",
+      "title": "Past, Future and Conditional Foundation",
+      "level": "intermediate",
+      "focus": "Use time markers and sequence markers to choose and build past, future, and conditional forms.",
+      "tenseIds": [
+        "simplePast",
+        "pastContinuous",
+        "pastPerfect",
+        "simpleFuture",
+        "futureContinuous",
+        "futurePerfect",
+        "simpleConditional",
+        "continuousConditional",
+        "perfectConditional"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "it-work",
+        "travel-vacation",
+        "prepositions"
+      ],
+      "objectives": [
+        "Differentiate past, future, and conditional meaning in short situations.",
+        "Use simple, continuous, and perfect forms when describing sequence and duration.",
+        "Build affirmative, negative, and question forms with clean subject-verb order.",
+        "Avoid common mistakes with tense choices and auxiliary placement."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning and usage",
+          "body": [
+            "Past forms describe actions before now and usually need clear time order.",
+            "Future forms are used for plans, predictions, and formal expectations.",
+            "Conditional forms describe possible situations and hypothetical outcomes.",
+            "Perfect and continuous forms help show results and ongoing duration."
+          ],
+          "signalWords": [
+            "yesterday",
+            "last week",
+            "by the time",
+            "next week",
+            "tomorrow",
+            "if",
+            "would"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Core structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + tense auxiliary pattern + base/participle/gerund as required",
+              "example": "She had completed the report before the call."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + auxiliary + not + base/participle/gerund as required",
+              "example": "They will not be working on the weekend."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Auxiliary + subject + verb phrase?",
+              "example": "Will he be arriving on Friday?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "He have worked when I arrived.",
+              "right": "He had worked when I arrived.",
+              "why": "Past perfect needs had + past participle."
+            },
+            {
+              "wrong": "If you would came, we would win.",
+              "right": "If you came, we would win.",
+              "why": "After if for first conditional, keep simple past in clause + conditional in result."
+            },
+            {
+              "wrong": "She will meet you tomorrow if she have time.",
+              "right": "She will meet you tomorrow if she has time.",
+              "why": "The conditional clause can use present for scheduling or hypothetical patterns."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "She had finished the deployment before they started testing.",
+              "note": "Past perfect shows an earlier completed action."
+            },
+            {
+              "context": "it-work",
+              "sentence": "He will be presenting when the meeting starts.",
+              "note": "Future continuous for action in progress at a future point."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "If he had more free time, he would travel more often.",
+              "note": "Hypothetical condition with conditional result."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "By next month, we will have planned the whole itinerary.",
+              "note": "Future perfect for completed action before a future time."
+            },
+            {
+              "context": "prepositions",
+              "sentence": "They were working on the project all day.",
+              "note": "Past continuous with a long ongoing action."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "deadline",
+              "meaning": "a time by which work should be finished",
+              "example": "The deadline was next Friday.",
+              "context": "it-work"
+            },
+            {
+              "term": "arrive",
+              "meaning": "to reach a place",
+              "example": "Would you arrive before noon?",
+              "context": "travel-vacation"
+            },
+            {
+              "term": "by",
+              "meaning": "used for limit points in time",
+              "example": "By the time she called, I had left.",
+              "context": "prepositions"
+            },
+            {
+              "term": "if",
+              "meaning": "used to set conditional meaning",
+              "example": "If I had time, I would join.",
+              "context": "daily-habits"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "past-future-conditional-fill-1",
+              "kind": "fillBlank",
+              "prompt": "By 8 a.m. she _____ already left the office.",
+              "answer": "had",
+              "explanation": "Past perfect is used for the action done before a past reference point.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-transform-1",
+              "kind": "transform",
+              "prompt": "Change to negative: He is working on the report now.",
+              "answer": "He is not working on the report now.",
+              "explanation": "Insert the negative after auxiliary: is not + present participle.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By next year, we ____ the client proposal.",
+              "answer": "future perfect",
+              "explanation": "Future perfect expresses an action completed before a future time.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct this sentence: If you would came earlier, we would talk now.",
+              "answer": "If you came earlier, we would talk now.",
+              "explanation": "After if, the hypothetical clause uses simple past in this pattern.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-translation-1",
+              "kind": "translation",
+              "prompt": "Translate to English: Si ella tuviera tiempo, viajaría más.",
+              "answer": "If she had time, she would travel more.",
+              "explanation": "Use if + past form in condition and would + base verb in result.",
+              "context": "travel-vacation"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
