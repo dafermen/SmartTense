@@ -54,6 +54,34 @@ export const PRODUCTION_PROMPTS = [
       "Spelling and punctuation are understandable"
     ],
     suggestedTimeMinutes: 3
+  },
+  {
+    id: "past-future-comparison-speaking",
+    mode: "speaking",
+    tenseId: "futurePerfect",
+    title: "Past-Future-Conditional comparison",
+    prompt: "Talk for 60 seconds: when would you use past perfect vs future perfect in daily work communication?",
+    contextTag: "it-work",
+    rubric: [
+      "Names at least one clear difference of meaning",
+      "Uses examples tied to different time points",
+      "Keeps tense forms understandable"
+    ],
+    suggestedTimeMinutes: 3
+  },
+  {
+    id: "conditional-speaking-note",
+    mode: "writing",
+    tenseId: "simpleConditional",
+    title: "Conditional situations",
+    prompt: "Write 4 short if-clauses about your work and habits.",
+    contextTag: "it-work",
+    rubric: [
+      "Uses if + past form in conditional clause",
+      "Uses would + verb in result clause",
+      "Sentences are clear and idiomatic"
+    ],
+    suggestedTimeMinutes: 4
   }
 ];
 

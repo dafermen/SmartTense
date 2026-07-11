@@ -17,6 +17,9 @@ Fecha base: 11/07/2026.
 - **Checkpoint de integracion (12/07/2026):**
   - Se habilito el selector de unidad activa en Home para abrir Theory/Practice con la unidad seleccionada.
   - Se persiste la unidad activa en settings locales y se usa para progreso y recomendacion de ruta.
+- **Checkpoint de mejora (13/07/2026):**
+  - Se añadieron 2 ejercicios de transferencia de tiempos (chooseTense) en `past-future-conditional-foundation` para comparación entre futuros y condicionales.
+  - Se añadieron prompts de speaking/writing alineados con la unidad de tiempos pasados/futuros/condicionales (`src/data/productionPrompts.js`).
 - **Tareas puntuales:**
   - Diseñar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional). **completada**.
   - Integrar la unidad en Theory y Practice con contexto y filtros.
@@ -32,14 +35,14 @@ Fecha base: 11/07/2026.
   - `npm run build` OK.
   - Validador de contenido y verbos conserva cobertura de escenarios negativos.
   - Home abre Theory/Practice con la unidad activa y Settings resume el estado de la unidad activa.
+  - Los nuevos ejercicios de transferencia y prompts de Production se importaron correctamente en los respectivos archivos JSON y JS.
 
 ## Seguimiento fase 8 (proximo tramo)
 
 - **Resultado del siguiente paso:** Checkpoint 8a entregado y se habilitó la navegación por unidad activa.
 - **Pendiente para cierre completo de Fase 8:**
   - Revisar rendimiento del flujo en movil con multiples contextos.
-  - Incorporar ejercicios de transferencia entre tiempos (comparacion entre Present, Past, Future y Conditional).
-  - Incluir prompts de speaking/writing alineados con la nueva unidad.
+  - Revisar el comportamiento en mobile con contextos reales y alto volumen de filas.
 
 ## Fases 0 a 7 (cierres previos)
 

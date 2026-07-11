@@ -425,6 +425,22 @@
               "answer": "If she had time, she would travel more.",
               "explanation": "Use if + past form in condition and would + base verb in result.",
               "context": "travel-vacation"
+            },
+            {
+              "id": "past-future-conditional-transfer-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By the time the test starts, she ____ already sent the final report.",
+              "answer": "future perfect",
+              "explanation": "Future perfect is used when an action is complete before a future reference time.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-transfer-2",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: If you had more time, you ____ in the workshop.",
+              "answer": "simple conditional",
+              "explanation": "If + past form in the condition and would + base verb in the result.",
+              "context": "it-work"
             }
           ]
         }
