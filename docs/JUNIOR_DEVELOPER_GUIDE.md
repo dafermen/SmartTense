@@ -72,7 +72,8 @@ SmartTense uses a phase-driven execution model. Before and after bigger changes,
 
 1. Identify the active phase in `docs/PHASE_EXECUTION_LOG.md`.
 2. Read the corresponding goals in:
-   - `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` (operational roadmap).
+   - `docs/INDEX.md` (documentation map).
+   - `docs/CURRICULUM_PHASE_PLAN.md` (official curriculum roadmap and operational tasks).
    - `docs/DEVELOPER_GUIDE.md` for architecture and file ownership.
 3. Implement the phase tasks with minimal scope.
 4. Update evidence in `docs/PHASE_EXECUTION_LOG.md` and adjust the phase plan/Gantt if needed.

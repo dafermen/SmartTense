@@ -40,8 +40,8 @@ Use a more specific commit message when possible.
 
 If the change closes a phase milestone, add phase artifacts to the same commit scope:
 - `docs/PHASE_EXECUTION_LOG.md`
-- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` (if that is the active planning source for the sprint)
+- `docs/CURRICULUM_PHASE_PLAN.md`
+- `docs/PROJECT_PHASE_ROADMAP.md`
 
 ## GitHub Pages Deployment Model
 
@@ -162,7 +162,7 @@ When learning content is edited through Settings, export the content JSON and in
 
 If a phase closes, register date, evidence (`npm test`, `npm run build`, manual validation notes), and next-step tasks in:
 - `docs/PHASE_EXECUTION_LOG.md`
-- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` (or corresponding phase plan doc)
+- `docs/CURRICULUM_PHASE_PLAN.md` (when the phase plan changes)
 
 ## Troubleshooting
 

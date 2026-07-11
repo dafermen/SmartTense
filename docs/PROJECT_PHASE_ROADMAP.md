@@ -2,12 +2,8 @@
 
 Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.
 
-La version ejecutiva + operativa detallada esta en [DEVELOPMENT_PHASE_EXECUTION_PLAN.md](DEVELOPMENT_PHASE_EXECUTION_PLAN.md).  
-Para la version recomendada con fases ejecutivas y tareas operativas derivadas del documento adjunto, ver:
-
-- [PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md](PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md).
-- [SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md](SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md) (versión nueva, más compacta y operativa, con Gantt interno).
-- [PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md](PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md) (nuevo documento con fases ejecutivas + tareas operativas y Gantt interno derivado del docx).
+La documentacion oficial empieza en [INDEX.md](INDEX.md).
+La version ejecutiva + operativa para la expansion curricular A1-B2 esta en [CURRICULUM_PHASE_PLAN.md](CURRICULUM_PHASE_PLAN.md).
 
 La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
 
@@ -25,6 +21,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 7 - Speaking, writing y revision | Cerrada | Workspace Production con speaking/writing, estado de intento y filtros | `src/data/productionPrompts.js`, `App.jsx`, `src/i18n.js` |
 | Fase 8 - Expansión de unidades de tiempo | Cerrada | Unidad past/future/conditional, ejercicios de transferencia y Production alineado | `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen con 500 verbos |
 | Fase 9 - Calidad, metricas y robustez | Cerrada | E2E mobile repetible, quality gates, accesibilidad basica y release checklist | `npm run test:e2e:mobile` |
+| Fase 10 - Reorganizacion documental y guia curricular | Cerrada | Indice documental y plan curricular A1-B2 como fuente oficial | `npm run release:check` |
 
 ## Lectura Ejecutiva Del Documento Fuente
 

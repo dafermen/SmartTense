@@ -50,7 +50,8 @@ If Chrome is not installed, record the blocker in `docs/PHASE_EXECUTION_LOG.md` 
 ## Documentation Checklist
 
 - `docs/PHASE_EXECUTION_LOG.md`: active phase, tasks, evidence, risks, next block.
-- Roadmap/Gantt docs: phase status and next implementation updated.
+- `docs/CURRICULUM_PHASE_PLAN.md`: phase status, operational tasks, exit criteria, and internal Gantt updated when roadmap scope changes.
+- `docs/INDEX.md`: documentation map updated when docs are added, removed, or consolidated.
 - `README.md`: commands or release behavior updated when developer workflow changes.
 - `docs/DEVELOPER_GUIDE.md`: implementation notes updated for developers.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe commands and touched files updated for junior developers.

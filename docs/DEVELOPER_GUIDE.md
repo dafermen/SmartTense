@@ -254,20 +254,18 @@ This file is the bridge between the current conjugation trainer and the guided l
 
 ## Documentation for phase execution
 
-Use `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` as the main instructional roadmap for the next product increment derived from the Dario unit.
-For an alternative execution perspective, use:
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` (executive and operational).
-- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md` (compact operational companion).
+Start with `docs/INDEX.md` to confirm the active documentation map.
+
+Use `docs/CURRICULUM_PHASE_PLAN.md` as the official roadmap for the next curriculum increment derived from the Dario unit and expanded into A1, A2, B1, and B2.
 
 Current evidence and execution status is tracked in:
 
 - `docs/PHASE_EXECUTION_LOG.md`
-- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`
-- `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`
+- `docs/PROJECT_PHASE_ROADMAP.md`
 
 Before opening PRs for new course units:
 
-1. Verify the unit tasks and acceptance criteria in the phase plan.
+1. Verify the unit tasks and acceptance criteria in `docs/CURRICULUM_PHASE_PLAN.md`.
 2. Update or create/update learning content schema if needed.
 3. Add tests first (validation, practice, or rendering where applicable).
 4. Capture closure evidence in `docs/PHASE_EXECUTION_LOG.md`.

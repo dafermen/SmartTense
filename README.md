@@ -209,20 +209,17 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 
 ## Documentation
 
+- `docs/INDEX.md`: start here; official documentation map and reading order.
+- `docs/CURRICULUM_PHASE_PLAN.md`: official A1-B2 curriculum phase plan with executive phases, operational tasks, exit criteria, and internal Gantt.
 - `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.
 - `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, contexts, vocabulary, examples, and exercises.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: roadmap ejecutivo + tareas operativas por fases con Gantt interno, basado en el documento de Dario.
-- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`: plan detallado de fases ejecutivas y tareas operativas derivadas de `DARIO _ GENERAL ENGLISH COURSE.docx`, incluyendo Gantt interno.
-- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`: versión ejecutiva/operativa por fases con Gantt interno y plan incremental.
-- `docs/PHASE_EXECUTION_LOG.md`: registro de ejecución por fases y evidencia por entrega.
-- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: roadmap ejecutivo y operativo con criterios de salida por fase.
+- `docs/PHASE_EXECUTION_LOG.md`: phase execution log and delivery evidence.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
 - `docs/RELEASE_CHECKLIST.md`: internal release checklist for phase milestones and critical UI changes.
-- `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`: phased execution roadmap with executive goals, operational tasks, and an internal Gantt plan.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.
 
 ## Current Validation

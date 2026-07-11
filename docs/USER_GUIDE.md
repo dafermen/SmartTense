@@ -209,11 +209,9 @@ Internal release notes and screen checks live in `docs/RELEASE_CHECKLIST.md`.
 
 If you want to follow the pedagogic extension of the app, this roadmap is the reference:
 
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: executive and operational phases for next increments.
-- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`: detailed operations roadmap (executive phase goals + operational tasks, plus internal Gantt).
+- `docs/INDEX.md`: documentation map and reading order.
+- `docs/CURRICULUM_PHASE_PLAN.md`: official A1-B2 curriculum plan with executive phases, operational tasks, and internal Gantt.
 - `docs/PHASE_EXECUTION_LOG.md`: latest status and validation evidence.
-- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: engineering execution plan used by the team.
-- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`: plan operativo alterno y compacto con enfoque de release por fases.
 
 Suggested sequence for you as a learner:
 

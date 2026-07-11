@@ -4,11 +4,44 @@ Fecha base: 11/07/2026.
 
 ## Fase actual
 
-- **Fase activa:** Fase 9 - Calidad, metricas y robustez (cerrada).
-- **Objetivo de la fase:** convertir la validacion mobile y de pantallas criticas en evidencia repetible, medible y facil de ejecutar.
-- **Estado:** cerrada. F9a, F9b y F9c entregados; no se requiere virtualizacion mientras el limite de verbos siga en 500 y el smoke mobile pase.
+- **Fase activa:** Fase 10 - Reorganizacion documental y guia curricular (cerrada).
+- **Objetivo de la fase:** consolidar la documentacion activa, eliminar fuentes redundantes de roadmap y crear una guia curricular A1-B2 con fases ejecutivas y tareas operativas.
+- **Estado:** cerrada. La siguiente fase de producto sugerida es Fase 11 - Revision del modelo de contenido.
 
-## Fase 9 (actual)
+## Fase 10 (actual)
+
+- **Estado operativo:** cerrada.
+- **Checkpoint F10a - Consolidacion documental (11/07/2026):**
+  - Se creo `docs/INDEX.md` como punto de entrada oficial para la documentacion.
+  - Se creo `docs/CURRICULUM_PHASE_PLAN.md` como plan oficial para expansion curricular A1, A2, B1 y B2.
+  - Se consolida la informacion util de los planes anteriores en un unico plan con fases ejecutivas, tareas operativas, criterios de salida y Gantt interno.
+  - Se eliminan referencias activas a documentos redundantes para evitar interpretaciones contradictorias.
+- **Tareas puntuales:**
+  - Crear indice documental. **completada**.
+  - Crear guia curricular por niveles. **completada**.
+  - Migrar informacion util de planes anteriores. **completada**.
+  - Eliminar documentos redundantes. **completada**.
+  - Actualizar README y guias por rol. **completada**.
+  - Ejecutar `npm run release:check`. **completada**.
+- **Criterio de salida definido para cierre de fase:**
+  - `docs/INDEX.md` lista documentos activos y consolidados.
+  - `docs/CURRICULUM_PHASE_PLAN.md` define fases A1-B2 con tareas operativas verificables.
+  - No quedan referencias activas a planes historicos eliminados.
+  - `npm run release:check` verde.
+- **Evidencia ejecutada hoy:**
+  - `rg` confirmo que los documentos historicos solo aparecen en `docs/INDEX.md` como documentos consolidados.
+  - `git diff --check` OK con avisos esperados de LF/CRLF en Windows.
+  - `node --check scripts/mobile-smoke.cjs` OK.
+  - `npm test` OK (50 pruebas, 0 fallos).
+  - `npm run build` OK.
+  - `npm run test:e2e:mobile` OK.
+  - Viewport validado: `390x844`.
+  - Volumen validado: 500 verbos sinteticos.
+  - Pantallas validadas: Home, Theory, Practice, Individual, Complete, Production, Settings.
+  - Metricas observadas en E2E: Home `628ms`, Settings `172ms`, 25 filas visibles, quality gates `passed: true`.
+  - Accesibilidad basica en E2E: `hasMain`, `hasNamedNavigation`, `hasDocumentLanguage`, `unnamedButtons: []`, `unlabeledFields: []`.
+
+## Fase 9 (cerrada)
 
 - **Estado operativo:** cerrada.
 - **Checkpoint F9a - E2E mobile repetible (11/07/2026):**
@@ -120,10 +153,7 @@ Fecha base: 11/07/2026.
 
 ## Referencias actualizadas
 
+- `docs/INDEX.md`
+- `docs/CURRICULUM_PHASE_PLAN.md`
 - `docs/PROJECT_PHASE_ROADMAP.md`
-- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`
-- `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`
-- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`
-- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`
 - `docs/RELEASE_CHECKLIST.md`
