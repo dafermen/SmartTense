@@ -205,7 +205,8 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 - `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, contexts, vocabulary, examples, and exercises.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: roadmap ejecutivo + tareas operativas por fases con Gantt interno, basado en el documento pedagógico aportado.
+- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: roadmap ejecutivo + tareas operativas por fases con Gantt interno, basado en el documento de Dario.
+- `docs/PHASE_EXECUTION_LOG.md`: registro de ejecución por fases y evidencia por entrega.
 - `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: roadmap ejecutivo y operativo con criterios de salida por fase.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
 - `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`: phased execution roadmap with executive goals, operational tasks, and an internal Gantt plan.

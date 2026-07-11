@@ -250,6 +250,23 @@ Stores learning units as data. The first unit is `present-simple-foundation`, wh
 
 This file is the bridge between the current conjugation trainer and the guided learning experience. Theory and Practice use it now.
 
+## Documentation for phase execution
+
+Use `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` as the executive + operational roadmap for the next product increment.
+
+Current evidence and execution status is tracked in:
+
+- `docs/PHASE_EXECUTION_LOG.md`
+- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`
+- `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`
+
+Before opening PRs for new course units:
+
+1. Verify the unit tasks and acceptance criteria in the phase plan.
+2. Update or create/update learning content schema if needed.
+3. Add tests first (validation, practice, or rendering where applicable).
+4. Capture closure evidence in `docs/PHASE_EXECUTION_LOG.md`.
+
 ## Scripts
 
 ```bash

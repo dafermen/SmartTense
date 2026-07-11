@@ -201,3 +201,19 @@ Learning path progress is also local. SmartTense tracks whether you have opened 
 SmartTense now includes structured Theory and Practice screens powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, vocabulary, contexts, and starter exercises.
 
 The current visible learning flow is Home -> Theory -> Practice -> Individual -> Production -> Complete -> Settings. Home recommends the next step based on your local unit progress.
+
+### Upcoming roadmap (Dario-based)
+
+If you want to follow the pedagogic extension of the app, this roadmap is the reference:
+
+- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: executive and operational phases for next increments.
+- `docs/PHASE_EXECUTION_LOG.md`: latest status and validation evidence.
+- `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: engineering execution plan used by the team.
+
+Suggested sequence for you as a learner:
+
+1. Complete Present Simple in Theory.
+2. Practice Present Simple patterns in Practice.
+3. Use Individual for targeted affirmatives (Past/Future/Conditional groups when available).
+4. Do Production prompts and compare with previous attempts.
+5. Open a new unit after Theory + Practice are marked complete for your current unit.
