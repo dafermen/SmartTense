@@ -206,7 +206,8 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
 - `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: roadmap ejecutivo + tareas operativas por fases con Gantt interno, basado en el documento de Dario.
-- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`: versión ejecutiva/operativa nueva por fases con Gantt interno y plan incremental.
+- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`: plan detallado de fases ejecutivas y tareas operativas derivadas de `DARIO _ GENERAL ENGLISH COURSE.docx`, incluyendo Gantt interno.
+- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`: versión ejecutiva/operativa por fases con Gantt interno y plan incremental.
 - `docs/PHASE_EXECUTION_LOG.md`: registro de ejecución por fases y evidencia por entrega.
 - `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: roadmap ejecutivo y operativo con criterios de salida por fase.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.

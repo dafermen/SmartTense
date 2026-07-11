@@ -252,7 +252,10 @@ This file is the bridge between the current conjugation trainer and the guided l
 
 ## Documentation for phase execution
 
-Use `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` as the executive + operational roadmap for the next product increment. `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md` is the compact operational companion for phase-by-phase execution.
+Use `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` as the main instructional roadmap for the next product increment derived from the Dario unit.
+For an alternative execution perspective, use:
+- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` (executive and operational).
+- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md` (compact operational companion).
 
 Current evidence and execution status is tracked in:
 

@@ -14,8 +14,11 @@ Fecha base: 11/07/2026.
 - **Checkpoint de ejecucion (11/07/2026):**
   - Se incorporo la unidad `past-future-conditional-foundation` en `public/data/learningUnits.json`.
   - La unidad nueva incluye teoria, estructuras, errores, ejemplos, vocabulario y 5 ejercicios iniciales: fillBlank, transform, chooseTense, correctMistake, translation.
+- **Checkpoint de integracion (12/07/2026):**
+  - Se habilito el selector de unidad activa en Home para abrir Theory/Practice con la unidad seleccionada.
+  - Se persiste la unidad activa en settings locales y se usa para progreso y recomendacion de ruta.
 - **Tareas puntuales:**
-  - Diseñar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional).
+  - Diseñar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional). **completada**.
   - Integrar la unidad en Theory y Practice con contexto y filtros.
   - Mantener el flujo Home -> unidad -> teoria -> practica -> acciones de repaso.
   - Verificar rendimiento para listas largas: filtros, orden y paginacion.
@@ -28,11 +31,11 @@ Fecha base: 11/07/2026.
   - `npm test` OK (48 pruebas, 0 fallos).
   - `npm run build` OK.
   - Validador de contenido y verbos conserva cobertura de escenarios negativos.
-  - Settings y Production siguen con confirmacion en edit/eliminar y flujo estable.
+  - Home abre Theory/Practice con la unidad activa y Settings resume el estado de la unidad activa.
 
 ## Seguimiento fase 8 (proximo tramo)
 
-- **Resultado del siguiente paso:** Checkpoint 8a entregado con contenido util para Theory y Practice.
+- **Resultado del siguiente paso:** Checkpoint 8a entregado y se habilitó la navegación por unidad activa.
 - **Pendiente para cierre completo de Fase 8:**
   - Revisar rendimiento del flujo en movil con multiples contextos.
   - Incorporar ejercicios de transferencia entre tiempos (comparacion entre Present, Past, Future y Conditional).
@@ -57,5 +60,5 @@ Fecha base: 11/07/2026.
 - `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`
 - `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`
 - `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`
-- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`
+- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`
 - `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`

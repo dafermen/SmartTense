@@ -7,6 +7,7 @@ Para la version recomendada con fases ejecutivas y tareas operativas derivadas d
 
 - [PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md](PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md).
 - [SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md](SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md) (versión nueva, más compacta y operativa, con Gantt interno).
+- [PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md](PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md) (nuevo documento con fases ejecutivas + tareas operativas y Gantt interno derivado del docx).
 
 La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
 

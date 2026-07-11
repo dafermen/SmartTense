@@ -49,6 +49,7 @@ export default function App() {
   const [appData, setAppData] = useState(DEFAULT_DATA);
   const [learningContent, setLearningContent] = useState({ schemaVersion: 1, units: [] });
   const [learningContentDraft, setLearningContentDraft] = useState({ schemaVersion: 2, contexts: [], units: [] });
+  const [activeLearningUnitId, setActiveLearningUnitId] = useState(storedSettings.activeLearningUnitId || "");
   const [verbId, setVerbId] = useState(storedSettings.verbId || DEFAULT_DATA.verbs[0].id);
   const [subjectId, setSubjectId] = useState(storedSettings.subjectId || SUBJECTS[0].id);
   const [individualTenseIds, setIndividualTenseIds] = useState(() => {
@@ -259,10 +260,23 @@ export default function App() {
     const previewTense = TENSES.find((tense) => tense.id === "simplePresent") || tenses[0] || TENSES[0];
     return buildRows(currentVerb, [previewSubject], [previewTense], interfaceLanguage, { learnerLanguage, useContractions })[0];
   }, [currentVerb, interfaceLanguage, learnerLanguage, subjectId, tenses, useContractions]);
-  const primaryLearningUnit = useMemo(
+  const defaultLearningUnit = useMemo(
     () => learningContent.units.find((unit) => unit.tenseIds.includes("simplePresent")) || learningContent.units[0],
     [learningContent.units]
   );
+  const primaryLearningUnit = useMemo(
+    () => learningContent.units.find((unit) => unit.id === activeLearningUnitId) || defaultLearningUnit,
+    [activeLearningUnitId, defaultLearningUnit, learningContent.units]
+  );
+  useEffect(() => {
+    if (!learningContent.units.length) return;
+    if (!activeLearningUnitId) {
+      setActiveLearningUnitId(defaultLearningUnit?.id || learningContent.units[0].id);
+      return;
+    }
+    if (learningContent.units.some((unit) => unit.id === activeLearningUnitId)) return;
+    setActiveLearningUnitId(defaultLearningUnit?.id || learningContent.units[0].id);
+  }, [activeLearningUnitId, defaultLearningUnit, learningContent.units]);
   const unitContexts = useMemo(
     () => getUnitContexts(primaryLearningUnit, learningContent.contexts || []),
     [learningContent.contexts, primaryLearningUnit]
@@ -339,6 +353,7 @@ export default function App() {
     writeStoredSettings({
       verbId,
       subjectId,
+      activeLearningUnitId,
       group,
       level,
       verbPattern,
@@ -812,6 +827,7 @@ export default function App() {
 
   function renderDashboard() {
     const levelLabel = LEVELS.find((entry) => entry.id === level)?.[interfaceLanguage];
+    const unitTitle = primaryLearningUnit?.title || "";
 
     return (
       <section className="home-board" aria-label={t("home")}>
@@ -819,6 +835,19 @@ export default function App() {
           <article className="home-primary-card">
             <div>
               <p className="eyebrow">{t("workspace")}</p>
+              <h3>{t("learningUnit")}</h3>
+              <SelectField
+                label={t("activeLearningUnit")}
+                value={primaryLearningUnit?.id || ""}
+                onChange={setActiveLearningUnitId}
+                variant="light"
+              >
+                {learningContent.units.map((unit) => (
+                  <option key={unit.id} value={unit.id}>
+                    {unit.title}
+                  </option>
+                ))}
+              </SelectField>
               <h2>{currentVerb.label}</h2>
               <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
             </div>
@@ -872,7 +901,7 @@ export default function App() {
           <article className="home-info-card home-recommend-card">
             <div className="home-card-heading">
               <p className="eyebrow">{t("recommendedNow")}</p>
-              <h3>{nextLearningStep.title || recommendedVerb?.label || currentVerb.label}</h3>
+              <h3>{unitTitle || nextLearningStep.title || recommendedVerb?.label || currentVerb.label}</h3>
             </div>
             <dl className="home-compact-list">
               <div><dt>{t("unitStatus")}</dt><dd>{t(primaryUnitProgress.status)}</dd></div>

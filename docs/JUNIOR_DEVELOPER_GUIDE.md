@@ -61,6 +61,20 @@ The current stable surfaces are:
 
 Production is now active. It supports drafting attempts, local statuses, filtering, edit, and delete in the queue.
 
+## Development Flow By Phase
+
+SmartTense uses a phase-driven execution model. Before and after bigger changes, keep this sequence:
+
+1. Identify the active phase in `docs/PHASE_EXECUTION_LOG.md`.
+2. Read the corresponding goals in:
+   - `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` (operational roadmap).
+   - `docs/DEVELOPER_GUIDE.md` for architecture and file ownership.
+3. Implement the phase tasks with minimal scope.
+4. Update evidence in `docs/PHASE_EXECUTION_LOG.md` and adjust the phase plan/Gantt if needed.
+5. Run checks (`npm.cmd test`, `npm.cmd run build`) before commit.
+
+Keep phase docs current when a deliverable is completed so the next teammate can continue safely.
+
 Keep any larger authoring UI separate from the small learning-content admin helpers.
 
 ## Updating Production

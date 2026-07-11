@@ -18,7 +18,7 @@ git remote -v
 
 ## Recommended Local Release Flow
 
-Before pushing a UI, documentation, Settings data export, or source data change:
+Before pushing a UI, documentation, Settings data export, source data, or phase plan change:
 
 ```bash
 npm test
@@ -35,6 +35,11 @@ git push origin main
 ```
 
 Use a more specific commit message when possible.
+
+If the change closes a phase milestone, add phase artifacts to the same commit scope:
+- `docs/PHASE_EXECUTION_LOG.md`
+- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`
+- `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` (if that is the active planning source for the sprint)
 
 ## GitHub Pages Deployment Model
 
@@ -153,6 +158,10 @@ Then push to `main` and verify the GitHub Actions deployment. If verb data chang
 If `public/data/learningUnits.json`, Theory, Practice, learning contexts, learning-content administration, learning path, or form explanations changed, confirm the relevant validation/conjugation/practice/context/content-admin/learning-path tests pass and run the production build before pushing.
 
 When learning content is edited through Settings, export the content JSON and intentionally update `public/data/learningUnits.json` before committing.
+
+If a phase closes, register date, evidence (`npm test`, `npm run build`, manual validation notes), and next-step tasks in:
+- `docs/PHASE_EXECUTION_LOG.md`
+- `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md` (or corresponding phase plan doc)
 
 ## Troubleshooting
 
