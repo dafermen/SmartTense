@@ -14,7 +14,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 3 - Motor de practica | Cerrada | Pagina Practice con ejercicios iniciales, scoring local y feedback inmediato | `npm test`, `npm run build` |
 | Fase 4 - Ruta de aprendizaje | Cerrada | Progreso local por unidad y Home recomienda el siguiente paso | `npm test`, `npm run build` |
 | Fase 5 - Vocabulario y contextos | Cerrada | Contextos, vocabulario y practica filtrable por contexto | `npm test`, `npm run build` |
-| Fase 6 - Administracion de contenido | Pendiente | Authoring tools para unidades y vocabulario | No iniciada |
+| Fase 6 - Administracion de contenido | Cerrada | Import/export, preview y validacion de contenido de aprendizaje en Settings | `npm test`, `npm run build` |
 | Fase 7 - Speaking, writing y revision | Pendiente | Prompts y cola de revision | No iniciada |
 
 ## Lectura Ejecutiva Del Documento Fuente
@@ -205,6 +205,10 @@ Entregable:
 
 - Un administrador puede editar contenido de aprendizaje, validarlo y exportarlo como JSON.
 
+Estado:
+
+- Cerrada para MVP. Settings incluye un administrador compacto de contenido de aprendizaje: importa JSON compatible como borrador, valida con `validateLearningContent`, muestra vista previa de unidades/contextos/vocabulario/ejercicios, aplica el contenido a Theory/Practice con confirmacion y exporta JSON para actualizar `public/data/learningUnits.json`. La edicion visual campo por campo queda para iteraciones posteriores si el volumen de contenido lo exige.
+
 ### Fase 7 - Speaking, Writing Y Revision
 
 Objetivo ejecutivo:
@@ -266,13 +270,13 @@ gantt
     Ejemplos por contexto                   :done, p5b, 2026-07-11, 1d
 
     section Administracion
-    Fase 6 - Authoring tools                :p6, 2026-07-12, 14d
-    Import export de contenido              :p6a, 2026-07-12, 7d
-    Preview y validacion                    :p6b, after p6a, 7d
+    Fase 6 - Authoring tools                :done, p6, 2026-07-11, 1d
+    Import export de contenido              :done, p6a, 2026-07-11, 1d
+    Preview y validacion                    :done, p6b, 2026-07-11, 1d
 
     section Produccion
-    Fase 7 - Speaking y writing             :p7, after p6, 12d
-    Prompts y rubricas                      :p7a, after p6, 6d
+    Fase 7 - Speaking y writing             :p7, 2026-07-12, 12d
+    Prompts y rubricas                      :p7a, 2026-07-12, 6d
     Cola de revision                        :p7b, after p7a, 6d
 ```
 
@@ -306,12 +310,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 6:
+Continuar con Fase 7:
 
-1. Extender Settings para administrar contenido de aprendizaje.
-2. Agregar import/export de unidades, contextos y vocabulario.
-3. Agregar vista previa y validacion antes de guardar.
-4. Mantener bulk edit enfocado en metadatos de contenido.
-5. Documentar el flujo para autores de contenido.
+1. Crear prompts simples de speaking y writing desde `learningUnits`.
+2. Agregar rubricas basicas de autoevaluacion.
+3. Guardar intentos localmente por unidad.
+4. Agregar cola de revision para errores frecuentes.
+5. Mantener la UI minima y enfocada en produccion guiada.
 
-Este paso debe hacer crecer el contenido sin editar JSON manualmente, conservando validacion estricta y una UI minima.
+Este paso debe llevar SmartTense de reconocimiento/practica controlada hacia produccion guiada sin agregar cuentas ni backend.

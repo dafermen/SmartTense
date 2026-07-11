@@ -26,6 +26,7 @@ The app is designed for two audiences:
 - English and Spanish interface, with Spanish and French learner-language guides.
 - Responsive layout optimized for desktop and mobile.
 - Local JSON verb data with hardened import support for custom verb lists.
+- Learning content import/export in Settings, with validation and preview before applying.
 - CSV and JSON export from Complete.
 - Capacitor projects for iOS and Android.
 
@@ -59,9 +60,10 @@ SmartTense/
     data/verbs.json           Default editable verb data
     data/learningUnits.json   Structured learning content, contexts, vocabulary, Theory, and Practice
   src/
-    App.jsx                   Main React interface, app state, and local data manager
+    App.jsx                   Main React interface, app state, and local data/content manager
     conjugation.js            Verb tense generation engine
     i18n.js                   English/Spanish UI strings
+    learningContentAdmin.js   Learning-content summary, clone, and export helpers
     learnerLanguages/         Learner-language guidance
     styles.css                Responsive visual design
     data/
@@ -180,6 +182,8 @@ Default verb data lives in `public/data/verbs.json`.
 Structured learning content lives in `public/data/learningUnits.json`. Theory renders this file in the app. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
 
 Learning contexts also live in `public/data/learningUnits.json`. The current context catalog includes IT work, daily habits, family routines, meetings, travel/vacation, and prepositions. Theory and Practice can filter examples, vocabulary, and exercises by context.
+
+Settings can import, preview, validate, apply, and export learning-content JSON for the current browser session. Use the exported JSON when `public/data/learningUnits.json` should be updated in source control.
 
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 

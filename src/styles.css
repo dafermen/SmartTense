@@ -2465,6 +2465,26 @@ th {
   padding: 10px;
 }
 
+.content-preview-box {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 10px;
+}
+
+.content-preview-box strong {
+  color: #172033;
+  line-height: 1.25;
+}
+
+.content-preview-box span:not(.pattern-pill) {
+  color: #596579;
+  line-height: 1.35;
+}
+
 .settings-control-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(170px, 1fr));

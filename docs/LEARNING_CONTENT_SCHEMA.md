@@ -14,6 +14,8 @@ The validator is:
 src/data/learningContentValidation.js
 ```
 
+Settings can import and export this same JSON shape through the Learning content manager. Imported content is validated before it can be applied to the current browser session.
+
 ## Root Object
 
 ```json

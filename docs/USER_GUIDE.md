@@ -95,6 +95,7 @@ Settings keeps configuration and data tools in one place. It includes:
 - Learning path status for the current unit and a reset option for that unit.
 - Data manager summary with total verbs, schema version, update date, and pattern count.
 - Import JSON and Export database for compatible SmartTense verb files.
+- Learning content manager for importing, previewing, applying, and exporting units, contexts, vocabulary, and exercises.
 - Restore default data when you want to return to the demo database for this browser session.
 - Add verb to create a new draft entry.
 - Data table to search, sort, and review verb rows before editing.
@@ -104,6 +105,8 @@ Settings keeps configuration and data tools in one place. It includes:
 - Update and Delete actions ask for confirmation before applying changes.
 
 Settings changes to the verb database are local to the current browser session. The data table opens in review mode first; press Edit on one row for a focused change, Cancel to discard that row edit, or Bulk edit to make the whole filtered page editable. Use Export database when you want to keep a copy or send the updated data to a developer.
+
+Learning content changes are also local to the current browser session. Import content JSON to load a draft, review the preview summary, then press Apply content when it is ready to use in Theory and Practice. Use Export content when the project file should be updated by a developer.
 
 ## Languages
 
@@ -160,12 +163,15 @@ Use Settings -> Data manager -> Import JSON when you have a compatible verb file
 
 For safety, SmartTense rejects files that are too large, do not use the `.json` extension, or do not match the expected verb schema.
 
+Use Settings -> Learning content manager -> Import content when you have compatible learning-content JSON. SmartTense validates units, contexts, vocabulary, examples, and exercises before the draft can be applied.
+
 ## Exporting
 
 There are two export options:
 
 - Complete -> CSV or JSON: exports a generated table snapshot from the current filters.
 - Settings -> Export database: exports the active verb database so it can be reused or reviewed.
+- Settings -> Export content: exports the active learning-content draft so it can be reviewed or committed to the project.
 
 ## Progress
 

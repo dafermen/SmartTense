@@ -4,6 +4,7 @@ import { DEFAULT_DATA, LEVELS, SUBJECTS, TENSES } from "./data/defaultData.js";
 import { validateLearningContent } from "./data/learningContentValidation.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
+import { buildLearningContentPayload, cloneLearningContent, getLearningContentSummary } from "./learningContentAdmin.js";
 import { ALL_CONTEXTS, getUnitContexts, getVocabularyItems, filterByContext } from "./learningContexts.js";
 import { getNextLearningStep, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
@@ -45,6 +46,7 @@ export default function App() {
   // rules themselves stay in conjugation.js so UI changes do not affect output.
   const [appData, setAppData] = useState(DEFAULT_DATA);
   const [learningContent, setLearningContent] = useState({ schemaVersion: 1, units: [] });
+  const [learningContentDraft, setLearningContentDraft] = useState({ schemaVersion: 2, contexts: [], units: [] });
   const [verbId, setVerbId] = useState(storedSettings.verbId || DEFAULT_DATA.verbs[0].id);
   const [subjectId, setSubjectId] = useState(storedSettings.subjectId || SUBJECTS[0].id);
   const [individualTenseIds, setIndividualTenseIds] = useState(() => {
@@ -83,6 +85,7 @@ export default function App() {
   const [practiceResults, setPracticeResults] = useState({});
   const fileInputRef = useRef(null);
   const settingsFileInputRef = useRef(null);
+  const learningContentFileInputRef = useRef(null);
   const [dataDraft, setDataDraft] = useState(() => cloneVerbData(DEFAULT_DATA));
   const [newVerbForm, setNewVerbForm] = useState(EMPTY_VERB_FORM);
   const [bulkEditSearch, setBulkEditSearch] = useState("");
@@ -148,10 +151,12 @@ export default function App() {
         const payload = validateLearningContent(await response.json());
         if (!isMounted) return;
         setLearningContent(payload);
+        setLearningContentDraft(cloneLearningContent(payload));
       } catch (error) {
         console.error(error);
         if (!isMounted) return;
         setLearningContent({ schemaVersion: 1, units: [] });
+        setLearningContentDraft({ schemaVersion: 2, contexts: [], units: [] });
         showTimedAlert(t("learningContentFallback"), "error");
       }
     }
@@ -397,6 +402,54 @@ export default function App() {
       console.error(error);
       showTimedAlert(t("draftInvalid"), "error");
     }
+  }
+
+  async function handleImportLearningContentJson(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      validateImportFile(file);
+      const payload = validateLearningContent(JSON.parse(await file.text()));
+      setLearningContentDraft(cloneLearningContent(payload));
+      showTimedAlert(t("learningContentDraftLoaded"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("invalidLearningContentJson"), "error");
+    } finally {
+      if (learningContentFileInputRef.current) learningContentFileInputRef.current.value = "";
+    }
+  }
+
+  function handleExportLearningContentJson() {
+    try {
+      const payload = validateLearningContent(buildLearningContentPayload(learningContentDraft));
+      downloadText(`${JSON.stringify(payload, null, 2)}\n`, "smarttense-learning-content.json", "application/json");
+      showTimedAlert(t("learningContentExported"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("learningContentDraftInvalid"), "error");
+    }
+  }
+
+  function handleApplyLearningContentDraft() {
+    if (!window.confirm(t("applyLearningContentConfirm"))) return;
+
+    try {
+      const payload = validateLearningContent(buildLearningContentPayload(learningContentDraft));
+      setLearningContent(cloneLearningContent(payload));
+      setPracticeAnswers({});
+      setPracticeResults({});
+      showTimedAlert(t("learningContentApplied"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("learningContentDraftInvalid"), "error");
+    }
+  }
+
+  function handleDiscardLearningContentDraft() {
+    setLearningContentDraft(cloneLearningContent(learningContent));
+    showTimedAlert(t("learningContentDraftDiscarded"));
   }
 
   function handleSaveDataDraft(shouldConfirm = false) {
@@ -720,6 +773,9 @@ export default function App() {
 
   function renderSettingsView() {
     const dataSummary = getDataSummary(dataDraft);
+    const learningContentSummary = getLearningContentSummary(learningContentDraft);
+    const previewUnit = learningContentDraft.units?.[0];
+    const previewContexts = learningContentDraft.contexts?.slice(0, 4) || [];
     const filteredDraftVerbs = sortDraftEntries(
       dataDraft.verbs
         .map((verb, index) => ({ verb, index }))
@@ -790,6 +846,36 @@ export default function App() {
               <button type="button" onClick={handleRestoreDefaultData}>{t("restoreDefaultData")}</button>
             </div>
             <p className="settings-note">{t("dataManagerNote")}</p>
+          </article>
+
+          <article className="settings-card content-manager-card">
+            <p className="eyebrow">{t("learningContentManager")}</p>
+            <dl className="data-summary-grid">
+              <div><dt>{t("units")}</dt><dd>{learningContentSummary.units}</dd></div>
+              <div><dt>{t("contexts")}</dt><dd>{learningContentSummary.contexts}</dd></div>
+              <div><dt>{t("vocabulary")}</dt><dd>{learningContentSummary.vocabulary}</dd></div>
+              <div><dt>{t("practice")}</dt><dd>{learningContentSummary.exercises}</dd></div>
+            </dl>
+            <div className="content-preview-box">
+              <p className="eyebrow">{t("contentPreview")}</p>
+              <strong>{previewUnit?.title || t("noLearningContent")}</strong>
+              <span>{previewUnit?.focus || t("learningContentPreviewEmpty")}</span>
+              {previewContexts.length > 0 && (
+                <div className="theory-pill-row">
+                  {previewContexts.map((context) => <span className="pattern-pill" key={context.id}>{context.title}</span>)}
+                </div>
+              )}
+            </div>
+            <div className="settings-actions settings-actions-wrap">
+              <label className="import-button import-button-light">
+                <input ref={learningContentFileInputRef} type="file" accept="application/json,.json" onChange={handleImportLearningContentJson} />
+                {t("importLearningContent")}
+              </label>
+              <button type="button" onClick={handleExportLearningContentJson}>{t("exportLearningContent")}</button>
+              <button type="button" onClick={handleApplyLearningContentDraft}>{t("applyLearningContent")}</button>
+              <button type="button" onClick={handleDiscardLearningContentDraft}>{t("discardContentDraft")}</button>
+            </div>
+            <p className="settings-note">{t("learningContentManagerNote")}</p>
           </article>
         </section>
 

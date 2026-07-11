@@ -8,6 +8,7 @@ SmartTense is intentionally small. Most behavior is split into these areas:
 
 - `src/App.jsx`: React state, page composition, controls, import/export, Settings data manager, and rendering.
 - `src/conjugation.js`: grammar engine that generates sentence rows.
+- `src/learningContentAdmin.js`: pure helpers for learning-content cloning, export payloads, and Settings summaries.
 - `src/learnerLanguages/`: learner-language translations, usage notes, and explanations.
 - `src/data/`: default data, tense metadata, and JSON validation.
 - `src/styles.css`: responsive layout for Home, Theory, Practice, Individual, Complete, Settings, mobile cards, and shared controls.
@@ -101,6 +102,20 @@ The learning path is local and unit-based. `src/learningPath.js` owns the pure h
 
 The current flow is Theory -> Practice -> Individual review. Home shows the recommended next step, and Settings can reset the current unit progress.
 
+### Learning Content Administration
+
+Settings includes a compact learning-content manager for the current browser session.
+
+Current MVP behavior:
+
+- imports compatible `learningUnits` JSON as a draft;
+- validates the draft with `validateLearningContent`;
+- previews units, contexts, vocabulary, and exercise counts;
+- applies the draft to Theory and Practice after confirmation;
+- exports the draft for source-control updates.
+
+Do not add a large visual authoring studio inside `App.jsx`. If editing forms for units or exercises become necessary, extract focused helpers/components first and keep validation as the gate before applying content.
+
 ### Individual
 
 Individual is affirmative-only practice. It builds rows from selected subjects and selected Individual tenses. Tense and subject controls are multi-select; group labels toggle entire groups.
@@ -127,7 +142,8 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 12. Theory renders the first matching learning unit for Present Simple from validated JSON.
 13. `src/learningContexts.js` maps contexts and filters examples, vocabulary, and exercises.
 14. Practice extracts starter exercises from the same unit and scores typed answers with `src/practice.js`.
-15. `src/learningPath.js` derives unit progress and the Home recommendation.
+15. `src/learningContentAdmin.js` summarizes and prepares content drafts for Settings import/export.
+16. `src/learningPath.js` derives unit progress and the Home recommendation.
 
 ## Important Source Files
 
@@ -186,6 +202,16 @@ It also validates the root `contexts` catalog and rejects examples, exercises, v
 ### `src/learningContexts.js`
 
 Owns context filtering helpers for learning content. It does not own UI state; `App.jsx` stores the selected context and passes it to Theory and Practice.
+
+### `src/learningContentAdmin.js`
+
+Owns pure helper logic for the Settings learning-content manager:
+
+- `cloneLearningContent`
+- `buildLearningContentPayload`
+- `getLearningContentSummary`
+
+Keep these helpers independent from React so they can be tested directly.
 
 ### `public/data/learningUnits.json`
 
@@ -248,6 +274,7 @@ Add tests when changing:
 - Form explanations.
 - Practice answer normalization and scoring.
 - Context filtering and vocabulary extraction.
+- Learning-content admin summaries and export payloads.
 - Learning path recommendations and unit progress updates.
 - Learning level filtering.
 - JSON validation.
@@ -327,7 +354,15 @@ Practice is intentionally simple.
 2. Reference those IDs from `unit.contextTags`.
 3. Add `context` to examples, vocabulary items, and exercises when filtering should apply.
 4. Update `tests/learningContexts.test.js` when helper behavior changes.
-5. Keep import/export and authoring tools out of this layer until Fase 6.
+5. Keep import/export and authoring tools in the Settings content manager, not inside the context-filter helpers.
+
+## Updating Learning Content Administration
+
+1. Keep import/export local to the browser session.
+2. Always validate with `validateLearningContent` before applying a draft.
+3. Keep preview data derived through `src/learningContentAdmin.js`.
+4. Update `tests/learningContentAdmin.test.js` when summary or export behavior changes.
+5. Update user-facing docs when the Settings content workflow changes.
 
 ## Updating The Learning Path
 
@@ -385,6 +420,7 @@ The workflow supports the repository variable `PAGES_BASE_PATH`:
 4. Run `npm test` and `npm run build`.
 5. If learning content changed, confirm `tests/learningContentValidation.test.js` validates the bundled JSON.
 6. If Settings was used to edit the database, export the database JSON and intentionally copy it into `public/data/verbs.json`; then keep `src/data/defaultData.js` aligned if the fallback should change.
-7. Run `npm audit` and review dependency findings.
-8. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
-9. Run `npm run cap:sync` if native projects should include the latest web build.
+7. If Settings was used to update learning content, export the content JSON and intentionally copy it into `public/data/learningUnits.json`.
+8. Run `npm audit` and review dependency findings.
+9. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
+10. Run `npm run cap:sync` if native projects should include the latest web build.

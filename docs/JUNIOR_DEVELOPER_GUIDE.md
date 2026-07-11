@@ -32,6 +32,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `src/data/defaultData.js`: built-in tense, subject, and fallback verb data.
 - `src/data/validation.js`: validation for verb JSON.
 - `src/data/learningContentValidation.js`: validation for learning units.
+- `src/learningContentAdmin.js`: learning-content draft summary and export helpers.
 - `src/practice.js`: practice exercise extraction, answer normalization, and scoring.
 - `src/learningContexts.js`: context filtering and vocabulary extraction helpers.
 - `src/learningPath.js`: local unit progress and next-step recommendation helpers.
@@ -55,9 +56,9 @@ The current stable surfaces are:
 - `Learning path`: local Theory/Practice progress for the active unit.
 - `Individual`: focused affirmative practice.
 - `Complete`: full conjugation comparison.
-- `Settings`: configuration and data administration.
+- `Settings`: configuration, verb data administration, and learning-content import/export.
 
-The next planned surface is content administration, but keep authoring tools separate from the learning-content helpers until that phase starts.
+The next planned surface is speaking and writing practice. Keep any larger authoring UI separate from the small learning-content admin helpers.
 
 ## Adding A Learning Unit
 
@@ -119,6 +120,18 @@ Current behavior:
 - keep untagged items visible as shared content.
 
 When editing contexts, update `public/data/learningUnits.json`, `docs/LEARNING_CONTENT_SCHEMA.md`, and `tests/learningContexts.test.js` if helper behavior changes.
+
+## Updating Learning Content Admin
+
+The Settings content manager uses `src/learningContentAdmin.js`.
+
+Current behavior:
+
+- preview counts for units, contexts, vocabulary, and exercises;
+- export a valid learning-content payload;
+- keep imports local to the browser until a developer updates `public/data/learningUnits.json`.
+
+When editing this flow, update `tests/learningContentAdmin.test.js` and keep validation in `src/data/learningContentValidation.js` as the final gate.
 
 ## Updating Learning Path
 
