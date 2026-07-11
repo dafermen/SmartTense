@@ -10,11 +10,11 @@ SmartTense is intentionally small. Most behavior is split into these areas:
 - `src/conjugation.js`: grammar engine that generates sentence rows.
 - `src/learnerLanguages/`: learner-language translations, usage notes, and explanations.
 - `src/data/`: default data, tense metadata, and JSON validation.
-- `src/styles.css`: responsive layout for Home, Individual, Complete, Settings, mobile cards, and shared controls.
+- `src/styles.css`: responsive layout for Home, Theory, Practice, Individual, Complete, Settings, mobile cards, and shared controls.
 
 The app loads editable verb data from `public/data/verbs.json`. If that request fails, it uses the embedded `DEFAULT_DATA` from `src/data/defaultData.js` so the UI can still run.
 
-The project also has the first learning-content data source in `public/data/learningUnits.json`. The Theory page renders this content as a compact lesson. Practice remains planned for a later phase. Validate learning content with `src/data/learningContentValidation.js`.
+The project also has the first learning-content data source in `public/data/learningUnits.json`. Theory and Practice render this content as compact guided-learning surfaces. Validate learning content with `src/data/learningContentValidation.js`.
 
 ## Main UI Surfaces
 
@@ -43,9 +43,12 @@ Theory includes:
 - structures;
 - common mistakes;
 - contextual examples;
+- context vocabulary;
 - starter practice preview.
 
-Do not add answer checking or scoring here. Interactive practice belongs to the later Practice phase.
+Do not add answer checking or scoring here. Interactive practice belongs to Practice.
+
+Theory uses `src/learningContexts.js` to filter examples and vocabulary by the selected context.
 
 ### Explanations
 
@@ -67,12 +70,25 @@ Practice renders starter exercises from the active learning unit. It uses `src/p
 Current MVP behavior:
 
 - reads `exercises` sections from `public/data/learningUnits.json`;
+- filters exercises by selected context;
 - accepts typed answers;
 - checks answers locally;
 - shows immediate correct/try-again feedback;
 - resets the current browser-session practice draft.
 
 Do not add complex persistence or speaking/writing flows here yet. Those belong to later phases.
+
+### Contexts And Vocabulary
+
+Context helpers live in `src/learningContexts.js`.
+
+Current responsibilities:
+
+- map unit `contextTags` to the root `contexts` catalog;
+- filter examples, vocabulary, and exercises by selected context;
+- expose vocabulary cards from `vocabulary` sections.
+
+Keep this layer data-focused. Do not put grammar-generation rules or Settings authoring behavior here.
 
 ### Learning Path
 
@@ -109,8 +125,9 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 10. The same generated row model supports Home preview, Individual affirmative cards, Complete desktop table, and mobile cards.
 11. `public/data/learningUnits.json` stores Theory/Practice content and is protected by `validateLearningContent`.
 12. Theory renders the first matching learning unit for Present Simple from validated JSON.
-13. Practice extracts starter exercises from the same unit and scores typed answers with `src/practice.js`.
-14. `src/learningPath.js` derives unit progress and the Home recommendation.
+13. `src/learningContexts.js` maps contexts and filters examples, vocabulary, and exercises.
+14. Practice extracts starter exercises from the same unit and scores typed answers with `src/practice.js`.
+15. `src/learningPath.js` derives unit progress and the Home recommendation.
 
 ## Important Source Files
 
@@ -164,6 +181,12 @@ Protects the app from invalid imported JSON. Validation intentionally rejects ov
 
 Protects structured learning content. It validates learning units, section types, grammar structures, common mistakes, examples, exercises, vocabulary, duplicate IDs, unsupported schema versions, and markup-like strings.
 
+It also validates the root `contexts` catalog and rejects examples, exercises, vocabulary, or unit tags that reference an unknown context.
+
+### `src/learningContexts.js`
+
+Owns context filtering helpers for learning content. It does not own UI state; `App.jsx` stores the selected context and passes it to Theory and Practice.
+
 ### `public/data/learningUnits.json`
 
 Stores learning units as data. The first unit is `present-simple-foundation`, which includes:
@@ -173,9 +196,10 @@ Stores learning units as data. The first unit is `present-simple-foundation`, wh
 - structures;
 - common mistakes;
 - contextual examples;
+- context vocabulary;
 - starter exercises.
 
-This file is the bridge between the current conjugation trainer and the guided learning experience. Theory uses it now; Practice will use it later.
+This file is the bridge between the current conjugation trainer and the guided learning experience. Theory and Practice use it now.
 
 ## Scripts
 
@@ -223,6 +247,7 @@ Add tests when changing:
 - Conjugation output.
 - Form explanations.
 - Practice answer normalization and scoring.
+- Context filtering and vocabulary extraction.
 - Learning path recommendations and unit progress updates.
 - Learning level filtering.
 - JSON validation.
@@ -238,7 +263,7 @@ Recommended responsive checks:
 - Mobile: around 390px wide.
 - Confirm no horizontal overflow.
 - Confirm buttons remain at touch-friendly size.
-- Confirm Home, Theory, Individual, and Complete remain readable with several selected filters.
+- Confirm Home, Theory, Practice, Individual, and Complete remain readable with several selected filters.
 
 ## Adding A Tense
 
@@ -272,9 +297,10 @@ Learning content lives in `public/data/learningUnits.json`.
 2. Use a unique hyphenated `id`.
 3. Link `tenseIds` to existing tense IDs from `src/data/defaultData.js`.
 4. Keep theory short and example-driven.
-5. Add or update tests in `tests/learningContentValidation.test.js` when the schema changes.
-6. Update `docs/LEARNING_CONTENT_SCHEMA.md`.
-7. Check Theory after adding sections that should be visible to learners.
+5. Add context metadata when examples, vocabulary, or exercises should be filterable.
+6. Add or update tests in `tests/learningContentValidation.test.js` when the schema changes.
+7. Update `docs/LEARNING_CONTENT_SCHEMA.md`.
+8. Check Theory and Practice after adding sections that should be visible to learners.
 
 Run:
 
@@ -289,10 +315,19 @@ The validator rejects unknown fields, unsafe strings, unsupported section types,
 Practice is intentionally simple.
 
 1. Add exercises to `public/data/learningUnits.json`.
-2. Keep each answer exact and learner-readable.
-3. Update `src/practice.js` only when scoring rules must change.
-4. Add or update tests in `tests/practice.test.js`.
-5. Keep UI feedback immediate and local.
+2. Add `context` when an exercise belongs to one learning context.
+3. Keep each answer exact and learner-readable.
+4. Update `src/practice.js` only when extraction, filtering, or scoring rules must change.
+5. Add or update tests in `tests/practice.test.js`.
+6. Keep UI feedback immediate and local.
+
+## Updating Contexts And Vocabulary
+
+1. Add context catalog entries at the root of `public/data/learningUnits.json`.
+2. Reference those IDs from `unit.contextTags`.
+3. Add `context` to examples, vocabulary items, and exercises when filtering should apply.
+4. Update `tests/learningContexts.test.js` when helper behavior changes.
+5. Keep import/export and authoring tools out of this layer until Fase 6.
 
 ## Updating The Learning Path
 
@@ -319,7 +354,7 @@ Before publishing, review:
 
 If a new JSON field is added, update `ALLOWED_VERB_KEYS`, `DATA_MANAGER_FIELDS`, documentation, and validation tests in the same change.
 
-If a new learning-content field is added, update `ALLOWED_UNIT_KEYS`, `ALLOWED_SECTION_KEYS`, documentation, and validation tests in the same change.
+If a new learning-content field is added, update the relevant allowed-key set, documentation, and validation tests in the same change.
 
 ## Capacitor Notes
 

@@ -12,7 +12,8 @@ The app is designed for two audiences:
 - Home dashboard with current verb summary, progress, quick actions, a live example, and a recommended next practice.
 - Local learning path for the active unit, with next-step recommendation and unit progress reset.
 - Theory view for the first Present Simple learning unit, rendered from structured JSON content.
-- Practice view with starter exercises, local answer checking, and immediate feedback.
+- Context filter for Theory and Practice, with vocabulary packs and real-life examples.
+- Practice view with starter exercises, local answer checking, immediate feedback, and context-aware filtering.
 - Individual practice view focused on affirmative conjugation only.
 - Complete view with affirmative, negative, interrogative, and negative interrogative forms.
 - Expandable "Why this form?" explanations for generated sentence forms.
@@ -31,9 +32,9 @@ The app is designed for two audiences:
 ## Screens And Main Flow
 
 1. Start on Home to see progress, the current verb, a short example, and the recommended next learning step.
-2. Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, examples, and starter practice preview.
+2. Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, context examples, vocabulary, and starter practice preview.
 3. Open Individual when you want focused affirmative practice with selected tenses and subjects.
-4. Open Practice when you want starter exercises with immediate feedback and local unit completion.
+4. Open Practice when you want starter exercises with immediate feedback, context filtering, and local unit completion.
 5. Open a "Why this form?" panel when you want the pattern, reason, auxiliary, and verb-form explanation for a generated sentence.
 6. Open Complete when you want the full table and comparison across sentence forms.
 7. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
@@ -56,7 +57,7 @@ SmartTense/
   public/
     assets/                   Static visual assets
     data/verbs.json           Default editable verb data
-    data/learningUnits.json   Structured learning content for future Theory/Practice
+    data/learningUnits.json   Structured learning content, contexts, vocabulary, Theory, and Practice
   src/
     App.jsx                   Main React interface, app state, and local data manager
     conjugation.js            Verb tense generation engine
@@ -178,6 +179,8 @@ Default verb data lives in `public/data/verbs.json`.
 
 Structured learning content lives in `public/data/learningUnits.json`. Theory renders this file in the app. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
 
+Learning contexts also live in `public/data/learningUnits.json`. The current context catalog includes IT work, daily habits, family routines, meetings, travel/vacation, and prepositions. Theory and Practice can filter examples, vocabulary, and exercises by context.
+
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 
 Imported JSON and Settings edits only change the current browser session; they do not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
@@ -193,7 +196,7 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 - `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.
-- `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, theory, examples, and exercises.
+- `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, contexts, vocabulary, examples, and exercises.
 - `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.

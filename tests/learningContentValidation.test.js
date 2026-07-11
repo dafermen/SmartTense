@@ -18,11 +18,11 @@ test("bundled Present Simple unit has the sections needed by Theory", () => {
   assert.ok(unit);
   assert.deepEqual(
     new Set(unit.sections.map((section) => section.type)),
-    new Set(["theory", "structures", "commonMistakes", "examples", "exercises"])
+    new Set(["theory", "structures", "commonMistakes", "examples", "vocabulary", "exercises"])
   );
 });
 
-test("bundled Present Simple practice includes three exercise kinds", () => {
+test("bundled Present Simple practice includes the starter exercise kinds", () => {
   const unit = learningContent.units.find((entry) => entry.id === "present-simple-foundation");
   const exerciseSection = unit.sections.find((section) => section.type === "exercises");
 
@@ -30,6 +30,14 @@ test("bundled Present Simple practice includes three exercise kinds", () => {
     new Set(exerciseSection.exercises.map((exercise) => exercise.kind)),
     new Set(["fillBlank", "transform", "chooseTense"])
   );
+});
+
+test("bundled learning content defines contexts used by the unit", () => {
+  const unit = learningContent.units.find((entry) => entry.id === "present-simple-foundation");
+  const contextIds = new Set(learningContent.contexts.map((context) => context.id));
+
+  assert.ok(learningContent.contexts.length >= 6);
+  assert.ok(unit.contextTags.every((contextTag) => contextIds.has(contextTag)));
 });
 
 test("rejects empty learning unit collections", () => {
@@ -62,6 +70,13 @@ test("rejects invalid exercise kinds", () => {
   payload.units[0].sections.find((section) => section.type === "exercises").exercises[0].kind = "essay";
 
   assert.throws(() => validateLearningContent(payload), /Invalid exercise kind/);
+});
+
+test("rejects unknown context tags", () => {
+  const payload = clone(learningContent);
+  payload.units[0].sections.find((section) => section.type === "examples").examples[0].context = "unknown-context";
+
+  assert.throws(() => validateLearningContent(payload), /Unknown context tag/);
 });
 
 test("rejects missing structures for structure sections", () => {

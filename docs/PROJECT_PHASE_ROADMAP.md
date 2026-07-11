@@ -13,7 +13,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 2 - Explicaciones inteligentes | Cerrada | Panel compacto `Why this form?` con patron, razon, auxiliar y forma verbal | `npm test`, `npm run build` |
 | Fase 3 - Motor de practica | Cerrada | Pagina Practice con ejercicios iniciales, scoring local y feedback inmediato | `npm test`, `npm run build` |
 | Fase 4 - Ruta de aprendizaje | Cerrada | Progreso local por unidad y Home recomienda el siguiente paso | `npm test`, `npm run build` |
-| Fase 5 - Vocabulario y contextos | Pendiente | Ejemplos y practica por contexto | No iniciada |
+| Fase 5 - Vocabulario y contextos | Cerrada | Contextos, vocabulario y practica filtrable por contexto | `npm test`, `npm run build` |
 | Fase 6 - Administracion de contenido | Pendiente | Authoring tools para unidades y vocabulario | No iniciada |
 | Fase 7 - Speaking, writing y revision | Pendiente | Prompts y cola de revision | No iniciada |
 
@@ -182,6 +182,10 @@ Entregable:
 
 - El usuario puede escoger un contexto y ver ejemplos/practicas adaptadas a ese contexto.
 
+Estado:
+
+- Cerrada para MVP. Existe un catalogo de contextos en `public/data/learningUnits.json`, Theory y Practice comparten un filtro compacto por contexto, Theory muestra vocabulario contextual y Practice filtra ejercicios por la situacion seleccionada. Import/export de vocabulario queda para Fase 6 como parte de administracion de contenido.
+
 ### Fase 6 - Administracion De Contenido
 
 Objetivo ejecutivo:
@@ -257,13 +261,13 @@ gantt
     Recomendaciones en Home                 :done, p4b, 2026-07-11, 1d
 
     section Expansion
-    Fase 5 - Vocabulario y contextos        :p5, 2026-07-12, 12d
-    Modelo de contextos                     :p5a, 2026-07-12, 5d
-    Ejemplos por contexto                   :p5b, after p5a, 7d
+    Fase 5 - Vocabulario y contextos        :done, p5, 2026-07-11, 1d
+    Modelo de contextos                     :done, p5a, 2026-07-11, 1d
+    Ejemplos por contexto                   :done, p5b, 2026-07-11, 1d
 
     section Administracion
-    Fase 6 - Authoring tools                :p6, after p5, 14d
-    Import export de contenido              :p6a, after p5, 7d
+    Fase 6 - Authoring tools                :p6, 2026-07-12, 14d
+    Import export de contenido              :p6a, 2026-07-12, 7d
     Preview y validacion                    :p6b, after p6a, 7d
 
     section Produccion
@@ -302,12 +306,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 5:
+Continuar con Fase 6:
 
-1. Crear paquetes de vocabulario por contexto.
-2. Conectar contextos con ejemplos y ejercicios.
-3. Agregar filtro de contexto.
-4. Mantener import/export de vocabulario para una fase posterior si aumenta el alcance.
-5. Agregar validacion y pruebas del modelo de contexto.
+1. Extender Settings para administrar contenido de aprendizaje.
+2. Agregar import/export de unidades, contextos y vocabulario.
+3. Agregar vista previa y validacion antes de guardar.
+4. Mantener bulk edit enfocado en metadatos de contenido.
+5. Documentar el flujo para autores de contenido.
 
-Este paso debe hacer que ejemplos y practica sean mas cercanos al estudiante sin crear todavia herramientas completas de authoring.
+Este paso debe hacer crecer el contenido sin editar JSON manualmente, conservando validacion estricta y una UI minima.

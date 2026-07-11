@@ -30,7 +30,10 @@ Theory includes:
 - grammar structures;
 - common mistakes;
 - contextual examples;
+- vocabulary cards by context;
 - starter practice preview with expandable answers.
+
+Use the Context row to show all content or focus on one situation, such as IT work, meetings, family routines, travel, daily habits, or prepositions.
 
 Use Theory when you want to understand the rule before opening Individual or Complete.
 
@@ -38,10 +41,13 @@ Use Theory when you want to understand the rule before opening Individual or Com
 
 Practice shows starter exercises from the current learning unit. Type your answer and press Check answer to get immediate feedback.
 
+Use the Context row in Practice when you want exercises for one situation only. For example, choose IT work to practice software examples, or Daily habits to practice routine examples.
+
 The first Practice MVP supports:
 
 - fill-in-the-blank style answers;
 - sentence transformation answers;
+- context-filtered exercises;
 - local scoring in this browser session;
 - reset for the current practice draft.
 
@@ -135,6 +141,7 @@ The verb pattern filter is useful when you want to practice one irregular family
 SmartTense is designed to save space on phones:
 
 - Home uses compact cards and two-column sections when the screen is wide enough.
+- Theory and Practice use a compact Context row instead of a large filter panel.
 - Individual keeps affirmative practice compact and grouped by tense.
 - Complete switches from a wide table to mobile practice cards.
 - Explanations stay collapsed until you open `Why this form?`, which keeps the screen compact.
@@ -168,6 +175,6 @@ Learning path progress is also local. SmartTense tracks whether you have opened 
 
 ## Learning Content Roadmap
 
-SmartTense now includes a structured Theory screen powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, and starter exercises.
+SmartTense now includes structured Theory and Practice screens powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, vocabulary, contexts, and starter exercises.
 
 The current visible learning flow is Home -> Theory -> Practice -> Individual -> Complete -> Settings. Home recommends the next step based on your local unit progress.

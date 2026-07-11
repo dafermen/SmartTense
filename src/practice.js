@@ -1,9 +1,13 @@
-export function getPracticeExercises(unit) {
+import { ALL_CONTEXTS, filterByContext } from "./learningContexts.js";
+
+export function getPracticeExercises(unit, selectedContext = ALL_CONTEXTS) {
   if (!unit?.sections) return [];
 
-  return unit.sections
+  const exercises = unit.sections
     .filter((section) => section.type === "exercises")
     .flatMap((section) => section.exercises.map((exercise) => ({ ...exercise, sectionTitle: section.title })));
+
+  return filterByContext(exercises, selectedContext);
 }
 
 export function scorePracticeAnswer(expectedAnswer, userAnswer) {

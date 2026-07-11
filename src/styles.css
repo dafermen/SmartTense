@@ -1977,6 +1977,48 @@ th {
   padding: 0 14px;
 }
 
+.context-strip {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.25fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 12px;
+}
+
+.context-strip p:not(.eyebrow) {
+  margin: 4px 0 0;
+  color: #596579;
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.context-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.context-buttons button {
+  min-height: 32px;
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #253247;
+  padding: 0 10px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.context-buttons button.active {
+  border-color: #3769a7;
+  background: #e8f0fb;
+  color: #214c83;
+}
+
 .theory-summary-grid,
 .theory-section-grid {
   display: grid;
@@ -2051,6 +2093,39 @@ th {
 .theory-list-row em {
   color: #596579;
   font-style: normal;
+}
+
+.vocabulary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.vocabulary-card {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 10px;
+}
+
+.vocabulary-card strong {
+  color: #214c83;
+}
+
+.vocabulary-card span {
+  color: #172033;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.vocabulary-card em {
+  color: #596579;
+  font-style: normal;
+  line-height: 1.35;
 }
 
 .mistake-list p {
@@ -2279,6 +2354,14 @@ th {
   .practice-card-heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .context-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .context-buttons {
+    justify-content: flex-start;
   }
 
   .theory-summary-grid,

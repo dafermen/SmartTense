@@ -1,6 +1,6 @@
 # SmartTense Learning Content Schema
 
-This document defines the first structured learning-content format for SmartTense. It is the foundation for future Theory, Practice, learning path, and content administration features.
+This document defines the structured learning-content format for SmartTense. It is the foundation for Theory, Practice, learning path, vocabulary contexts, and future content administration features.
 
 The source file is:
 
@@ -18,17 +18,35 @@ src/data/learningContentValidation.js
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "updatedAt": "2026-07-11",
+  "contexts": [],
   "units": []
 }
 ```
 
 Allowed root fields:
 
-- `schemaVersion`: optional integer. Current maximum is `1`.
+- `schemaVersion`: optional integer. Current maximum is `2`.
 - `updatedAt`: optional non-empty string.
+- `contexts`: optional non-empty array when context filtering is used.
 - `units`: required non-empty array of learning units.
+
+## Context Catalog
+
+```json
+{
+  "id": "it-work",
+  "title": "IT work",
+  "description": "Software, support, meetings, and technical work."
+}
+```
+
+Rules:
+
+- `id` must be unique and use letters, numbers, or hyphens.
+- `title` and `description` are learner-facing text.
+- When the root `contexts` array exists, unit tags, examples, vocabulary, and exercises that include a `context` must reference an existing context ID.
 
 ## Learning Unit
 
@@ -50,7 +68,7 @@ Rules:
 - `id` must be unique and use letters, numbers, or hyphens.
 - `level` must be `basic`, `intermediate`, or `advanced`.
 - `tenseIds` links the unit to tense metadata from `src/data/defaultData.js`.
-- `contextTags` prepares the content for future vocabulary/context filters.
+- `contextTags` controls which context buttons are shown for the unit.
 - `objectives` are learner-facing goals.
 - `sections` holds the real teaching and practice content.
 
@@ -136,9 +154,14 @@ Use for contextual examples.
 }
 ```
 
+Rules:
+
+- `context` must reference a root context when the catalog exists.
+- Theory uses this field for the context filter.
+
 ### exercises
 
-Use for future Practice activities.
+Use for Practice activities.
 
 ```json
 {
@@ -151,7 +174,8 @@ Use for future Practice activities.
       "kind": "fillBlank",
       "prompt": "Dario _____ as an IT engineer.",
       "answer": "works",
-      "explanation": "Dario is he, so the verb work becomes works."
+      "explanation": "Dario is he, so the verb work becomes works.",
+      "context": "it-work"
     }
   ]
 }
@@ -166,9 +190,13 @@ Allowed `kind` values:
 - `translation`
 - `shortAnswer`
 
+Optional field:
+
+- `context`: filters the exercise in Practice. It must reference a root context when the catalog exists.
+
 ### vocabulary
 
-Use for future vocabulary packs.
+Use for vocabulary cards shown in Theory.
 
 ```json
 {
@@ -179,11 +207,16 @@ Use for future vocabulary packs.
     {
       "term": "meeting",
       "meaning": "A planned work conversation",
-      "example": "She has a meeting every Monday."
+      "example": "She has a meeting every Monday.",
+      "context": "meetings"
     }
   ]
 }
 ```
+
+Optional field:
+
+- `context`: filters the vocabulary card in Theory. It must reference a root context when the catalog exists.
 
 ## Validation Rules
 
@@ -191,6 +224,8 @@ The validator rejects:
 
 - Empty unit collections.
 - Duplicate unit IDs.
+- Duplicate context IDs.
+- Unknown context references.
 - Unknown fields.
 - Unsupported schema versions.
 - Unsupported levels, section types, structure forms, or exercise kinds.

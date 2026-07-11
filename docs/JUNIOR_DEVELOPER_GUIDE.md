@@ -33,6 +33,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `src/data/validation.js`: validation for verb JSON.
 - `src/data/learningContentValidation.js`: validation for learning units.
 - `src/practice.js`: practice exercise extraction, answer normalization, and scoring.
+- `src/learningContexts.js`: context filtering and vocabulary extraction helpers.
 - `src/learningPath.js`: local unit progress and next-step recommendation helpers.
 - `public/data/verbs.json`: default verb database loaded by the app.
 - `public/data/learningUnits.json`: first structured learning-content database.
@@ -48,6 +49,7 @@ The current stable surfaces are:
 
 - `Home`: dashboard and recommendations.
 - `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
+- `Contexts`: compact filters for examples, vocabulary, and practice.
 - `Why this form?`: compact explanations attached to generated sentence rows.
 - `Practice`: starter exercises with local answer checking.
 - `Learning path`: local Theory/Practice progress for the active unit.
@@ -55,15 +57,16 @@ The current stable surfaces are:
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration and data administration.
 
-The next planned surface is Practice, powered by `public/data/learningUnits.json`.
+The next planned surface is content administration, but keep authoring tools separate from the learning-content helpers until that phase starts.
 
 ## Adding A Learning Unit
 
 1. Open `public/data/learningUnits.json`.
 2. Add one unit with a unique hyphenated `id`.
 3. Link it to one or more `tenseIds`.
-4. Add objectives and sections.
-5. Run:
+4. Link it to context IDs from the root `contexts` catalog.
+5. Add objectives and sections.
+6. Run:
 
 ```powershell
 npm.cmd test
@@ -97,13 +100,25 @@ Rules for safe edits:
 
 Practice is rendered in `src/App.jsx` by `PracticePage`.
 
-The pure logic lives in `src/practice.js`:
+The pure practice logic lives in `src/practice.js`:
 
 - `getPracticeExercises`
 - `normalizePracticeAnswer`
 - `scorePracticeAnswer`
 
-When editing Practice, add tests in `tests/practice.test.js` and keep scoring local. Do not add accounts, server storage, or long-term progress until the Learning Path phase.
+When editing Practice, add tests in `tests/practice.test.js` and keep scoring local. Do not add accounts or server storage.
+
+## Updating Contexts
+
+Context logic lives in `src/learningContexts.js`.
+
+Current behavior:
+
+- map unit `contextTags` to root context metadata;
+- filter examples, vocabulary, and exercises;
+- keep untagged items visible as shared content.
+
+When editing contexts, update `public/data/learningUnits.json`, `docs/LEARNING_CONTENT_SCHEMA.md`, and `tests/learningContexts.test.js` if helper behavior changes.
 
 ## Updating Learning Path
 

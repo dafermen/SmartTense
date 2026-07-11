@@ -27,3 +27,20 @@ test("extracts practice exercises from learning units", () => {
 
   assert.deepEqual(exercises, [{ id: "one", prompt: "A", answer: "B", sectionTitle: "Starter" }]);
 });
+
+test("filters practice exercises by context", () => {
+  const exercises = getPracticeExercises({
+    sections: [
+      {
+        type: "exercises",
+        title: "Starter",
+        exercises: [
+          { id: "one", prompt: "A", answer: "B", context: "it-work" },
+          { id: "two", prompt: "C", answer: "D", context: "daily-habits" }
+        ]
+      }
+    ]
+  }, "daily-habits");
+
+  assert.deepEqual(exercises, [{ id: "two", prompt: "C", answer: "D", context: "daily-habits", sectionTitle: "Starter" }]);
+});

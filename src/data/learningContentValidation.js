@@ -1,4 +1,4 @@
-const MAX_SCHEMA_VERSION = 1;
+const MAX_SCHEMA_VERSION = 2;
 const MAX_UNITS = 50;
 const MAX_SECTIONS = 40;
 const MAX_ITEMS = 60;
@@ -11,7 +11,8 @@ const SECTION_TYPES = new Set(["theory", "structures", "commonMistakes", "exampl
 const STRUCTURE_FORMS = new Set(["affirmative", "negative", "questionPositive", "questionNegative"]);
 const EXERCISE_KINDS = new Set(["fillBlank", "transform", "chooseTense", "correctMistake", "translation", "shortAnswer"]);
 
-const ALLOWED_PAYLOAD_KEYS = new Set(["schemaVersion", "updatedAt", "units"]);
+const ALLOWED_PAYLOAD_KEYS = new Set(["schemaVersion", "updatedAt", "contexts", "units"]);
+const ALLOWED_CONTEXT_KEYS = new Set(["id", "title", "description"]);
 const ALLOWED_UNIT_KEYS = new Set(["id", "title", "level", "focus", "tenseIds", "contextTags", "objectives", "sections"]);
 const ALLOWED_SECTION_KEYS = new Set([
   "id",
@@ -47,15 +48,42 @@ export function validateLearningContent(payload) {
     throw new Error(`Too many learning units: maximum ${MAX_UNITS}`);
   }
 
+  const contextIds = validateContexts(payload.contexts);
   const seenUnitIds = new Set();
   for (const unit of payload.units) {
-    validateUnit(unit, seenUnitIds);
+    validateUnit(unit, seenUnitIds, contextIds);
   }
 
   return payload;
 }
 
-function validateUnit(unit, seenUnitIds) {
+function validateContexts(contexts) {
+  if (contexts === undefined) return new Set();
+  if (!Array.isArray(contexts) || contexts.length === 0 || contexts.length > MAX_ITEMS) {
+    throw new Error("Invalid contexts");
+  }
+
+  const seenContextIds = new Set();
+  for (const context of contexts) {
+    validateObjectKeys(context, ALLOWED_CONTEXT_KEYS, "context");
+
+    for (const key of ["id", "title", "description"]) {
+      if (!isSafeString(context[key], key === "id" ? MAX_ID_LENGTH : MAX_STRING_LENGTH)) {
+        throw new Error(`Invalid context ${key}`);
+      }
+    }
+
+    validateId(context.id, "context id");
+    if (seenContextIds.has(context.id)) {
+      throw new Error(`Duplicate context id: ${context.id}`);
+    }
+    seenContextIds.add(context.id);
+  }
+
+  return seenContextIds;
+}
+
+function validateUnit(unit, seenUnitIds, contextIds) {
   if (!unit || typeof unit !== "object" || Array.isArray(unit)) {
     throw new Error("Invalid learning unit");
   }
@@ -81,6 +109,7 @@ function validateUnit(unit, seenUnitIds) {
 
   validateTextArray(unit.tenseIds, "unit tenseIds", MAX_ITEMS, true);
   validateTextArray(unit.contextTags, "unit contextTags", MAX_ITEMS, true);
+  validateKnownContextTags(unit.contextTags, contextIds);
   validateTextArray(unit.objectives, "unit objectives", MAX_OBJECTIVES);
 
   if (!Array.isArray(unit.sections) || unit.sections.length === 0 || unit.sections.length > MAX_SECTIONS) {
@@ -89,11 +118,11 @@ function validateUnit(unit, seenUnitIds) {
 
   const seenSectionIds = new Set();
   for (const section of unit.sections) {
-    validateSection(section, unit.id, seenSectionIds);
+    validateSection(section, unit.id, seenSectionIds, contextIds);
   }
 }
 
-function validateSection(section, unitId, seenSectionIds) {
+function validateSection(section, unitId, seenSectionIds, contextIds) {
   if (!section || typeof section !== "object" || Array.isArray(section)) {
     throw new Error("Invalid learning section");
   }
@@ -133,13 +162,13 @@ function validateSection(section, unitId, seenSectionIds) {
       validateStructuredArray(section.mistakes, "section mistakes", validateMistake);
       break;
     case "examples":
-      validateStructuredArray(section.examples, "section examples", validateExample);
+      validateStructuredArray(section.examples, "section examples", (item) => validateExample(item, contextIds));
       break;
     case "exercises":
-      validateStructuredArray(section.exercises, "section exercises", validateExercise);
+      validateStructuredArray(section.exercises, "section exercises", (item) => validateExercise(item, contextIds));
       break;
     case "vocabulary":
-      validateStructuredArray(section.vocabulary, "section vocabulary", validateVocabulary);
+      validateStructuredArray(section.vocabulary, "section vocabulary", (item) => validateVocabulary(item, contextIds));
       break;
     default:
       throw new Error(`Invalid section type: ${section.type}`);
@@ -170,7 +199,7 @@ function validateMistake(item) {
   }
 }
 
-function validateExample(item) {
+function validateExample(item, contextIds) {
   validateObjectKeys(item, new Set(["context", "sentence", "note"]), "example");
 
   for (const key of ["context", "sentence", "note"]) {
@@ -178,10 +207,11 @@ function validateExample(item) {
       throw new Error(`Invalid example ${key}`);
     }
   }
+  validateKnownContextTag(item.context, contextIds);
 }
 
-function validateExercise(item) {
-  validateObjectKeys(item, new Set(["id", "kind", "prompt", "answer", "explanation"]), "exercise");
+function validateExercise(item, contextIds) {
+  validateObjectKeys(item, new Set(["id", "kind", "prompt", "answer", "explanation", "context"]), "exercise");
 
   if (!isSafeString(item.id, MAX_ID_LENGTH)) {
     throw new Error("Invalid exercise id");
@@ -197,10 +227,18 @@ function validateExercise(item) {
       throw new Error(`Invalid exercise ${key}`);
     }
   }
+
+  if (item.context !== undefined) {
+    if (!isSafeString(item.context, MAX_ID_LENGTH)) {
+      throw new Error("Invalid exercise context");
+    }
+    validateId(item.context, "exercise context");
+    validateKnownContextTag(item.context, contextIds);
+  }
 }
 
-function validateVocabulary(item) {
-  validateObjectKeys(item, new Set(["term", "meaning", "example"]), "vocabulary");
+function validateVocabulary(item, contextIds) {
+  validateObjectKeys(item, new Set(["term", "meaning", "example", "context"]), "vocabulary");
 
   for (const key of ["term", "meaning"]) {
     if (!isSafeString(item[key], MAX_STRING_LENGTH)) {
@@ -210,6 +248,14 @@ function validateVocabulary(item) {
 
   if (item.example !== undefined && !isSafeString(item.example, MAX_STRING_LENGTH)) {
     throw new Error("Invalid vocabulary example");
+  }
+
+  if (item.context !== undefined) {
+    if (!isSafeString(item.context, MAX_ID_LENGTH)) {
+      throw new Error("Invalid vocabulary context");
+    }
+    validateId(item.context, "vocabulary context");
+    validateKnownContextTag(item.context, contextIds);
   }
 }
 
@@ -249,6 +295,18 @@ function validateTextArray(value, label, maxItems, validateIds = false) {
 function validateId(value, label) {
   if (!/^[a-z0-9-]+$/i.test(value)) {
     throw new Error(`Invalid ${label}`);
+  }
+}
+
+function validateKnownContextTags(tags, contextIds) {
+  for (const tag of tags) {
+    validateKnownContextTag(tag, contextIds);
+  }
+}
+
+function validateKnownContextTag(tag, contextIds) {
+  if (contextIds.size > 0 && !contextIds.has(tag)) {
+    throw new Error(`Unknown context tag: ${tag}`);
   }
 }
 

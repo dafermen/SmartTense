@@ -1,6 +1,38 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "updatedAt": "2026-07-11",
+  "contexts": [
+    {
+      "id": "daily-habits",
+      "title": "Daily habits",
+      "description": "Routines at home, school, and personal life."
+    },
+    {
+      "id": "it-work",
+      "title": "IT work",
+      "description": "Software, support, meetings, and technical work."
+    },
+    {
+      "id": "family-routines",
+      "title": "Family routines",
+      "description": "Daily activities with family and children."
+    },
+    {
+      "id": "meetings",
+      "title": "Meetings",
+      "description": "Work conversations, schedules, and follow-ups."
+    },
+    {
+      "id": "travel-vacation",
+      "title": "Travel and vacation",
+      "description": "Trips, plans, hotels, and free time."
+    },
+    {
+      "id": "prepositions",
+      "title": "Prepositions",
+      "description": "Place, time, and movement words used in examples."
+    }
+  ],
   "units": [
     {
       "id": "present-simple-foundation",
@@ -78,6 +110,69 @@
               "context": "daily-habits",
               "sentence": "He drops off his kids at school every morning.",
               "note": "Every morning signals a repeated habit."
+            },
+            {
+              "context": "meetings",
+              "sentence": "She joins the planning meeting every Tuesday.",
+              "note": "Every Tuesday shows a regular schedule."
+            },
+            {
+              "context": "family-routines",
+              "sentence": "They cook dinner together on Fridays.",
+              "note": "On Fridays points to a repeated family routine."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "We book a hotel before every vacation.",
+              "note": "Before every vacation describes a repeated travel habit."
+            },
+            {
+              "context": "prepositions",
+              "sentence": "The laptop stays on the desk during the day.",
+              "note": "On the desk uses a place preposition in a simple fact."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "deploy",
+              "meaning": "to publish or release software",
+              "example": "The team deploys the app on Friday.",
+              "context": "it-work"
+            },
+            {
+              "term": "stand-up",
+              "meaning": "a short daily team meeting",
+              "example": "They have a stand-up every morning.",
+              "context": "meetings"
+            },
+            {
+              "term": "pick up",
+              "meaning": "to collect someone or something",
+              "example": "He picks up his kids after school.",
+              "context": "family-routines"
+            },
+            {
+              "term": "pack",
+              "meaning": "to put things in a bag before a trip",
+              "example": "We pack our bags before vacation.",
+              "context": "travel-vacation"
+            },
+            {
+              "term": "usually",
+              "meaning": "a word for something that happens most of the time",
+              "example": "She usually studies after dinner.",
+              "context": "daily-habits"
+            },
+            {
+              "term": "on",
+              "meaning": "a preposition for days and surfaces",
+              "example": "The report is on the desk.",
+              "context": "prepositions"
             }
           ]
         },
@@ -91,21 +186,40 @@
               "kind": "fillBlank",
               "prompt": "Dario _____ as an IT engineer.",
               "answer": "works",
-              "explanation": "Dario is he, so the verb work becomes works."
+              "explanation": "Dario is he, so the verb work becomes works.",
+              "context": "it-work"
             },
             {
               "id": "present-simple-transform-1",
               "kind": "transform",
               "prompt": "Change to a question: He works in IT.",
               "answer": "Does he work in IT?",
-              "explanation": "Use does + subject + base verb for he/she/it questions."
+              "explanation": "Use does + subject + base verb for he/she/it questions.",
+              "context": "it-work"
             },
             {
               "id": "present-simple-choose-1",
               "kind": "chooseTense",
               "prompt": "Choose the tense: Dario checks his email every morning.",
               "answer": "simple present",
-              "explanation": "Every morning signals a repeated routine, so Simple Present is the best tense."
+              "explanation": "Every morning signals a repeated routine, so Simple Present is the best tense.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-simple-fill-meetings-1",
+              "kind": "fillBlank",
+              "prompt": "She _____ the planning meeting every Tuesday.",
+              "answer": "joins",
+              "explanation": "She needs the -s form in affirmative Present Simple.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-simple-fill-family-1",
+              "kind": "fillBlank",
+              "prompt": "He _____ up his kids after school.",
+              "answer": "picks",
+              "explanation": "He needs the -s form: picks up.",
+              "context": "family-routines"
             }
           ]
         }

@@ -4,6 +4,7 @@ import { DEFAULT_DATA, LEVELS, SUBJECTS, TENSES } from "./data/defaultData.js";
 import { validateLearningContent } from "./data/learningContentValidation.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
+import { ALL_CONTEXTS, getUnitContexts, getVocabularyItems, filterByContext } from "./learningContexts.js";
 import { getNextLearningStep, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
 import { getPracticeExercises, scorePracticeAnswer } from "./practice.js";
@@ -71,6 +72,7 @@ export default function App() {
   });
   const [visitedVerbIds, setVisitedVerbIds] = useState(storedSettings.visitedVerbIds || []);
   const [unitProgress, setUnitProgress] = useState(storedSettings.unitProgress || {});
+  const [selectedContextTag, setSelectedContextTag] = useState(storedSettings.selectedContextTag || ALL_CONTEXTS);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -246,7 +248,15 @@ export default function App() {
     () => learningContent.units.find((unit) => unit.tenseIds.includes("simplePresent")) || learningContent.units[0],
     [learningContent.units]
   );
-  const practiceExercises = useMemo(() => getPracticeExercises(primaryLearningUnit), [primaryLearningUnit]);
+  const unitContexts = useMemo(
+    () => getUnitContexts(primaryLearningUnit, learningContent.contexts || []),
+    [learningContent.contexts, primaryLearningUnit]
+  );
+  const vocabularyItems = useMemo(
+    () => getVocabularyItems(primaryLearningUnit, selectedContextTag),
+    [primaryLearningUnit, selectedContextTag]
+  );
+  const practiceExercises = useMemo(() => getPracticeExercises(primaryLearningUnit, selectedContextTag), [primaryLearningUnit, selectedContextTag]);
   const primaryUnitProgress = useMemo(
     () => getUnitProgress(primaryLearningUnit?.id, unitProgress),
     [primaryLearningUnit?.id, unitProgress]
@@ -264,6 +274,12 @@ export default function App() {
     if (!currentVerb?.id) return;
     setVisitedVerbIds((current) => current.includes(currentVerb.id) ? current : [...current, currentVerb.id]);
   }, [currentVerb?.id]);
+
+  useEffect(() => {
+    if (selectedContextTag === ALL_CONTEXTS) return;
+    if (unitContexts.some((context) => context.id === selectedContextTag)) return;
+    setSelectedContextTag(ALL_CONTEXTS);
+  }, [selectedContextTag, unitContexts]);
 
   useEffect(() => {
     if (activePage !== "theory" || !primaryLearningUnit?.id) return;
@@ -294,9 +310,10 @@ export default function App() {
       showSentenceParts,
       completeFormColumns,
       visitedVerbIds,
-      unitProgress
+      unitProgress,
+      selectedContextTag
     });
-  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds]);
+  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, selectedContextTag, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds]);
 
   function showTimedAlert(message, type = "success") {
     setAlert({ message, type });
@@ -942,8 +959,12 @@ export default function App() {
     return (
       <TheoryPage
         unit={primaryLearningUnit}
+        contexts={unitContexts}
+        selectedContext={selectedContextTag}
+        vocabularyItems={vocabularyItems}
         t={t}
         language={interfaceLanguage}
+        onContextChange={setSelectedContextTag}
         onPractice={() => setActivePage("individual")}
       />
     );
@@ -953,10 +974,13 @@ export default function App() {
     return (
       <PracticePage
         unit={primaryLearningUnit}
+        contexts={unitContexts}
+        selectedContext={selectedContextTag}
         exercises={practiceExercises}
         answers={practiceAnswers}
         results={practiceResults}
         t={t}
+        onContextChange={setSelectedContextTag}
         onAnswerChange={(exerciseId, value) => {
           setPracticeAnswers((current) => ({ ...current, [exerciseId]: value }));
           setPracticeResults((current) => {
@@ -1172,7 +1196,7 @@ export default function App() {
   );
 }
 
-function TheoryPage({ unit, t, language, onPractice }) {
+function TheoryPage({ unit, contexts, selectedContext, vocabularyItems, t, language, onContextChange, onPractice }) {
   if (!unit) {
     return (
       <section className="theory-page">
@@ -1198,6 +1222,13 @@ function TheoryPage({ unit, t, language, onPractice }) {
         <button type="button" onClick={onPractice}>{t("practiceIndividual")}</button>
       </div>
 
+      <ContextFilter
+        contexts={contexts}
+        selectedContext={selectedContext}
+        t={t}
+        onChange={onContextChange}
+      />
+
       <div className="theory-summary-grid">
         <article>
           <p className="eyebrow">{t("learningObjectives")}</p>
@@ -1218,14 +1249,20 @@ function TheoryPage({ unit, t, language, onPractice }) {
 
       <div className="theory-section-grid">
         {unit.sections.map((section) => (
-          <LearningSection key={section.id} section={section} t={t} />
+          <LearningSection
+            key={section.id}
+            section={section}
+            selectedContext={selectedContext}
+            vocabularyItems={vocabularyItems}
+            t={t}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function LearningSection({ section, t }) {
+function LearningSection({ section, selectedContext, vocabularyItems, t }) {
   switch (section.type) {
     case "theory":
       return (
@@ -1273,11 +1310,23 @@ function LearningSection({ section, t }) {
         </article>
       );
     case "examples":
+      {
+        const examples = filterByContext(section.examples, selectedContext);
+
+        if (examples.length === 0) {
+          return (
+            <article className="theory-card">
+              <h3>{section.title}</h3>
+              <p className="theory-muted">{t("noContextExamples")}</p>
+            </article>
+          );
+        }
+
       return (
         <article className="theory-card">
           <h3>{section.title}</h3>
           <div className="example-list">
-            {section.examples.map((item) => (
+            {examples.map((item) => (
               <div key={item.sentence}>
                 <p className="sentence">{item.sentence}</p>
                 <p className="theory-muted">{item.context} | {item.note}</p>
@@ -1286,6 +1335,7 @@ function LearningSection({ section, t }) {
           </div>
         </article>
       );
+      }
     case "exercises":
       return (
         <article className="theory-card theory-wide-card">
@@ -1302,12 +1352,21 @@ function LearningSection({ section, t }) {
         </article>
       );
     case "vocabulary":
+      if (vocabularyItems.length === 0) {
+        return (
+          <article className="theory-card">
+            <h3>{section.title}</h3>
+            <p className="theory-muted">{t("noContextVocabulary")}</p>
+          </article>
+        );
+      }
+
       return (
         <article className="theory-card">
           <h3>{section.title}</h3>
-          <div className="theory-list">
-            {section.vocabulary.map((item) => (
-              <div className="theory-list-row" key={item.term}>
+          <div className="vocabulary-grid">
+            {vocabularyItems.map((item) => (
+              <div className="vocabulary-card" key={`${item.context}-${item.term}`}>
                 <strong>{item.term}</strong>
                 <span>{item.meaning}</span>
                 {item.example && <em>{item.example}</em>}
@@ -1321,7 +1380,42 @@ function LearningSection({ section, t }) {
   }
 }
 
-function PracticePage({ unit, exercises, answers, results, t, onAnswerChange, onCheck, onReset }) {
+function ContextFilter({ contexts, selectedContext, t, onChange }) {
+  if (!contexts?.length) return null;
+
+  return (
+    <section className="context-strip" aria-label={t("contextFilter")}>
+      <div>
+        <p className="eyebrow">{t("contextFilter")}</p>
+        <p>{t("contextFilterHint")}</p>
+      </div>
+      <div className="context-buttons">
+        <button
+          type="button"
+          className={selectedContext === ALL_CONTEXTS ? "active" : ""}
+          aria-pressed={selectedContext === ALL_CONTEXTS}
+          onClick={() => onChange(ALL_CONTEXTS)}
+        >
+          {t("allContexts")}
+        </button>
+        {contexts.map((context) => (
+          <button
+            type="button"
+            className={selectedContext === context.id ? "active" : ""}
+            aria-pressed={selectedContext === context.id}
+            title={context.description}
+            key={context.id}
+            onClick={() => onChange(context.id)}
+          >
+            {context.title}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PracticePage({ unit, contexts, selectedContext, exercises, answers, results, t, onContextChange, onAnswerChange, onCheck, onReset }) {
   const correctCount = Object.values(results).filter((result) => result.isCorrect).length;
 
   return (
@@ -1337,6 +1431,13 @@ function PracticePage({ unit, exercises, answers, results, t, onAnswerChange, on
           <small>{t("correctAnswers")}</small>
         </div>
       </div>
+
+      <ContextFilter
+        contexts={contexts}
+        selectedContext={selectedContext}
+        t={t}
+        onChange={onContextChange}
+      />
 
       {exercises.length === 0 ? (
         <p className="empty-filter-message">{t("noPracticeExercises")}</p>
