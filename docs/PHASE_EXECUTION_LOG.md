@@ -20,6 +20,11 @@ Fecha base: 11/07/2026.
 - **Checkpoint de mejora (13/07/2026):**
   - Se añadieron 2 ejercicios de transferencia de tiempos (chooseTense) en `past-future-conditional-foundation` para comparación entre futuros y condicionales.
   - Se añadieron prompts de speaking/writing alineados con la unidad de tiempos pasados/futuros/condicionales (`src/data/productionPrompts.js`).
+- **Checkpoint de QA mobile (14/07/2026):**
+  - Se ejecuto smoke test headless con Chrome DevTools Protocol en viewport movil `390x844`.
+  - Home renderizo navegacion y acceso a Production.
+  - Production renderizo el composer, multiples prompts y el prompt de transferencia `Past-Future-Conditional comparison`.
+  - Practice renderizo contexto, ejercicios y contador de respuestas correctas en mobile.
 - **Tareas puntuales:**
   - Diseñar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional). **completada**.
   - Integrar la unidad en Theory y Practice con contexto y filtros.
@@ -31,8 +36,9 @@ Fecha base: 11/07/2026.
   - flujo de Home/Path recomendado para la nueva unidad sin regresion.
   - evidencia de actualizacion documental (roadmap, log, guias).
 - **Evidencia ejecutada hoy:**
-  - `npm test` OK (48 pruebas, 0 fallos).
+  - `npm test` OK (50 pruebas, 0 fallos).
   - `npm run build` OK.
+  - Smoke test mobile CDP OK (`390x844`: Home, Production y Practice).
   - Validador de contenido y verbos conserva cobertura de escenarios negativos.
   - Home abre Theory/Practice con la unidad activa y Settings resume el estado de la unidad activa.
   - Los nuevos ejercicios de transferencia y prompts de Production se importaron correctamente en los respectivos archivos JSON y JS.
@@ -41,7 +47,7 @@ Fecha base: 11/07/2026.
 
 - **Resultado del siguiente paso:** Checkpoint 8a entregado y se habilitó la navegación por unidad activa.
 - **Pendiente para cierre completo de Fase 8:**
-  - Revisar rendimiento del flujo en movil con multiples contextos.
+  - Revisar rendimiento del flujo en movil con alto volumen de datos simulado.
   - Revisar el comportamiento en mobile con contextos reales y alto volumen de filas.
 
 ## Fases 0 a 7 (cierres previos)
