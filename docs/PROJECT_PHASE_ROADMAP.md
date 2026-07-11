@@ -3,7 +3,10 @@
 Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.
 
 La version ejecutiva + operativa detallada esta en [DEVELOPMENT_PHASE_EXECUTION_PLAN.md](DEVELOPMENT_PHASE_EXECUTION_PLAN.md).  
-Para la version recomendada con fases ejecutivas y tareas operativas derivadas del documento adjunto, ver [PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md](PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md).
+Para la version recomendada con fases ejecutivas y tareas operativas derivadas del documento adjunto, ver:
+
+- [PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md](PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md).
+- [SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md](SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md) (versión nueva, más compacta y operativa, con Gantt interno).
 
 La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
 

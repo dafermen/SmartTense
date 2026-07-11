@@ -252,7 +252,7 @@ This file is the bridge between the current conjugation trainer and the guided l
 
 ## Documentation for phase execution
 
-Use `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` as the executive + operational roadmap for the next product increment.
+Use `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md` as the executive + operational roadmap for the next product increment. `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md` is the compact operational companion for phase-by-phase execution.
 
 Current evidence and execution status is tracked in:
 
@@ -464,3 +464,4 @@ The workflow supports the repository variable `PAGES_BASE_PATH`:
 8. Run `npm audit` and review dependency findings.
 9. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
 10. Run `npm run cap:sync` if native projects should include the latest web build.
+

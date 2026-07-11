@@ -5,6 +5,7 @@ Este plan convierte el contenido pedagógico de referencia en una implementació
 Para alinear esta ejecución con la fuente de Dario (Unit 1 - A2), consulta también:
 
 - [Faseo ejecutico detallado desde Dario](./PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md)
+- [Plan operativo extendido desde Dario](./SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md)
 
 ## Principios Del Plan
 

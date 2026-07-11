@@ -209,6 +209,7 @@ If you want to follow the pedagogic extension of the app, this roadmap is the re
 - `docs/PROJECT_PHASE_EXECUTION_PLAN_FROM_DARIO.md`: executive and operational phases for next increments.
 - `docs/PHASE_EXECUTION_LOG.md`: latest status and validation evidence.
 - `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: engineering execution plan used by the team.
+- `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`: plan operativo alterno y compacto con enfoque de release por fases.
 
 Suggested sequence for you as a learner:
 
