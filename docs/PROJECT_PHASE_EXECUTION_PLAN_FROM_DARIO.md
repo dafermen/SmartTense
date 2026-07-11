@@ -1,232 +1,204 @@
-# Roadmap Ejecutivo — SmartTense (Faseo por producto)
+# Roadmap Ejecutivo y Operativo de SmartTense (base Dario Unit 1)
 
-**Fuente:** `DARIO _ GENERAL ENGLISH COURSE.docx`  
-**Unidad base analizada:** `A2 ENGLISH LEVEL — UNIT 1: Verbs tenses and daily habits`  
-**Fecha base:** 11/07/2026  
-**Objetivo del plan:** convertir contenido pedagógico en un producto incremental, escalable y mantenible.
+**Fuente:** `DARIO _ GENERAL ENGLISH COURSE.docx` (A2 English Level, Unit 1: *Verb tenses and daily habits*).  
+**Fecha base:** `11/07/2026`.  
+**Objetivo del documento:** convertir el contenido pedagogico en un plan de producto incremental, por fases ejecutivas y tareas operativas de desarrollo.
 
-## Qué aporta esta referencia al producto
+## Alcance de la referencia academica
 
-El curso de Dario entrega una estructura completa para evolución pedagógica:
+El curso de Dario aporta:
 
-- Objetivos de aprendizaje explícitos por unidad.
-- Secuencia sugerida: objetivos -> reglas -> práctica -> consolidación.
-- Uso de formatos de práctica variados: completar, transformar, traducir, corregir errores, y speaking/writing.
-- Detección de errores típicos de hispanohablantes (ej. `he work`, *subject-verb agreement*).
-- Contextos reales: IT, rutina diaria, familia, viajes, reuniones.
-- Vocabulario temático y refuerzo de preposiciones.
+- objetivos por unidad y criterio de logro;
+- manejo de tiempos (afirmativo / negativo / interrogativo / interrogativo negativo);
+- estructuras y reglas por caso;
+- errores tipicos del hispanohablante;
+- vocabulario tematico (IT, rutinas, familia, movimiento, preposiciones);
+- ejercicios de completar, transformar, elegir tiempo, corregir errores y traducir ES->EN;
+- tareas de speaking/writing como puente de produccion.
 
-SmartTense puede mapear esto con su stack actual (Theory + Practice + Individual + Complete + Production + Settings).
+Con esto como base, la hoja de ruta propone un crecimiento progresivo de producto sin romper el stack actual.
 
 ---
 
 ## Fases ejecutivas y tareas operativas
 
-### Fase 0 — Base de contenido estable
+### Fase 0 - Alineacion pedagogica y estructura de contenido
 
-**Objetivo ejecutivo:** disponer de un modelo de contenido seguro y escalable para toda la app.
+**Objetivo ejecutivo:** asegurar que el producto use una fuente de verdad unificada y no dependa de datos hardcoded.
 
 **Tareas operativas**
-- Definir/normalizar `public/data/learningUnits.json` con: unidades, secciones, secciones de gramática, ejercicios, vocabulario y contexto.
-- Fortalecer `src/data/learningContentValidation.js` (IDs, referencias, tamaños, esquema de versión, campos permitidos).
-- Documentar shape validado en `docs/LEARNING_CONTENT_SCHEMA.md`.
-- Añadir pruebas de integridad y regresión de carga/parseo.
+- Diseñar y normalizar `public/data/learningUnits.json` para cubrir unidad, teoria, estructuras, ejercicios, errores, vocabulario y contexto.
+- Extender `src/data/learningContentValidation.js` para validar unidades, secciones, ejercicios y metadatos.
+- Actualizar `docs/LEARNING_CONTENT_SCHEMA.md` y pruebas de integridad.
+- Definir convencion de versionado de contenido.
 
-**Entregable**
-- El contenido inválido no entra a runtime.
+**Criterio de cierre**
+- La app rechaza contenido invalido y carga una unidad base consistente.
 
 ---
 
-### Fase 1 — Theory 1:0 (unidad guiada mínima)
+### Fase 1 - Unidad base "Present Simple" completa
 
-**Objetivo ejecutivo:** ofrecer un módulo de estudio con estructura pedagógica completa para la Unidad 1.
+**Objetivo ejecutivo:** entregar un modulo de aprendizaje usable y consistente para el nivel inicial.
 
 **Tareas operativas**
-- Convertir las secciones de la unidad a data-driven:
-  - objetivos de aprendizaje
-  - significados y usos
-  - palabras clave
-  - formas gramaticales
-  - errores comunes
-  - ejemplos y práctica de muestra
-  - vocabulario contextual
-- Revisar flujo de contexto (IT, rutinas, familia, reuniones).
-- Añadir soporte EN/ES para notas pedagógicas.
+- Mapear del documento: objetivos, significado, usos y reglas basicas.
+- Renderizar en `Theory`:
+  - significado de forma;
+  - reglas de uso;
+  - estructuras (`Aff`, `Neg`, `Interrog`);
+  - signos de uso y formas correctas;
+  - errores comunes con correccion;
+  - ejemplos y practica inicial.
+- Cargar unidad en `learningUnits.json` con `contexts`, `signalWords`, `vocabulary`, `exercises`.
 
-**Entregable**
-- Theory usable como pantalla de estudio completa sin editar código.
+**Criterio de cierre**
+- La unidad 1 funciona desde JSON sin codigo hardcoded.
 
 ---
 
-### Fase 2 — Explicaciones en línea por forma
+### Fase 2 - Explicacion gramatical en linea
 
-**Objetivo ejecutivo:** explicar el mecanismo interno de cada frase para reducir memorización mecánica.
+**Objetivo ejecutivo:** convertir la tabla de conjugaciones en una herramienta de aprendizaje explicativo.
 
 **Tareas operativas**
-- Enriquecer metadata de la fila en `src/conjugation.js` para explicación rápida (`subject`, `auxiliary`, `verbForm`, `reason`).
-- Mostrar `Why this form?` en Complete e Individual.
-- Añadir ejemplos de error frecuente y corrección guiada.
+- Enriquecer generacion de filas en `src/conjugation.js` con metadata (`subject`, `auxiliary`, `verbForm`, `reason`).
+- Mostrar en `Complete` e `Individual` un panel `Why this form?`.
+- Registrar y validar errores tipicos de forma automatica.
 
-**Entregable**
-- Cada fila visible puede explicarse con 1 interacción.
+**Criterio de cierre**
+- Cada forma visible explica por que se usa esa estructura.
 
 ---
 
-### Fase 3 — Practice Engine inicial
+### Fase 3 - Motor de practica funcional
 
-**Objetivo ejecutivo:** que el alumno practique y reciba feedback inmediato.
+**Objetivo ejecutivo:** permitir practicar con feedback inmediato y seguimiento.
 
 **Tareas operativas**
-- Definir tipos de ejercicio en JSON:
-  - fill-in-the-blank
-  - transform
-  - select tense
-  - error correction
-  - translation ES->EN
-  - task speaker/writer
-- Implementar normalización de respuestas y scoring local.
-- Persistir estado de draft por unidad.
-- Filtros por contexto y tipo de ejercicio.
+- Implementar ejercicios base: fill in blank, transformacion, elegir tiempo, traduccion.
+- Normalizar respuestas y calcular score local.
+- Guardar progreso de unidad por `unitId`.
+- Filtrar ejercicios por contexto/vocabulario.
 
-**Entregable**
-- Práctica inicial con feedback local y trazabilidad de avance por unidad.
+**Criterio de cierre**
+- El alumno responde ejercicios y recibe feedback inmediato.
 
 ---
 
-### Fase 4 — Unidad 1 completa y consolidada
+### Fase 4 - Production guided y seguimiento
 
-**Objetivo ejecutivo:** cerrar la unidad inicial del curso como referencia de calidad.
+**Objetivo ejecutivo:** pasar de practica de regla a produccion comunicativa.
 
 **Tareas operativas**
-- Completar y unificar Present Simple / Present Continuous / Present Perfect / Present Perfect Continuous.
-- Añadir práctica de preposiciones (tiempo/lugar/dirección) alineada a los ejemplos.
-- Añadir ejercicio final tipo *Typical Day* como puente a producción libre.
-- Homogeneizar nivel de dificultad, longitud de instrucciones y estilo de feedback.
+- Diseñar prompts de speaking y writing con estructura del documento.
+- Guardar intentos localmente con estados (`draft`, `done`, `needsReview`, `approved`).
+- Filtros de cola por estado y edicion con confirmacion.
 
-**Entregable**
-- Unidad 1 end-to-end (Theory + Practice + Production corta) con progresión coherente.
+**Criterio de cierre**
+- Cada intento queda registrable, revisable y rastreable.
 
 ---
 
-### Fase 5 — Ruta de aprendizaje y experiencia de progreso
+### Fase 5 - Administracion de contenido y mantenimiento
 
-**Objetivo ejecutivo:** guiar al alumno con una ruta clara entre módulos.
+**Objetivo ejecutivo:** permitir mantenimiento de contenidos sin editar archivos JSON manualmente.
 
 **Tareas operativas**
-- Selección y persistencia de unidad activa en Home/Settings.
-- Estados por bloque (Theory, Practice, Production) por unidad.
-- Recomendación contextual de "siguiente paso" en Home.
-- Reset de unidad sin perder el resto de la sesión.
+- Consolidar en `Settings` import/export de `learningUnits`.
+- Validacion obligatoria antes de aplicar cambios.
+- Tabla indexada, filtrada, ordenada y paginada para revision.
+- Modo Bulk Edit opcional y acciones con confirmacion.
 
-**Entregable**
-- Home funciona como dashboard de progreso y navegación no ambigua.
+**Criterio de cierre**
+- Cambios de contenido se preparan desde UI y se pueden exportar para actualizar repo.
 
 ---
 
-### Fase 6 — Expansión de unidades
+### Fase 6 - Expansion de unidades de tiempo
 
-**Objetivo ejecutivo:** escalar de Unidad 1 a bloques de tiempo adicionales.
+**Objetivo ejecutivo:** escalar tiempos sin redisenar UI.
 
 **Tareas operativas**
-- Diseñar `past/future/conditional` con la misma estructura data-driven.
-- Crear ejercicios de contraste entre tiempos (ej. diferencia entre perfecto y continuo).
-- Reutilizar componentes existentes para no duplicar render o estado.
-- Ajustar filtros de tensos por level/estado para móvil y desktop.
+- Añadir la unidad de `past / future / conditional` con estructura equivalente.
+- Reutilizar componentes de Theory/Practice/Complete.
+- Incluir ejercicios de contraste entre tiempos.
+- Ajustar Home para navegacion por unidad y recomendado siguiente paso.
+- Mantener rendimiento con paginacion.
 
-**Entregable**
-- Al menos una nueva unidad funcional integrada con su progreso.
+**Criterio de cierre**
+- Al menos una unidad adicional operativa con progreso y practica completa.
 
 ---
 
-### Fase 7 — Administración segura de contenido
+### Fase 7 - UX mobile-first y consolidacion
 
-**Objetivo ejecutivo:** permitir mantenimiento de contenidos sin editar archivos manualmente.
+**Objetivo ejecutivo:** reducir friccion visual y fatiga en dispositivos moviles.
 
 **Tareas operativas**
-- Incluir administración en Settings:
-  - import / export de `learningUnits`
-  - vista previa de cambios
-  - validación obligatoria antes de aplicar
-  - confirmación explícita de acción.
-- Filtros, orden y paginación de tabla de revisión.
-- Modo Bulk Edit opcional para ajustes masivos.
+- Compactar tarjetas y controles clave.
+- Diseñar filtros y botones de accion con targets tocables.
+- Revisar jerarquia visual y espaciado por flujo.
+- Validar escenarios de uso continuo en mobile.
 
-**Entregable**
-- Flujo de edición y despliegue de contenido preparado para el reuso por desarrollador.
+**Criterio de cierre**
+- Menor scroll y menos toques para completar un bloque frecuente.
 
 ---
 
-### Fase 8 — UX mobile + volumen
+### Fase 8 - QA, evidencia y despliegue
 
-**Objetivo ejecutivo:** sostener usabilidad con más contenido y más filas.
+**Objetivo ejecutivo:** cerrar cada etapa con evidencia verificable.
 
 **Tareas operativas**
-- Compactar tarjetas y controles para flujos repetitivos.
-- Revisar jerarquía visual en Home/Individual/Complete/Settings.
-- Implementar paginación y límites de render para listas largas.
-- Revisar legibilidad y áreas táctiles en móvil.
+- Pruebas por flujo: `Home`, `Theory`, `Individual`, `Complete`, `Practice`, `Production`, `Settings`.
+- Pruebas de regresion de import/export y rendimiento con dataset grande.
+- Recolectar metricas basicas: tiempo a primera accion, tasa de finalizar unidad, tasa de retorno.
+- Checklist de release + reporte final por fase.
 
-**Entregable**
-- Menor fatiga visual y menor scroll para usuarios frecuentes.
+**Criterio de cierre**
+- Cada fase aprobada con `npm test`, `npm run build` y revision manual.
 
 ---
 
-### Fase 9 — Calidad, QA y evidencias
-
-**Objetivo ejecutivo:** estabilizar releases incrementales.
-
-**Tareas operativas**
-- Definir suite de tests por flujo crítico (Home, Theory, Practice, Individual, Complete, Production, Settings).
-- Añadir pruebas de validación de progreso y esquema para cambios nuevos.
-- Definir métricas de producto:
-  - tiempo a primera acción
-  - tasa de completar unidad
-  - recurrencia de ejercicios.
-
-**Entregable**
-- Fases cerradas con evidencia (`npm test`, `npm run build`, revisión manual del flujo).
-
----
-
-## Gantt interno (Mermaid)
+## Gantt interno sugerido
 
 ```mermaid
 gantt
-    title SmartTense Roadmap Interno
+    title SmartTense Roadmap Interno (Fases de desarrollo)
     dateFormat  YYYY-MM-DD
-    axisFormat  %d %b
+    axisFormat  %d-%b
 
     section Fundacion
-    Fase 0 - Base estable               :done, p0, 2026-07-11, 2d
-    Fase 1 - Theory 1.0                 :done, p1, after p0, 2d
-    Fase 2 - Explicaciones inline        :done, p2, after p1, 2d
-    Fase 3 - Practice engine             :done, p3, after p2, 3d
+    Fase 0 - Alineacion de contenido      :done, p0, 2026-07-11, 2d
+    Fase 1 - Unidad base Present Simple    :done, p1, after p0, 4d
+    Fase 2 - Explicacion en linea         :done, p2, after p1, 2d
 
-    section Producto
-    Fase 4 - Unidad 1 cerrada            :done, p4, after p3, 4d
-    Fase 5 - Ruta por unidad             :p5, after p4, 2d
-    Fase 6 - Nuevas unidades             :p6, after p5, 5d
+    section Practica
+    Fase 3 - Motor de practica            :p3, after p2, 5d
+    Fase 4 - Speaking y Writing           :p4, after p3, 4d
+    Fase 5 - Admin contenidos             :p5, after p4, 4d
 
-    section Operacion
-    Fase 7 - Admin contenido            :p7, after p6, 4d
-    Fase 8 - UX mobile y paginacion      :p8, after p7, 3d
-    Fase 9 - QA + calidad                :p9, after p8, 3d
+    section Escala
+    Fase 6 - Expansion de unidades        :p6, after p5, 8d
+    Fase 7 - UX mobile-first              :p7, after p6, 3d
+    Fase 8 - QA y despliegue              :p8, after p7, 3d
 ```
 
-## Relación operativa recomendada
+## Secuencia recomendada (incremental)
 
-- **Sprint 1 (5 días):** Fase 4 (cierre pedagógico) + ajustes de feedback de unidad.
-- **Sprint 2 (4 días):** Fase 6 (unidad 2) + pruebas de contraste entre tiempos.
-- **Sprint 3 (3 días):** Fase 8 (UX mobile y tabla/paginación) + validación visual.
-- **Sprint 4 (3 días):** Fase 9 + documentación de evidencia de cierre.
+1. **Sprint 1 (7-10 dias):** Fases 0, 1 y 2 (establecer base pedagogica).
+2. **Sprint 2 (5-7 dias):** Fase 3 y ajuste de feedback.
+3. **Sprint 3 (5-7 dias):** Fase 4 y Fase 6.
+4. **Sprint 4 (5 dias):** Fase 5 y Fase 7.
+5. **Sprint 5 (2 dias):** Fase 8 y release.
 
-## Dependencias técnicas
+## Dependencias claves
 
 - `public/data/learningUnits.json`
 - `src/data/learningContentValidation.js`
-- `src/learningContexts.js`
-- `src/practice.js`
-- `src/learningPath.js`
+- `src/data/learningContentAdmin.js`
 - `src/App.jsx`
+- `src/conjugation.js`
 - `src/data/productionPrompts.js`
 - `docs/LEARNING_CONTENT_SCHEMA.md`
