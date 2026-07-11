@@ -170,7 +170,7 @@ Estado: **Cerrada**
 **Criterio de cierre:**
 - `npm test`, `npm run build` y `npm run test:e2e:mobile` verdes con evidencia registrada.
 
-Estado: **En curso**. F9a y F9b entregadas con el script `scripts/mobile-smoke.cjs` y quality gates internos.
+Estado: **Cerrada**. F9a, F9b y F9c entregadas con el script `scripts/mobile-smoke.cjs`, quality gates internos, checks de accesibilidad basica y `docs/RELEASE_CHECKLIST.md`. No se agrega virtualizacion mientras el limite actual siga en 500 verbos y el smoke mobile pase.
 
 ## Plan Gantt Interno
 
@@ -196,14 +196,12 @@ gantt
     Modelo de prompts y filtros                   :p7a, 2026-07-12, 6d
     Guardado local + cola de revision             :p7b, after p7a, 6d
     Fase 8 Expansion de Unidades                 :done, p8, 2026-07-13, 10d
-    Fase 9 Calidad, metricas y robustez          :active, p9, after p8, 5d
+    Fase 9 Calidad, metricas y robustez          :done, p9, after p8, 5d
     E2E mobile repetible                          :done, p9a, after p8, 1d
     Metricas y umbrales                           :done, p9b, after p9a, 1d
-    Accesibilidad y checklist                     :p9c, after p9b, 3d
+    Accesibilidad y checklist                     :done, p9c, after p9b, 3d
 ```
 
 ## Hoja de Ruta de Ejecutable Inmediato
 
-1. Revisar accesibilidad y textos de pantallas criticas.
-2. Preparar checklist de release interna por pantalla.
-3. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
+1. Definir la siguiente fase de producto antes de abrir trabajo nuevo fuera del MVP actual.

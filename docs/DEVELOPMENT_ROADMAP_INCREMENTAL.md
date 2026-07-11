@@ -123,7 +123,7 @@ Lo que aporta el documento pedagógico al proyecto:
 **Criterio de salida:**
 - Al menos un bloque adicional completo de teoría + práctica + producción, sin regresiones. Cumplido con `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen de 500 verbos.
 
-### Fase 9 — Calidad, métricas y robustez (En curso)
+### Fase 9 — Calidad, métricas y robustez (Cerrada)
 **Objetivo ejecutivo:** elevar estabilidad para volumen y uso real.
 
 **Tareas operativas:**
@@ -138,6 +138,8 @@ Lo que aporta el documento pedagógico al proyecto:
 **Estado actual:**
 - F9a entregada con `npm run test:e2e:mobile`, que valida Home, Theory, Practice, Individual, Complete, Production y Settings en viewport mobile `390x844` con 500 verbos sinteticos.
 - F9b entregada con quality gates internos: Home <= `5000ms`, Settings <= `2000ms`, viewport `390x844`, 500 verbos sinteticos y 25 filas visibles en Settings.
+- F9c entregada con verificaciones de accesibilidad basica en el smoke mobile y `docs/RELEASE_CHECKLIST.md`.
+- F9d cerrada sin virtualizacion: el limite actual es 500 verbos y el smoke valida ese maximo con paginacion estable.
 
 ## Dependencias técnicas transversales
 
@@ -174,10 +176,10 @@ gantt
   F8c - Performance + mobile            :done, f8c, after f8b, 3d
   F8d - Ajuste UX y cierre              :done, f8d, after f8c, 3d
   section Calidad
-  F9 - QA y medición                    :active, f9, after f8d, 5d
+  F9 - QA y medición                    :done, f9, after f8d, 5d
   F9a - E2E mobile repetible             :done, f9a, after f8d, 1d
   F9b - Metricas y umbrales              :done, f9b, after f9a, 1d
-  F9c - Accesibilidad y release checklist :f9c, after f9b, 3d
+  F9c - Accesibilidad y release checklist :done, f9c, after f9b, 3d
 ```
 
 ## Cierre de fase y validación continua
@@ -190,7 +192,5 @@ Cada fase termina con:
 
 ## Ruta de trabajo recomendada (próximo tramo)
 
-1. F9c: revisar accesibilidad y textos de pantallas criticas.
-2. F9d: preparar checklist de release interna con evidencias por pantalla.
-3. F9e: evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
+1. Definir la siguiente fase de producto antes de abrir trabajo nuevo fuera del MVP actual.
 

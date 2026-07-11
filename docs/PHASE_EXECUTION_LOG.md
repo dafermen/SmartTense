@@ -4,13 +4,13 @@ Fecha base: 11/07/2026.
 
 ## Fase actual
 
-- **Fase activa:** Fase 9 - Calidad, metricas y robustez (en curso).
+- **Fase activa:** Fase 9 - Calidad, metricas y robustez (cerrada).
 - **Objetivo de la fase:** convertir la validacion mobile y de pantallas criticas en evidencia repetible, medible y facil de ejecutar.
-- **Estado:** en curso. Bloques F9a y F9b entregados: smoke E2E mobile repetible con umbrales internos.
+- **Estado:** cerrada. F9a, F9b y F9c entregados; no se requiere virtualizacion mientras el limite de verbos siga en 500 y el smoke mobile pase.
 
 ## Fase 9 (actual)
 
-- **Estado operativo:** en curso.
+- **Estado operativo:** cerrada.
 - **Checkpoint F9a - E2E mobile repetible (11/07/2026):**
   - Se agrego `scripts/mobile-smoke.cjs`.
   - Se agrego el comando `npm run test:e2e:mobile`.
@@ -22,11 +22,19 @@ Fecha base: 11/07/2026.
   - Se agregaron quality gates al smoke mobile para que el comando falle ante regresiones visibles.
   - Umbrales internos: Home listo <= `5000ms`, Settings listo <= `2000ms`, 500 verbos sinteticos, viewport `390x844`, 25 filas visibles en Settings, maximo 140 botones activos y minimo 1200 caracteres renderizados.
   - Los umbrales de tiempo y densidad ajustables usan variables `SMARTTENSE_QA_*` documentadas en la guia de desarrollador.
+- **Checkpoint F9c - Accesibilidad y release checklist (11/07/2026):**
+  - Se agregaron verificaciones automaticas de accesibilidad basica al smoke mobile: `main`, navegacion con nombre, idioma del documento, botones visibles con nombre y campos visibles con etiqueta.
+  - Se creo `docs/RELEASE_CHECKLIST.md` con comandos obligatorios, gates del smoke mobile, checklist por pantalla y checklist documental.
+  - README, guias de usuario/desarrollador/junior y guia de GitHub Pages enlazan el checklist.
+- **Checkpoint F9d - Evaluacion de optimizacion (11/07/2026):**
+  - No se agrega virtualizacion en este hito porque `src/data/validation.js` limita la base a 500 verbos y el smoke mobile valida ese maximo con paginacion de 25 filas.
+  - Criterio futuro: reconsiderar virtualizacion solo si `MAX_VERBS` aumenta o si `npm run test:e2e:mobile` falla por rendimiento/densidad.
 - **Tareas puntuales:**
   - Convertir recorridos mobile CDP en prueba E2E repetible. **completada**.
   - Definir metricas de experiencia y umbrales internos. **completada**.
-  - Revisar accesibilidad y textos de pantallas criticas. **pendiente**.
-  - Preparar checklist de release interna por pantalla. **pendiente**.
+  - Revisar accesibilidad y textos de pantallas criticas. **completada**.
+  - Preparar checklist de release interna por pantalla. **completada**.
+  - Evaluar optimizacion adicional para alto volumen. **completada sin cambio de codigo**.
 - **Criterio de salida definido para cierre de fase:**
   - E2E mobile repetible disponible desde npm.
   - `npm test`, `npm run build` y `npm run test:e2e:mobile` verdes.
@@ -41,7 +49,8 @@ Fecha base: 11/07/2026.
   - Viewport validado: `390x844`.
   - Volumen validado: 500 verbos sinteticos.
   - Pantallas validadas: Home, Theory, Practice, Individual, Complete, Production, Settings.
-  - Metricas observadas en E2E: Home `652ms`, Settings `146ms`, 25 filas visibles en tabla, quality gates `passed: true`.
+  - Metricas observadas en E2E: Home `748ms`, Settings `154ms`, 25 filas visibles en tabla, quality gates `passed: true`.
+  - Accesibilidad basica en E2E: `hasMain`, `hasNamedNavigation`, `hasDocumentLanguage`, `unnamedButtons: []`, `unlabeledFields: []`.
 
 ## Fase 8 (cerrada)
 
@@ -88,9 +97,10 @@ Fecha base: 11/07/2026.
 ## Seguimiento fase 8 (cierre)
 
 - **Resultado del siguiente paso:** Fase 8 cerrada con unidad adicional, Production alineado, smoke mobile y prueba de alto volumen.
-- **Pendiente para Fase 9:**
-  - Revisar accesibilidad y textos de pantallas criticas.
-  - Preparar checklist de release interna por pantalla.
+## Seguimiento fase 9 (cierre)
+
+- **Resultado:** Fase 9 cerrada con smoke E2E mobile repetible, quality gates, accesibilidad basica automatizada, checklist de release y criterio explicito para no agregar virtualizacion prematura.
+- **Siguiente fase:** pendiente de definicion de producto. No se abre una Fase 10 tecnica sin nuevo alcance MVP.
 
 ## Fases 0 a 7 (cierres previos)
 
@@ -113,3 +123,4 @@ Fecha base: 11/07/2026.
 - `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`
 - `docs/PHASE_PLAN_DARIO_UNIT1_BY_OPERATIONS.md`
 - `docs/SMARTTENSE_PHASE_PLAN_DARIO_INCREMENTAL.md`
+- `docs/RELEASE_CHECKLIST.md`

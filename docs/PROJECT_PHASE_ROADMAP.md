@@ -24,7 +24,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 6 - Administracion de contenido | Cerrada | Import/export, preview y validacion de contenido de aprendizaje en Settings | `npm test`, `npm run build` |
 | Fase 7 - Speaking, writing y revision | Cerrada | Workspace Production con speaking/writing, estado de intento y filtros | `src/data/productionPrompts.js`, `App.jsx`, `src/i18n.js` |
 | Fase 8 - Expansión de unidades de tiempo | Cerrada | Unidad past/future/conditional, ejercicios de transferencia y Production alineado | `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen con 500 verbos |
-| Fase 9 - Calidad, metricas y robustez | En curso | E2E mobile repetible para pantallas criticas y alto volumen | `npm run test:e2e:mobile` |
+| Fase 9 - Calidad, metricas y robustez | Cerrada | E2E mobile repetible, quality gates, accesibilidad basica y release checklist | `npm run test:e2e:mobile` |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
@@ -280,7 +280,7 @@ Tareas operativas:
 
 Estado:
 
-- En curso. F9a y F9b estan entregadas con `npm run test:e2e:mobile` y quality gates internos para tiempos, volumen, viewport y densidad de tabla.
+- Cerrada. F9a, F9b y F9c estan entregadas con `npm run test:e2e:mobile`, quality gates internos, checks de accesibilidad basica y `docs/RELEASE_CHECKLIST.md`. No se agrega virtualizacion mientras el limite actual siga en 500 verbos y el smoke mobile pase.
 
 ## Gantt Interno
 
@@ -336,10 +336,10 @@ gantt
     Rendimiento y UX mobile                  :done, p8b, after p8a, 3d
     Ruta de progreso multiunidad             :done, p8c, after p8b, 3d
     section Calidad
-    Fase 9 - QA mobile repetible             :active, p9, after p8c, 5d
+    Fase 9 - QA mobile repetible             :done, p9, after p8c, 5d
     E2E mobile CDP                            :done, p9a, after p8c, 1d
     Metricas internas                         :done, p9b, after p9a, 1d
-    Accesibilidad y release checklist         :p9c, after p9b, 3d
+    Accesibilidad y release checklist         :done, p9c, after p9b, 3d
 ```
 
 ## Releases Sugeridos
@@ -372,10 +372,8 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 9:
+Continuar con la siguiente fase:
 
-1. Revisar accesibilidad y textos de pantallas criticas.
-2. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
-3. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
+1. Definir la siguiente fase de producto antes de abrir trabajo nuevo fuera del MVP actual.
 
 Este paso debe convertir la plataforma multiunidad en un flujo medible y repetible, sin cambiar el modelo tecnico actual.

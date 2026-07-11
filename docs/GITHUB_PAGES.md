@@ -32,6 +32,7 @@ npm run test:e2e:mobile
 ```
 
 The mobile smoke fails if critical screens do not render, Settings pagination breaks, or the internal readiness/density gates are exceeded.
+For phase milestones, also follow `docs/RELEASE_CHECKLIST.md`.
 
 If Settings was used to edit verbs, export the database first and intentionally update `public/data/verbs.json` plus `src/data/defaultData.js` before committing. Then commit and push:
 

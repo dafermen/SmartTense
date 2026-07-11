@@ -50,6 +50,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `docs/`: user, developer, data, publishing, and roadmap docs.
 
 The mobile smoke has internal quality gates for Home ready time, Settings ready time, viewport size, 500-verb volume, and 25 visible Settings rows. If it fails, read the failure message before changing thresholds.
+For a phase milestone, also follow `docs/RELEASE_CHECKLIST.md`.
 
 ## Current Product Direction
 

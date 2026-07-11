@@ -245,7 +245,7 @@ async function clickAndWait(cdp, label, expression) {
 
 function assertQualityGates(result) {
   const failures = [];
-  const { durations, metrics, syntheticVerbCount, screens } = result;
+  const { accessibility, durations, metrics, syntheticVerbCount, screens } = result;
 
   if (durations.homeMs > QA_THRESHOLDS.homeReadyMs) {
     failures.push(`Home ready time ${durations.homeMs}ms exceeded ${QA_THRESHOLDS.homeReadyMs}ms`);
@@ -270,6 +270,21 @@ function assertQualityGates(result) {
   }
   if (metrics.bodyChars < QA_THRESHOLDS.minBodyChars) {
     failures.push(`Body text length ${metrics.bodyChars} was below ${QA_THRESHOLDS.minBodyChars}`);
+  }
+  if (!accessibility.hasMain) {
+    failures.push("Document did not expose a main landmark");
+  }
+  if (!accessibility.hasNamedNavigation) {
+    failures.push("Document did not expose a named navigation landmark");
+  }
+  if (!accessibility.hasDocumentLanguage) {
+    failures.push("Document language was missing");
+  }
+  if (accessibility.unnamedButtons.length > 0) {
+    failures.push(`Buttons without accessible names: ${accessibility.unnamedButtons.join(", ")}`);
+  }
+  if (accessibility.unlabeledFields.length > 0) {
+    failures.push(`Visible fields without labels: ${accessibility.unlabeledFields.join(", ")}`);
   }
 
   if (failures.length > 0) {
@@ -368,6 +383,52 @@ async function main() {
       viewport: { width: window.innerWidth, height: window.innerHeight },
       language: document.documentElement.lang
     }))()`);
+    const accessibility = await evaluate(cdp, `(() => {
+      const isVisible = (element) => {
+        const style = window.getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+      };
+      const accessibleName = (element) => {
+        const ariaLabel = element.getAttribute('aria-label') || '';
+        const labelledBy = element.getAttribute('aria-labelledby') || '';
+        const labelledByText = labelledBy
+          .split(/\\s+/)
+          .filter(Boolean)
+          .map((id) => document.getElementById(id)?.innerText || '')
+          .join(' ');
+        const labelText = element.labels ? [...element.labels].map((label) => label.innerText).join(' ') : '';
+        return [ariaLabel, labelledByText, labelText, element.innerText, element.value]
+          .join(' ')
+          .replace(/\\s+/g, ' ')
+          .trim();
+      };
+      const describe = (element, index) => {
+        const text = accessibleName(element);
+        return text || element.id || element.name || element.className || element.tagName.toLowerCase() + '-' + index;
+      };
+
+      const interactive = [...document.querySelectorAll('button, input, select, textarea')].filter(isVisible);
+      const unnamedButtons = interactive
+        .filter((element) => element.tagName === 'BUTTON' && !accessibleName(element))
+        .map(describe);
+      const unlabeledFields = interactive
+        .filter((element) => ['INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName))
+        .filter((element) => {
+          if (element.type === 'hidden') return false;
+          if (element.type === 'file' && element.closest('label')) return false;
+          return !accessibleName(element);
+        })
+        .map(describe);
+
+      return {
+        hasMain: Boolean(document.querySelector('main')),
+        hasNamedNavigation: [...document.querySelectorAll('nav')].some((nav) => accessibleName(nav)),
+        hasDocumentLanguage: Boolean(document.documentElement.lang),
+        unnamedButtons,
+        unlabeledFields
+      };
+    })()`);
 
     if (browserProblems.length > 0) {
       throw new Error(`Browser problems detected:\\n${browserProblems.join("\\n")}`);
@@ -379,6 +440,7 @@ async function main() {
       screens: REQUIRED_SCREENS,
       paginationOk: true,
       durations: { homeMs, settingsMs },
+      accessibility,
       metrics,
       qualityGates: {
         passed: true,

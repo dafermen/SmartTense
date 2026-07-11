@@ -203,6 +203,7 @@ SmartTense now includes structured Theory and Practice screens powered by learni
 The current visible learning flow is Home -> Theory -> Practice -> Individual -> Production -> Complete -> Settings. Home recommends the next step based on your local unit progress.
 
 The current release checks include a mobile smoke test at `390x844` that opens Home, Theory, Practice, Individual, Complete, Production, and Settings with a simulated high-volume verb database. It also checks basic readiness and table-density gates so the main learner flow stays stable on small screens as the content grows.
+Internal release notes and screen checks live in `docs/RELEASE_CHECKLIST.md`.
 
 ### Upcoming roadmap (Dario-based)
 

@@ -221,6 +221,7 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 - `docs/PHASE_EXECUTION_LOG.md`: registro de ejecución por fases y evidencia por entrega.
 - `docs/DEVELOPMENT_PHASE_EXECUTION_PLAN.md`: roadmap ejecutivo y operativo con criterios de salida por fase.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
+- `docs/RELEASE_CHECKLIST.md`: internal release checklist for phase milestones and critical UI changes.
 - `docs/DEVELOPMENT_ROADMAP_INCREMENTAL.md`: phased execution roadmap with executive goals, operational tasks, and an internal Gantt plan.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.
 
@@ -233,6 +234,8 @@ npm test
 npm run test:e2e:mobile
 npm run build
 ```
+
+For phase milestones and critical UI changes, also follow `docs/RELEASE_CHECKLIST.md`.
 
 For native wrapper updates, also run:
 

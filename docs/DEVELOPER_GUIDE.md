@@ -302,6 +302,7 @@ Optional environment variables:
 - `SMARTTENSE_QA_MIN_BODY_CHARS`: minimum rendered text size in the final Settings state. Default: `1200`.
 
 The smoke also enforces fixed gates for viewport `390x844`, 500 synthetic verbs, all seven critical screens, and 25 visible Settings table rows.
+It also checks for a main landmark, named navigation, document language, visible buttons with names, and visible fields with labels.
 
 ```bash
 npm run build
@@ -353,6 +354,7 @@ Recommended responsive checks:
 - Confirm no horizontal overflow.
 - Confirm buttons remain at touch-friendly size.
 - Confirm Home, Theory, Practice, Individual, and Complete remain readable with several selected filters.
+- For phase milestones, follow `docs/RELEASE_CHECKLIST.md`.
 
 ## Adding A Tense
 
