@@ -10,6 +10,7 @@ The app is designed for two audiences:
 ## Main Features
 
 - Home dashboard with current verb summary, progress, quick actions, a live example, and a recommended next practice.
+- Local learning path for the active unit, with next-step recommendation and unit progress reset.
 - Theory view for the first Present Simple learning unit, rendered from structured JSON content.
 - Practice view with starter exercises, local answer checking, and immediate feedback.
 - Individual practice view focused on affirmative conjugation only.
@@ -29,10 +30,10 @@ The app is designed for two audiences:
 
 ## Screens And Main Flow
 
-1. Start on Home to see progress, the current verb, a short example, and quick actions.
+1. Start on Home to see progress, the current verb, a short example, and the recommended next learning step.
 2. Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, examples, and starter practice preview.
 3. Open Individual when you want focused affirmative practice with selected tenses and subjects.
-4. Open Practice when you want starter exercises with immediate feedback.
+4. Open Practice when you want starter exercises with immediate feedback and local unit completion.
 5. Open a "Why this form?" panel when you want the pattern, reason, auxiliary, and verb-form explanation for a generated sentence.
 6. Open Complete when you want the full table and comparison across sentence forms.
 7. Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.
@@ -180,6 +181,8 @@ Structured learning content lives in `public/data/learningUnits.json`. Theory re
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 
 Imported JSON and Settings edits only change the current browser session; they do not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
+
+Learning path progress is also local to the current browser. It tracks whether the active unit's Theory has been viewed and whether its Practice exercises have been completed.
 
 For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 

@@ -14,6 +14,7 @@ Home is the starting dashboard. It shows:
 - Progress for verbs already viewed in this browser.
 - Current level, number of visible tenses, and number of matching verbs.
 - A recommended next practice.
+- The recommended next learning step for the current unit.
 
 Use Home when you want to quickly continue studying without opening the full table.
 
@@ -44,7 +45,9 @@ The first Practice MVP supports:
 - local scoring in this browser session;
 - reset for the current practice draft.
 
-Practice is a starter workflow. It does not yet save long-term unit progress.
+Practice is a starter workflow. It saves only local unit progress in this browser.
+
+Completing all starter exercises marks the current unit's Practice step as complete in this browser.
 
 ### Individual
 
@@ -83,6 +86,7 @@ Use `Why this form?` inside any generated form when you want a short grammar exp
 Settings keeps configuration and data tools in one place. It includes:
 
 - General settings for interface language, learner language, translations, sentence parts, and local progress reset.
+- Learning path status for the current unit and a reset option for that unit.
 - Data manager summary with total verbs, schema version, update date, and pattern count.
 - Import JSON and Export database for compatible SmartTense verb files.
 - Restore default data when you want to return to the demo database for this browser session.
@@ -160,8 +164,10 @@ There are two export options:
 
 Progress is local to the browser and can be reset from Settings. It counts verbs you have viewed on the current device and browser. It is not uploaded to a server and does not require an account.
 
+Learning path progress is also local. SmartTense tracks whether you have opened Theory and completed Practice for the active unit. Settings can reset all local progress or only the current unit.
+
 ## Learning Content Roadmap
 
 SmartTense now includes a structured Theory screen powered by learning-content JSON. The first visible unit is Present Simple and includes objectives, theory, structures, common mistakes, examples, and starter exercises.
 
-The current visible learning flow is Home -> Theory -> Practice -> Individual -> Complete -> Settings. Practice now gives immediate local feedback for starter exercises.
+The current visible learning flow is Home -> Theory -> Practice -> Individual -> Complete -> Settings. Home recommends the next step based on your local unit progress.

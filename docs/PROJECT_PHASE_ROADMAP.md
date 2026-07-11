@@ -12,7 +12,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 1 - Theory | Cerrada | Pagina Theory renderizada desde JSON, enlazada desde Home y menu | `npm test`, `npm run build`; navegador interno no disponible para captura automatizada |
 | Fase 2 - Explicaciones inteligentes | Cerrada | Panel compacto `Why this form?` con patron, razon, auxiliar y forma verbal | `npm test`, `npm run build` |
 | Fase 3 - Motor de practica | Cerrada | Pagina Practice con ejercicios iniciales, scoring local y feedback inmediato | `npm test`, `npm run build` |
-| Fase 4 - Ruta de aprendizaje | Pendiente | Home recomienda el siguiente paso dentro de una unidad | No iniciada |
+| Fase 4 - Ruta de aprendizaje | Cerrada | Progreso local por unidad y Home recomienda el siguiente paso | `npm test`, `npm run build` |
 | Fase 5 - Vocabulario y contextos | Pendiente | Ejemplos y practica por contexto | No iniciada |
 | Fase 6 - Administracion de contenido | Pendiente | Authoring tools para unidades y vocabulario | No iniciada |
 | Fase 7 - Speaking, writing y revision | Pendiente | Prompts y cola de revision | No iniciada |
@@ -159,6 +159,10 @@ Entregable:
 
 - Home puede recomendar el siguiente paso del usuario dentro de una unidad.
 
+Estado:
+
+- Cerrada para MVP. La app guarda progreso local por unidad, marca Theory como visto, marca Practice como completado al responder correctamente todos los ejercicios, recomienda el siguiente paso en Home y permite resetear la unidad desde Settings.
+
 ### Fase 5 - Vocabulario Y Contextos
 
 Objetivo ejecutivo:
@@ -248,13 +252,13 @@ gantt
     Feedback y scoring                      :done, p3b, 2026-07-11, 1d
 
     section Ruta
-    Fase 4 - Learning path                  :p4, 2026-07-12, 12d
-    Modelo de progreso                      :p4a, 2026-07-12, 5d
-    Recomendaciones en Home                 :p4b, after p4a, 7d
+    Fase 4 - Learning path                  :done, p4, 2026-07-11, 1d
+    Modelo de progreso                      :done, p4a, 2026-07-11, 1d
+    Recomendaciones en Home                 :done, p4b, 2026-07-11, 1d
 
     section Expansion
-    Fase 5 - Vocabulario y contextos        :p5, after p4, 12d
-    Modelo de contextos                     :p5a, after p4, 5d
+    Fase 5 - Vocabulario y contextos        :p5, 2026-07-12, 12d
+    Modelo de contextos                     :p5a, 2026-07-12, 5d
     Ejemplos por contexto                   :p5b, after p5a, 7d
 
     section Administracion
@@ -298,12 +302,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 4:
+Continuar con Fase 5:
 
-1. Agregar estado de unidad: no iniciada, en progreso y completada.
-2. Conectar Home con el siguiente paso recomendado.
-3. Definir criterios locales de completitud para Theory y Practice.
-4. Agregar reset de progreso por unidad en Settings.
-5. Mantener el progreso local y simple.
+1. Crear paquetes de vocabulario por contexto.
+2. Conectar contextos con ejemplos y ejercicios.
+3. Agregar filtro de contexto.
+4. Mantener import/export de vocabulario para una fase posterior si aumenta el alcance.
+5. Agregar validacion y pruebas del modelo de contexto.
 
-Este paso debe convertir las pantallas ya creadas en una ruta guiada sin agregar cuentas ni backend.
+Este paso debe hacer que ejemplos y practica sean mas cercanos al estudiante sin crear todavia herramientas completas de authoring.

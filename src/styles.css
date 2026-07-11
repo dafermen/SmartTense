@@ -2373,6 +2373,15 @@ th {
   padding: 14px;
 }
 
+.unit-progress-box {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 10px;
+}
+
 .settings-control-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(170px, 1fr));

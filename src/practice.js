@@ -23,7 +23,7 @@ export function normalizePracticeAnswer(value) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[’]/g, "'")
+    .replace(/\u2019/g, "'")
     .replace(/\s+/g, " ")
     .trim()
     .replace(/[?!.]+$/g, "");

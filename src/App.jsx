@@ -4,6 +4,7 @@ import { DEFAULT_DATA, LEVELS, SUBJECTS, TENSES } from "./data/defaultData.js";
 import { validateLearningContent } from "./data/learningContentValidation.js";
 import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
+import { getNextLearningStep, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
 import { getPracticeExercises, scorePracticeAnswer } from "./practice.js";
 
@@ -69,6 +70,7 @@ export default function App() {
     return COMPLETE_FORM_COLUMNS;
   });
   const [visitedVerbIds, setVisitedVerbIds] = useState(storedSettings.visitedVerbIds || []);
+  const [unitProgress, setUnitProgress] = useState(storedSettings.unitProgress || {});
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -245,11 +247,34 @@ export default function App() {
     [learningContent.units]
   );
   const practiceExercises = useMemo(() => getPracticeExercises(primaryLearningUnit), [primaryLearningUnit]);
+  const primaryUnitProgress = useMemo(
+    () => getUnitProgress(primaryLearningUnit?.id, unitProgress),
+    [primaryLearningUnit?.id, unitProgress]
+  );
+  const nextLearningStep = useMemo(
+    () => getNextLearningStep(primaryLearningUnit, unitProgress),
+    [primaryLearningUnit, unitProgress]
+  );
+  const practiceCorrectCount = useMemo(
+    () => Object.values(practiceResults).filter((result) => result.isCorrect).length,
+    [practiceResults]
+  );
 
   useEffect(() => {
     if (!currentVerb?.id) return;
     setVisitedVerbIds((current) => current.includes(currentVerb.id) ? current : [...current, currentVerb.id]);
   }, [currentVerb?.id]);
+
+  useEffect(() => {
+    if (activePage !== "theory" || !primaryLearningUnit?.id) return;
+    setUnitProgress((current) => markUnitProgress(current, primaryLearningUnit.id, { theoryViewed: true }));
+  }, [activePage, primaryLearningUnit?.id]);
+
+  useEffect(() => {
+    if (!primaryLearningUnit?.id || practiceExercises.length === 0) return;
+    if (practiceCorrectCount < practiceExercises.length) return;
+    setUnitProgress((current) => markUnitProgress(current, primaryLearningUnit.id, { theoryViewed: true, practiceCompleted: true }));
+  }, [practiceCorrectCount, practiceExercises.length, primaryLearningUnit?.id]);
 
   useEffect(() => {
     writeStoredSettings({
@@ -268,9 +293,10 @@ export default function App() {
       showTranslations,
       showSentenceParts,
       completeFormColumns,
-      visitedVerbIds
+      visitedVerbIds,
+      unitProgress
     });
-  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, showAllSubjects, showSentenceParts, showTranslations, subjectId, verbId, verbPattern, verbSearch, visitedVerbIds]);
+  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds]);
 
   function showTimedAlert(message, type = "success") {
     setAlert({ message, type });
@@ -497,7 +523,17 @@ export default function App() {
 
     clearStoredSettings();
     setVisitedVerbIds([]);
+    setUnitProgress({});
     showTimedAlert(t("progressReset"));
+  }
+
+  function handleResetCurrentUnitProgress() {
+    if (!primaryLearningUnit?.id || !window.confirm(t("resetUnitProgressConfirm"))) return;
+
+    setUnitProgress((current) => resetUnitProgress(current, primaryLearningUnit.id));
+    setPracticeAnswers({});
+    setPracticeResults({});
+    showTimedAlert(t("unitProgressReset"));
   }
 
 
@@ -595,23 +631,23 @@ export default function App() {
           <article className="home-info-card home-recommend-card">
             <div className="home-card-heading">
               <p className="eyebrow">{t("recommendedNow")}</p>
-              <h3>{recommendedVerb?.label || currentVerb.label}</h3>
+              <h3>{nextLearningStep.title || recommendedVerb?.label || currentVerb.label}</h3>
             </div>
             <dl className="home-compact-list">
-              <div><dt>{t("suggestedVerb")}</dt><dd>{recommendedVerb?.label || currentVerb.label}</dd></div>
-              <div><dt>{t("learnerMeaning")}</dt><dd>{recommendedSummary.meaning || t("noLearnerMeaning")}</dd></div>
+              <div><dt>{t("unitStatus")}</dt><dd>{t(primaryUnitProgress.status)}</dd></div>
+              <div><dt>{t("nextStep")}</dt><dd>{t(nextLearningStep.labelKey)}</dd></div>
               <div><dt>{t("suggestedTense")}</dt><dd>{TENSES.find((tense) => tense.id === "simplePresent")?.[interfaceLanguage]}</dd></div>
-              <div><dt>{t("suggestedSubject")}</dt><dd>{SUBJECTS.find((subject) => subject.id === subjectId)?.label || SUBJECTS[0].label}</dd></div>
+              <div><dt>{t("learnerMeaning")}</dt><dd>{recommendedSummary.meaning || t("noLearnerMeaning")}</dd></div>
             </dl>
             <button
               type="button"
               className="home-recommend-button"
               onClick={() => {
                 if (recommendedVerb?.id) setVerbId(recommendedVerb.id);
-                setActivePage("individual");
+                setActivePage(nextLearningStep.page);
               }}
             >
-              {t("continueLast")}
+              {t(nextLearningStep.labelKey)}
             </button>
           </article>
         </section>
@@ -708,6 +744,16 @@ export default function App() {
               <label className="check-row check-row-light"><input type="checkbox" checked={showSentenceParts} onChange={(event) => setShowSentenceParts(event.target.checked)} /><span>{t("showSentenceParts")}</span></label>
             </div>
             <button type="button" className="reset-progress-button" onClick={handleResetProgress}>{t("resetProgress")}</button>
+            <div className="unit-progress-box">
+              <p className="eyebrow">{t("learningPath")}</p>
+              <dl className="data-summary-grid">
+                <div><dt>{t("unitStatus")}</dt><dd>{t(primaryUnitProgress.status)}</dd></div>
+                <div><dt>{t("theory")}</dt><dd>{primaryUnitProgress.theoryViewed ? t("completed") : t("notStarted")}</dd></div>
+                <div><dt>{t("practice")}</dt><dd>{primaryUnitProgress.practiceCompleted ? t("completed") : t("notStarted")}</dd></div>
+                <div><dt>{t("nextStep")}</dt><dd>{t(nextLearningStep.labelKey)}</dd></div>
+              </dl>
+              <button type="button" className="reset-progress-button" onClick={handleResetCurrentUnitProgress}>{t("resetUnitProgress")}</button>
+            </div>
           </article>
 
           <article className="settings-card">

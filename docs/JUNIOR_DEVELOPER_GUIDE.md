@@ -33,6 +33,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `src/data/validation.js`: validation for verb JSON.
 - `src/data/learningContentValidation.js`: validation for learning units.
 - `src/practice.js`: practice exercise extraction, answer normalization, and scoring.
+- `src/learningPath.js`: local unit progress and next-step recommendation helpers.
 - `public/data/verbs.json`: default verb database loaded by the app.
 - `public/data/learningUnits.json`: first structured learning-content database.
 - `src/styles.css`: visual layout and responsive behavior.
@@ -49,6 +50,7 @@ The current stable surfaces are:
 - `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
 - `Why this form?`: compact explanations attached to generated sentence rows.
 - `Practice`: starter exercises with local answer checking.
+- `Learning path`: local Theory/Practice progress for the active unit.
 - `Individual`: focused affirmative practice.
 - `Complete`: full conjugation comparison.
 - `Settings`: configuration and data administration.
@@ -102,6 +104,18 @@ The pure logic lives in `src/practice.js`:
 - `scorePracticeAnswer`
 
 When editing Practice, add tests in `tests/practice.test.js` and keep scoring local. Do not add accounts, server storage, or long-term progress until the Learning Path phase.
+
+## Updating Learning Path
+
+Learning path logic lives in `src/learningPath.js`.
+
+Current statuses:
+
+- `notStarted`
+- `inProgress`
+- `completed`
+
+Home uses `getNextLearningStep` to decide whether the learner should open Theory, Practice, or Individual next. Settings can reset the current unit progress. Update `tests/learningPath.test.js` with any rule change.
 
 ## Adding Or Editing Verbs
 
