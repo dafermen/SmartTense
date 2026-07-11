@@ -151,9 +151,9 @@ Estado: **Cerrada**
 - Probar UX en mobile por encima de desktop.
 
 **Criterio de cierre:**
-- Mínimo una unidad adicional completa validada por ejecución y tests.
+- Mínimo una unidad adicional completa validada por ejecución y tests. Cumplido con `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen de 500 verbos.
 
-Estado: **En curso**
+Estado: **Cerrada**
 
 ## Plan Gantt Interno
 
@@ -178,13 +178,14 @@ gantt
     Fase 7 Speaking, Writing y Revision         :done, p7, 2026-07-12, 12d
     Modelo de prompts y filtros                   :p7a, 2026-07-12, 6d
     Guardado local + cola de revision             :p7b, after p7a, 6d
-    Fase 8 Expansion de Unidades                 :active, p8, 2026-07-13, 10d
+    Fase 8 Expansion de Unidades                 :done, p8, 2026-07-13, 10d
+    Fase 9 Calidad, metricas y robustez          :p9, after p8, 5d
 ```
 
 ## Hoja de Ruta de Ejecutable Inmediato
 
-1. Diseñar y validar la unidad de Past/Future/Conditional en `learningUnits.json`.
-2. Crear una capa de ejercicios de transferencia entre tiempos para Practice.
-3. Revisar la navegación Home para múltiples unidades y reducir clics en mobile.
-4. Optimizar tabla/listados para alto volumen (ordenado, filtros, paginación).
-5. Cerrar fase 8 con pruebas de regresión en `npm test` y `npm run build`.
+1. Convertir los recorridos mobile CDP en pruebas E2E repetibles.
+2. Definir metricas de experiencia y umbrales internos.
+3. Revisar accesibilidad y textos de pantallas criticas.
+4. Preparar checklist de release interna por pantalla.
+5. Evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.

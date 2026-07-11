@@ -111,7 +111,7 @@ Lo que aporta el documento pedagógico al proyecto:
 **Criterio de salida:**
 - El estudiante completa un intento, lo guarda, lo revisa y avanza estado.
 
-### Fase 8 — Expansión de unidades y gramática (En curso)
+### Fase 8 — Expansión de unidades y gramática (Cerrada)
 **Objetivo ejecutivo:** pasar de unidad inicial a multiunidad sin duplicar arquitectura.
 
 **Tareas operativas:**
@@ -121,7 +121,7 @@ Lo que aporta el documento pedagógico al proyecto:
 - Mejorar mobile primero, filtros y ordenamiento con rendimiento estable.
 
 **Criterio de salida:**
-- Al menos un bloque adicional completo de teoría + práctica + producción, sin regresiones.
+- Al menos un bloque adicional completo de teoría + práctica + producción, sin regresiones. Cumplido con `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen de 500 verbos.
 
 ### Fase 9 — Calidad, métricas y robustez (Futura)
 **Objetivo ejecutivo:** elevar estabilidad para volumen y uso real.
@@ -164,11 +164,11 @@ gantt
   section Produccion
   F7 - Produccion guiada               :done, f7, after f6, 8d
   section Expansión
-  F8 - Nuevas unidades                 :active, f8, 2026-07-12, 14d
-  F8a - Diseño JSON de unidad           :f8a, after f8, 4d
-  F8b - Transferencia entre tiempos     :f8b, after f8a, 4d
-  F8c - Performance + mobile            :f8c, after f8b, 3d
-  F8d - Ajuste UX y cierre              :f8d, after f8c, 3d
+  F8 - Nuevas unidades                 :done, f8, 2026-07-12, 14d
+  F8a - Diseño JSON de unidad           :done, f8a, after f8, 4d
+  F8b - Transferencia entre tiempos     :done, f8b, after f8a, 4d
+  F8c - Performance + mobile            :done, f8c, after f8b, 3d
+  F8d - Ajuste UX y cierre              :done, f8d, after f8c, 3d
   section Calidad
   F9 - QA y medición                    :f9, after f8d, 5d
 ```
@@ -183,9 +183,9 @@ Cada fase termina con:
 
 ## Ruta de trabajo recomendada (próximo tramo)
 
-1. F8a: construir la unidad temporal `Past/Future/Conditional` con ejercicios y vocabulario.
-2. F8b: incorporar ejercicios de transferencia de forma comparativa.
-3. F8c: validar UX en mobile con tablas largas y filtros.
-4. F8d: cerrar checklist de Home/Learning path y preparar pre-release interna.
-5. F9: dejar suite de pruebas de regresión para rutas de alta frecuencia.
+1. F9a: convertir recorridos CDP de mobile en pruebas E2E repetibles.
+2. F9b: definir metricas de experiencia y registrar umbrales internos.
+3. F9c: revisar accesibilidad y textos de pantallas criticas.
+4. F9d: preparar checklist de release interna con evidencias por pantalla.
+5. F9e: evaluar optimizacion adicional solo si el volumen supera el limite actual de 500 verbos.
 

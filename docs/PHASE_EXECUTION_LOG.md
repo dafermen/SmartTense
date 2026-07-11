@@ -4,13 +4,13 @@ Fecha base: 11/07/2026.
 
 ## Fase actual
 
-- **Fase activa:** Fase 8 - Expansion de unidades de tiempo (en curso).
+- **Fase activa:** Fase 8 - Expansion de unidades de tiempo (cerrada).
 - **Objetivo de la fase:** agregar una unidad nueva de tiempos y reforzar la navegacion mobile sin romper el core.
-- **Estado:** en curso.
+- **Estado:** cerrada. Siguiente tramo recomendado: Fase 9 - Calidad, metricas y robustez.
 
 ## Fase 8 (actual)
 
-- **Estado operativo:** en curso.
+- **Estado operativo:** cerrada.
 - **Checkpoint de ejecucion (11/07/2026):**
   - Se incorporo la unidad `past-future-conditional-foundation` en `public/data/learningUnits.json`.
   - La unidad nueva incluye teoria, estructuras, errores, ejemplos, vocabulario y 5 ejercicios iniciales: fillBlank, transform, chooseTense, correctMistake, translation.
@@ -25,11 +25,17 @@ Fecha base: 11/07/2026.
   - Home renderizo navegacion y acceso a Production.
   - Production renderizo el composer, multiples prompts y el prompt de transferencia `Past-Future-Conditional comparison`.
   - Practice renderizo contexto, ejercicios y contador de respuestas correctas en mobile.
+- **Checkpoint de QA alto volumen (11/07/2026):**
+  - Se ejecuto smoke test headless con Chrome DevTools Protocol en viewport movil `390x844`.
+  - Se intercepto `public/data/verbs.json` en navegador y se cargo un dataset sintetico de 500 verbos, el maximo permitido por el validador.
+  - Home renderizo el total de 500 verbos sin error de consola de aplicacion.
+  - Settings renderizo la tabla de datos, pagino de `1-25` a `26-50` y mantuvo controles operativos en mobile.
+  - Complete abrio correctamente usando el dataset sintetico.
 - **Tareas puntuales:**
   - Diseñar nueva unidad en `public/data/learningUnits.json` (pasado/futuro/condicional). **completada**.
-  - Integrar la unidad en Theory y Practice con contexto y filtros.
-  - Mantener el flujo Home -> unidad -> teoria -> practica -> acciones de repaso.
-  - Verificar rendimiento para listas largas: filtros, orden y paginacion.
+  - Integrar la unidad en Theory y Practice con contexto y filtros. **completada**.
+  - Mantener el flujo Home -> unidad -> teoria -> practica -> acciones de repaso. **completada**.
+  - Verificar rendimiento para listas largas: filtros, orden y paginacion. **completada**.
 - **Criterio de salida definido para cierre de fase:**
   - al menos una unidad adicional completa (teoria + practica + vocabulario contextual) visible en app.
   - `npm test` y `npm run build` verdes con la unidad activa.
@@ -39,16 +45,17 @@ Fecha base: 11/07/2026.
   - `npm test` OK (50 pruebas, 0 fallos).
   - `npm run build` OK.
   - Smoke test mobile CDP OK (`390x844`: Home, Production y Practice).
+  - Smoke test mobile CDP con alto volumen OK (`390x844`, 500 verbos sinteticos, Settings y Complete).
   - Validador de contenido y verbos conserva cobertura de escenarios negativos.
   - Home abre Theory/Practice con la unidad activa y Settings resume el estado de la unidad activa.
   - Los nuevos ejercicios de transferencia y prompts de Production se importaron correctamente en los respectivos archivos JSON y JS.
 
-## Seguimiento fase 8 (proximo tramo)
+## Seguimiento fase 8 (cierre)
 
-- **Resultado del siguiente paso:** Checkpoint 8a entregado y se habilitó la navegación por unidad activa.
-- **Pendiente para cierre completo de Fase 8:**
-  - Revisar rendimiento del flujo en movil con alto volumen de datos simulado.
-  - Revisar el comportamiento en mobile con contextos reales y alto volumen de filas.
+- **Resultado del siguiente paso:** Fase 8 cerrada con unidad adicional, Production alineado, smoke mobile y prueba de alto volumen.
+- **Pendiente para Fase 9:**
+  - Convertir los recorridos CDP en pruebas E2E repetibles si el proyecto adopta Playwright o una suite equivalente.
+  - Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion en mobile.
 
 ## Fases 0 a 7 (cierres previos)
 

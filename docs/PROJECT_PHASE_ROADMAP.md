@@ -23,7 +23,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 5 - Vocabulario y contextos | Cerrada | Contextos, vocabulario y practica filtrable por contexto | `npm test`, `npm run build` |
 | Fase 6 - Administracion de contenido | Cerrada | Import/export, preview y validacion de contenido de aprendizaje en Settings | `npm test`, `npm run build` |
 | Fase 7 - Speaking, writing y revision | Cerrada | Workspace Production con speaking/writing, estado de intento y filtros | `src/data/productionPrompts.js`, `App.jsx`, `src/i18n.js` |
-| Fase 8 - Expansión de unidades de tiempo | En curso | Nuevas unidades de past/future/conditional sin tocar core | Fase 8 activa: nueva unidad en diseño |
+| Fase 8 - Expansión de unidades de tiempo | Cerrada | Unidad past/future/conditional, ejercicios de transferencia y Production alineado | `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen con 500 verbos |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
@@ -261,7 +261,7 @@ Tareas operativas:
 
 Estado:
 
-- En curso.
+- Cerrada. La unidad adicional, los ejercicios de transferencia, Production y la validacion mobile/alto volumen quedaron documentados en `docs/PHASE_EXECUTION_LOG.md`.
 
 ## Gantt Interno
 
@@ -312,10 +312,10 @@ gantt
     Fase 7 - Speaking y writing             :done, p7, 2026-07-12, 12d
     Prompts y rubricas                      :p7a, 2026-07-12, 6d
     Cola de revision                        :p7b, after p7a, 6d
-    Fase 8 - Expansion de unidades          :active, p8, 2026-07-12, 10d
-    Unit 2/3 y validaciones por escala      :p8a, after p8, 4d
-    Rendimiento y UX mobile                  :p8b, after p8a, 3d
-    Ruta de progreso multiunidad             :p8c, after p8b, 3d
+    Fase 8 - Expansion de unidades          :done, p8, 2026-07-12, 10d
+    Unit 2/3 y validaciones por escala      :done, p8a, after p8, 4d
+    Rendimiento y UX mobile                  :done, p8b, after p8a, 3d
+    Ruta de progreso multiunidad             :done, p8c, after p8b, 3d
 ```
 
 ## Releases Sugeridos
@@ -348,12 +348,12 @@ gantt
 
 ## Siguiente Implementacion Recomendada
 
-Continuar con Fase 8:
+Continuar con Fase 9:
 
-1. Diseñar la primera unidad de Past/Future/Conditional en JSON (objetivos, estructuras, ejemplos, ejercicios).
-2. Hacer que Practice cubra transferencia entre tiempos sin perder usabilidad.
-3. Cerrar validadores de rendimiento para alta cardinalidad (filtros + paginación).
-4. Extender Home y Learning Path para navegación multiunidad.
-5. Medir fricción móvil antes de abrir más unidades.
+1. Convertir los recorridos mobile CDP en pruebas E2E repetibles.
+2. Definir metricas de experiencia: tiempo a primera accion, completion de ejercicios y friccion mobile.
+3. Revisar accesibilidad y textos de pantallas criticas.
+4. Evaluar virtualizacion solo si la base supera el limite actual de 500 verbos.
+5. Preparar checklist de release interna con evidencias de Home, Theory, Practice, Individual, Complete, Production y Settings.
 
-Este paso debe llevar a una plataforma multiunidad y estable en mobile, sin cambiar el modelo técnico actual.
+Este paso debe convertir la plataforma multiunidad en un flujo medible y repetible, sin cambiar el modelo tecnico actual.
