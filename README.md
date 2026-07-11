@@ -49,6 +49,7 @@ SmartTense/
   public/
     assets/                   Static visual assets
     data/verbs.json           Default editable verb data
+    data/learningUnits.json   Structured learning content for future Theory/Practice
   src/
     App.jsx                   Main React interface, app state, and local data manager
     conjugation.js            Verb tense generation engine
@@ -58,6 +59,7 @@ SmartTense/
     data/
       defaultData.js          Embedded fallback data and tense metadata
       validation.js           JSON import validation
+      learningContentValidation.js  Learning content validation
   tests/                      Unit tests for grammar and validation
   docs/                       User, developer, data, and GitHub guides
   .github/workflows/          GitHub Actions workflows
@@ -167,17 +169,23 @@ Change this id before publishing if you have a final App Store or Play Store bun
 
 Default verb data lives in `public/data/verbs.json`.
 
+Structured learning content lives in `public/data/learningUnits.json`. This file is the foundation for the planned Theory and Practice phases. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
+
 The app also includes embedded fallback data in `src/data/defaultData.js`. The fallback keeps the app usable if the browser cannot load `public/data/verbs.json`.
 
 Imported JSON and Settings edits only change the current browser session; they do not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.
 
 For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 
+For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
+
 ## Documentation
 
 - `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.
+- `docs/LEARNING_CONTENT_SCHEMA.md`: JSON format for learning units, theory, examples, and exercises.
+- `docs/JUNIOR_DEVELOPER_GUIDE.md`: safe first steps for new contributors.
 - `docs/PROJECT_PHASE_ROADMAP.md`: phased product and software development roadmap.
 - `docs/GITHUB_PAGES.md`: GitHub Pages and repository publishing guide.
 - `SECURITY.md`: static hosting security model, JSON import limits, and publishing checklist.

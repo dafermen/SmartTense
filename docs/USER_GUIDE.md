@@ -125,3 +125,9 @@ There are two export options:
 ## Progress
 
 Progress is local to the browser and can be reset from Settings. It counts verbs you have viewed on the current device and browser. It is not uploaded to a server and does not require an account.
+
+## Learning Content Roadmap
+
+SmartTense now includes a structured learning-content foundation for future Theory and Practice screens. This content is not shown as a separate page yet, but the project already has a Present Simple foundation unit with objectives, theory, structures, common mistakes, examples, and starter exercises.
+
+The current visible learning flow is still Home -> Individual -> Complete -> Settings. Theory and interactive Practice are planned as later phases so they can be added cleanly without overcrowding the current interface.

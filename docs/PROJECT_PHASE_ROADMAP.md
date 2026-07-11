@@ -1,35 +1,48 @@
 # SmartTense - Roadmap De Desarrollo Por Fases
 
-Este documento convierte las ideas del curso de inglés revisado en un plan incremental para SmartTense. El curso muestra una dirección clara: SmartTense puede evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoría, explicaciones, ejemplos, ejercicios, vocabulario y práctica oral/escrita.
+Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.
 
-La intención no es copiar el curso dentro de la app, sino usar su estructura pedagógica para diseñar el siguiente nivel del producto.
+La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.
+
+## Estado Ejecutivo De Fases
+
+| Fase | Estado | Entregable actual | Evidencia |
+| --- | --- | --- | --- |
+| Fase 0 - Arquitectura de contenido | Cerrada | `public/data/learningUnits.json`, validador, pruebas y esquema documentado | `npm test` con validacion de contenido |
+| Fase 1 - Theory | Pendiente | Pagina/seccion Theory renderizada desde JSON | No iniciada |
+| Fase 2 - Explicaciones inteligentes | Pendiente | Panel de explicacion por oracion | No iniciada |
+| Fase 3 - Motor de practica | Pendiente | Ejercicios interactivos con feedback | No iniciada |
+| Fase 4 - Ruta de aprendizaje | Pendiente | Home recomienda el siguiente paso dentro de una unidad | No iniciada |
+| Fase 5 - Vocabulario y contextos | Pendiente | Ejemplos y practica por contexto | No iniciada |
+| Fase 6 - Administracion de contenido | Pendiente | Authoring tools para unidades y vocabulario | No iniciada |
+| Fase 7 - Speaking, writing y revision | Pendiente | Prompts y cola de revision | No iniciada |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
 El documento revisado trabaja un nivel A2 y combina:
 
 - Objetivos claros por unidad.
-- Teoría gramatical por tiempo verbal.
+- Teoria gramatical por tiempo verbal.
 - Estructuras afirmativas, negativas, interrogativas e interrogativas negativas.
-- Respuestas cortas, reglas ortográficas, palabras señal y errores comunes.
+- Respuestas cortas, reglas ortograficas, palabras senal y errores comunes.
 - Ejemplos contextualizados en trabajo de IT, familia, rutinas, escuela/trabajo, vacaciones y movimiento.
-- Ejercicios de completar, transformar, elegir tiempo correcto, corregir errores, traducir de español a inglés y practicar speaking.
-- Temas de soporte que amplían el valor de SmartTense: preposiciones, vocabulario diario y tareas guiadas de speaking/writing.
+- Ejercicios de completar, transformar, elegir tiempo correcto, corregir errores, traducir de espanol a ingles y practicar speaking.
+- Temas de soporte que amplian el valor de SmartTense: preposiciones, vocabulario diario y tareas guiadas de speaking/writing.
 
-La oportunidad principal es que SmartTense ya genera estructuras. El siguiente paso es explicar por qué funcionan y convertirlas en práctica guiada.
+La oportunidad principal es que SmartTense ya genera estructuras. El siguiente paso es explicar por que funcionan y convertirlas en practica guiada.
 
-## Dirección Del Producto
+## Direccion Del Producto
 
-SmartTense debería evolucionar hacia un espacio de aprendizaje estructurado:
+SmartTense deberia evolucionar hacia un espacio de aprendizaje estructurado:
 
 - `Home`: progreso, recomendaciones y siguiente actividad.
-- `Theory`: teoría corta, reglas, ejemplos y errores comunes.
-- `Individual`: práctica enfocada, inicialmente afirmativa.
-- `Complete`: comparación completa de formas.
+- `Theory`: teoria corta, reglas, ejemplos y errores comunes.
+- `Individual`: practica enfocada, inicialmente afirmativa.
+- `Complete`: comparacion completa de formas.
 - `Practice`: ejercicios interactivos generados desde datos.
-- `Settings`: configuración y administración de datos/contenido.
+- `Settings`: configuracion y administracion de datos/contenido.
 
-Principio clave: cada nueva capacidad debe apoyarse en el motor gramatical y el modelo de datos existente. Evitar crear un visor estático de curso separado de SmartTense.
+Principio clave: cada nueva capacidad debe apoyarse en el motor gramatical y el modelo de datos existente. Evitar crear un visor estatico de curso separado de SmartTense.
 
 ## Fases Ejecutivas Y Tareas Operativas
 
@@ -37,93 +50,79 @@ Principio clave: cada nueva capacidad debe apoyarse en el motor gramatical y el 
 
 Objetivo ejecutivo:
 
-Crear la base para que SmartTense pueda manejar teoría, ejemplos, ejercicios, vocabulario y unidades de aprendizaje como datos estructurados.
+Crear la base para que SmartTense pueda manejar teoria, ejemplos, ejercicios, vocabulario y unidades de aprendizaje como datos estructurados.
 
 Tareas operativas:
 
-- Diseñar un esquema JSON para `learningUnits`.
-- Definir entidades: unidad, sección, objetivo, nota gramatical, estructura, ejemplo, ejercicio, vocabulario y contexto.
-- Conectar el contenido con `tenseId`, `subjectId`, `verbId`, idioma de interfaz e idioma del estudiante.
-- Crear validación similar a `src/data/validation.js`.
-- Crear contenido mínimo para Present Simple.
-- Agregar pruebas de validación.
+- Disenar un esquema JSON para `learningUnits`.
+- Definir entidades: unidad, seccion, objetivo, nota gramatical, estructura, ejemplo, ejercicio, vocabulario y contexto.
+- Conectar el contenido con `tenseIds`, idioma de interfaz e idioma del estudiante.
+- Crear validacion similar a `src/data/validation.js`.
+- Crear contenido minimo para Present Simple.
+- Agregar pruebas de validacion.
 - Documentar el esquema en `docs/LEARNING_CONTENT_SCHEMA.md`.
 
 Entregable:
 
-- SmartTense puede cargar una unidad de aprendizaje desde JSON y rechazar contenido inválido.
+- SmartTense puede cargar una unidad de aprendizaje desde JSON y rechazar contenido invalido.
 
-### Fase 1 - Sección Theory
+Estado:
+
+- Cerrada. Existe una unidad `present-simple-foundation`, un validador dedicado, pruebas automatizadas y documentacion del esquema.
+
+### Fase 1 - Seccion Theory
 
 Objetivo ejecutivo:
 
-Permitir que el usuario lea teoría breve antes de practicar.
+Permitir que el usuario lea teoria breve antes de practicar.
 
 Tareas operativas:
 
-- Agregar sección o página `Theory`.
-- Crear componentes reutilizables:
-  - objetivos de lección;
-  - explicación del tiempo verbal;
-  - estructuras;
-  - palabras señal;
-  - errores comunes;
-  - ejemplos.
+- Agregar seccion o pagina `Theory`.
+- Crear componentes reutilizables: objetivos, explicacion del tiempo verbal, estructuras, palabras senal, errores comunes y ejemplos.
 - Renderizar contenido desde JSON, no hard-coded.
-- Conectar teoría con grupos de tiempos existentes.
-- Agregar textos de interfaz en inglés/español.
-- Diseñar layout responsive para móvil.
-- Actualizar documentación.
+- Conectar teoria con grupos de tiempos existentes.
+- Agregar textos de interfaz en ingles/espanol.
+- Disenar layout responsive para movil.
+- Actualizar documentacion.
 
 Entregable:
 
-- Present Simple tiene una vista de teoría navegable desde la app.
+- Present Simple tiene una vista de teoria navegable desde la app.
 
 ### Fase 2 - Explicaciones Inteligentes
 
 Objetivo ejecutivo:
 
-Hacer que SmartTense explique cómo se construye una oración, no solo mostrarla.
+Hacer que SmartTense explique como se construye una oracion, no solo mostrarla.
 
 Tareas operativas:
 
-- Extender las filas generadas con metadatos explicativos:
-  - sujeto;
-  - auxiliar;
-  - forma verbal;
-  - complemento;
-  - motivo del tiempo verbal;
-  - forma afirmativa/negativa/interrogativa.
+- Extender las filas generadas con metadatos explicativos: sujeto, auxiliar, forma verbal, complemento, motivo del tiempo verbal y tipo de forma.
 - Agregar panel `Why this form?`.
 - Explicar errores comunes como `He doesn't works`.
 - Agregar explicaciones en el idioma del estudiante cuando existan.
-- Agregar pruebas para helpers de explicación.
+- Agregar pruebas para helpers de explicacion.
 
 Entregable:
 
-- El usuario puede abrir una oración y ver una explicación clara de su estructura.
+- El usuario puede abrir una oracion y ver una explicacion clara de su estructura.
 
-### Fase 3 - Motor De Práctica
+### Fase 3 - Motor De Practica
 
 Objetivo ejecutivo:
 
-Convertir SmartTense en una herramienta activa de práctica.
+Convertir SmartTense en una herramienta activa de practica.
 
 Tareas operativas:
 
-- Crear página `Practice`.
-- Implementar tipos de ejercicio:
-  - completar espacios;
-  - escoger el tiempo correcto;
-  - corregir errores;
-  - transformar afirmativa a negativa/interrogativa;
-  - traducción español -> inglés;
-  - respuestas cortas.
-- Crear normalización de respuestas.
+- Crear pagina `Practice`.
+- Implementar ejercicios de completar espacios, escoger tiempo correcto, corregir errores, transformar formas, traducir espanol -> ingles y respuestas cortas.
+- Crear normalizacion de respuestas.
 - Agregar feedback inmediato.
 - Guardar progreso local.
 - Generar ejercicios desde verbos, sujetos, tiempos y plantillas.
-- Agregar pruebas para scoring y validación de respuestas.
+- Agregar pruebas para scoring y validacion de respuestas.
 
 Entregable:
 
@@ -138,14 +137,9 @@ Organizar el aprendizaje en una secuencia guiada.
 Tareas operativas:
 
 - Agregar estado de unidad: no iniciada, en progreso, completada.
-- Agregar flujo: teoría -> ejemplos -> práctica -> revisión.
+- Agregar flujo: teoria -> ejemplos -> practica -> revision.
 - Actualizar Home para recomendar la siguiente actividad.
-- Crear unidades iniciales:
-  - Unidad 1: Present tenses and daily habits.
-  - Unidad 2: Past tenses.
-  - Unidad 3: Future and conditional.
-  - Unidad 4: Prepositions and movement.
-  - Unidad 5: Speaking and writing tasks.
+- Crear unidades iniciales para presente, pasado, futuro/condicional, preposiciones y speaking/writing.
 - Agregar criterios locales de completitud.
 - Agregar reset de progreso por unidad en Settings.
 
@@ -157,17 +151,11 @@ Entregable:
 
 Objetivo ejecutivo:
 
-Hacer que SmartTense genere ejemplos más cercanos a la vida real del estudiante.
+Hacer que SmartTense genere ejemplos mas cercanos a la vida real del estudiante.
 
 Tareas operativas:
 
-- Crear paquetes de vocabulario:
-  - IT work;
-  - daily habits;
-  - family routines;
-  - meetings;
-  - travel/vacation;
-  - prepositions of time/place/direction.
+- Crear paquetes de vocabulario: IT work, daily habits, family routines, meetings, travel/vacation y prepositions.
 - Conectar vocabulario con complementos y ejercicios.
 - Agregar filtros por contexto.
 - Agregar tarjetas simples de vocabulario.
@@ -176,9 +164,9 @@ Tareas operativas:
 
 Entregable:
 
-- El usuario puede escoger un contexto y ver ejemplos/prácticas adaptadas a ese contexto.
+- El usuario puede escoger un contexto y ver ejemplos/practicas adaptadas a ese contexto.
 
-### Fase 6 - Administración De Contenido
+### Fase 6 - Administracion De Contenido
 
 Objetivo ejecutivo:
 
@@ -186,45 +174,40 @@ Permitir crecer el contenido sin editar archivos JSON manualmente todo el tiempo
 
 Tareas operativas:
 
-- Extender Settings para administrar:
-  - verbos;
-  - unidades;
-  - teoría;
-  - ejercicios;
-  - vocabulario.
+- Extender Settings para administrar verbos, unidades, teoria, ejercicios y vocabulario.
 - Agregar import/export por tipo de contenido.
 - Agregar vista previa antes de guardar.
-- Agregar validación con resumen de errores.
+- Agregar validacion con resumen de errores.
 - Agregar bulk edit para metadatos de contenido.
-- Crear documentación para autores de contenido.
+- Crear documentacion para autores de contenido.
 
 Entregable:
 
 - Un administrador puede editar contenido de aprendizaje, validarlo y exportarlo como JSON.
 
-### Fase 7 - Speaking, Writing Y Revisión
+### Fase 7 - Speaking, Writing Y Revision
 
 Objetivo ejecutivo:
 
-Soportar práctica de producción, que es donde el estudiante realmente gana fluidez.
+Soportar practica de produccion, que es donde el estudiante realmente gana fluidez.
 
 Tareas operativas:
 
 - Crear tarjetas de speaking prompts.
 - Crear tarjetas de writing prompts.
-- Agregar rúbricas simples de autoevaluación.
+- Agregar rubricas simples de autoevaluacion.
 - Agregar drills con temporizador.
 - Guardar intentos localmente.
 - Agregar notas del estudiante o profesor.
-- Crear cola de revisión para errores frecuentes.
+- Crear cola de revision para errores frecuentes.
 
 Entregable:
 
-- El usuario puede completar una tarea corta de speaking/writing y guardarla para revisión.
+- El usuario puede completar una tarea corta de speaking/writing y guardarla para revision.
 
 ## Gantt Interno
 
-Fechas internas de referencia. Se pueden ajustar según prioridad, tiempo disponible y feedback del usuario.
+Fechas internas de referencia. Se pueden ajustar segun prioridad, tiempo disponible y feedback del usuario.
 
 ```mermaid
 gantt
@@ -233,13 +216,13 @@ gantt
     axisFormat  %b %d
 
     section Fundacion
-    Fase 0 - Arquitectura de contenido      :p0, 2026-07-15, 10d
-    Esquema y validacion                    :p0a, 2026-07-15, 5d
-    Contenido Present Simple                :p0b, after p0a, 5d
+    Fase 0 - Arquitectura de contenido      :done, p0, 2026-07-11, 1d
+    Esquema y validacion                    :done, p0a, 2026-07-11, 1d
+    Contenido Present Simple                :done, p0b, 2026-07-11, 1d
 
     section Teoria
-    Fase 1 - Theory                         :p1, after p0, 12d
-    Componentes de teoria                   :p1a, after p0, 6d
+    Fase 1 - Theory                         :p1, 2026-07-12, 12d
+    Componentes de teoria                   :p1a, 2026-07-12, 6d
     Vista responsive                        :p1b, after p1a, 6d
 
     section Explicaciones
@@ -279,7 +262,7 @@ gantt
 
 - Fase 0 completa.
 - Fase 1 solo con Present Simple.
-- Sin motor de práctica todavía.
+- Sin motor de practica todavia.
 
 ### Release 2 - Explain The Sentence
 
@@ -288,7 +271,7 @@ gantt
 
 ### Release 3 - Practice MVP
 
-- Fase 3 con completar espacios, transformar oración y elegir tiempo correcto.
+- Fase 3 con completar espacios, transformar oracion y elegir tiempo correcto.
 - Scoring local.
 
 ### Release 4 - Course Mode
@@ -301,16 +284,14 @@ gantt
 - Bases de Fase 5 y Fase 6.
 - Vocabulario por contexto e import/export de contenido.
 
-## Primera Implementación Recomendada
+## Siguiente Implementacion Recomendada
 
-Empezar pequeño:
+Continuar con Fase 1:
 
-1. Crear `public/data/learningUnits.json`.
-2. Crear `src/data/learningContentValidation.js`.
-3. Agregar una unidad de teoría para Present Simple.
-4. Agregar `Theory` al menú.
-5. Renderizar objetivos, explicación, estructuras, palabras señal, errores comunes y ejemplos.
-6. Dejar ejercicios interactivos para una fase posterior.
+1. Cargar `public/data/learningUnits.json` desde la app.
+2. Agregar `Theory` al menu.
+3. Renderizar objetivos, explicacion, estructuras, palabras senal, errores comunes y ejemplos.
+4. Mantener la vista responsive y compacta.
+5. Dejar ejercicios interactivos para Fase 3.
 
-Este primer paso da una nueva dirección al producto sin tocar demasiado el motor de conjugación existente.
-
+Este paso vuelve visible la nueva direccion del producto sin tocar demasiado el motor de conjugacion existente.

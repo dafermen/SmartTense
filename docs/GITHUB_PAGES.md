@@ -131,6 +131,7 @@ Important limitation:
 For GitHub Pages, keep these protections in the app itself:
 
 - Strict JSON validation in `src/data/validation.js`.
+- Strict learning-content validation in `src/data/learningContentValidation.js`.
 - Settings draft validation before local database changes are applied.
 - File type and file size checks before import.
 - No `eval`.
@@ -148,6 +149,8 @@ npm audit --audit-level=moderate
 ```
 
 Then push to `main` and verify the GitHub Actions deployment. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.
+
+If `public/data/learningUnits.json` changed, confirm the learning-content validation tests pass before pushing.
 
 ## Troubleshooting
 

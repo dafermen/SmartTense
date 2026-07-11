@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-07-11",
+  "units": [
+    {
+      "id": "present-simple-foundation",
+      "title": "Present Simple Foundation",
+      "level": "basic",
+      "focus": "Use Present Simple for habits, routines, facts, and schedules.",
+      "tenseIds": ["simplePresent"],
+      "contextTags": ["daily-habits", "it-work"],
+      "objectives": [
+        "Recognize when Present Simple is the right tense.",
+        "Build affirmative, negative, and question forms.",
+        "Avoid the common he/she/it -s mistake."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Present Simple describes habits, routines, general truths, permanent situations, and schedules.",
+            "It usually answers the question: what do you usually do?"
+          ],
+          "signalWords": ["always", "usually", "often", "sometimes", "never", "every day", "on Mondays"]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + base verb (+ s/es for he/she/it)",
+              "example": "He works as an IT engineer."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + do/does + not + base verb",
+              "example": "He does not work on Sundays."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Do/Does + subject + base verb?",
+              "example": "Does he work in IT?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "He work in IT.",
+              "right": "He works in IT.",
+              "why": "He/she/it needs -s in affirmative Present Simple."
+            },
+            {
+              "wrong": "He does not works on Sundays.",
+              "right": "He does not work on Sundays.",
+              "why": "Does already carries the third-person marker, so the main verb returns to base form."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "Dario checks his email before he starts coding.",
+              "note": "This describes a regular work routine."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "He drops off his kids at school every morning.",
+              "note": "Every morning signals a repeated habit."
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "present-simple-fill-1",
+              "kind": "fillBlank",
+              "prompt": "Dario _____ as an IT engineer.",
+              "answer": "works",
+              "explanation": "Dario is he, so the verb work becomes works."
+            },
+            {
+              "id": "present-simple-transform-1",
+              "kind": "transform",
+              "prompt": "Change to a question: He works in IT.",
+              "answer": "Does he work in IT?",
+              "explanation": "Use does + subject + base verb for he/she/it questions."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

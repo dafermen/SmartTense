@@ -14,6 +14,8 @@ SmartTense is intentionally small. Most behavior is split into these areas:
 
 The app loads editable verb data from `public/data/verbs.json`. If that request fails, it uses the embedded `DEFAULT_DATA` from `src/data/defaultData.js` so the UI can still run.
 
+The project also has the first learning-content data source in `public/data/learningUnits.json`. This content is not rendered in the UI yet; it is the source foundation for the planned Theory and Practice phases. Validate it with `src/data/learningContentValidation.js`.
+
 ## Main UI Surfaces
 
 ### Home
@@ -49,6 +51,7 @@ Complete renders the full conjugation table. Users can toggle visible sentence-f
 7. `buildRows` generates affirmative, negative, interrogative, and negative interrogative sentences.
 8. `src/learnerLanguages/` adds learner-language translations and usage notes.
 9. The same generated row model supports Home preview, Individual affirmative cards, Complete desktop table, and mobile cards.
+10. `public/data/learningUnits.json` stores future Theory/Practice content and is protected by `validateLearningContent`.
 
 ## Important Source Files
 
@@ -97,6 +100,23 @@ Contains built-in verbs, subject metadata, tense definitions, and learning level
 
 Protects the app from invalid imported JSON. Validation intentionally rejects oversized collections, unknown fields, unsupported schema versions, unsafe IDs, markup-like strings, and fields that exceed length limits.
 
+### `src/data/learningContentValidation.js`
+
+Protects structured learning content. It validates learning units, section types, grammar structures, common mistakes, examples, exercises, vocabulary, duplicate IDs, unsupported schema versions, and markup-like strings.
+
+### `public/data/learningUnits.json`
+
+Stores learning units as data. The first unit is `present-simple-foundation`, which includes:
+
+- objectives;
+- short theory;
+- structures;
+- common mistakes;
+- contextual examples;
+- starter exercises.
+
+This file is the bridge between the current conjugation trainer and the future guided learning experience.
+
 ## Scripts
 
 ```bash
@@ -143,6 +163,7 @@ Add tests when changing:
 - Conjugation output.
 - Learning level filtering.
 - JSON validation.
+- Learning content validation.
 - Learner-language translations or usage notes.
 - Import/export behavior that can be isolated from the browser.
 
@@ -180,6 +201,25 @@ See `docs/DATA_SCHEMA.md` for the accepted fields.
 
 Verb pattern classification is calculated from `base`, `past`, and `participle`. Do not store `AAA`, `ABB`, or `ABC` manually unless the data model changes later.
 
+## Adding Learning Content
+
+Learning content lives in `public/data/learningUnits.json`.
+
+1. Add one small unit at a time.
+2. Use a unique hyphenated `id`.
+3. Link `tenseIds` to existing tense IDs from `src/data/defaultData.js`.
+4. Keep theory short and example-driven.
+5. Add or update tests in `tests/learningContentValidation.test.js` when the schema changes.
+6. Update `docs/LEARNING_CONTENT_SCHEMA.md`.
+
+Run:
+
+```bash
+npm test
+```
+
+The validator rejects unknown fields, unsafe strings, unsupported section types, unsupported exercise kinds, duplicate IDs, and oversized collections.
+
 ## Security Notes
 
 SmartTense is safest when published as a static site. Imported JSON is read only inside the user's browser and never writes to server files.
@@ -189,9 +229,12 @@ Before publishing, review:
 - `SECURITY.md` for the security model and publishing checklist.
 - `public/_headers` for static hosting security headers on hosts that support it.
 - `src/data/validation.js` when adding new JSON fields.
+- `src/data/learningContentValidation.js` when adding new learning-content fields.
 - `docs/GITHUB_PAGES.md` for GitHub Pages, custom subdomains, and the Vite base path used by deployment.
 
 If a new JSON field is added, update `ALLOWED_VERB_KEYS`, `DATA_MANAGER_FIELDS`, documentation, and validation tests in the same change.
+
+If a new learning-content field is added, update `ALLOWED_UNIT_KEYS`, `ALLOWED_SECTION_KEYS`, documentation, and validation tests in the same change.
 
 ## Capacitor Notes
 
@@ -220,7 +263,8 @@ The workflow supports the repository variable `PAGES_BASE_PATH`:
 2. Choose a license and add a `LICENSE` file if the repository will be public.
 3. Replace `com.smarttense.app` in `capacitor.config.json` with the final bundle id if needed.
 4. Run `npm test` and `npm run build`.
-5. If Settings was used to edit the database, export the database JSON and intentionally copy it into `public/data/verbs.json`; then keep `src/data/defaultData.js` aligned if the fallback should change.
-6. Run `npm audit` and review dependency findings.
-7. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
-8. Run `npm run cap:sync` if native projects should include the latest web build.
+5. If learning content changed, confirm `tests/learningContentValidation.test.js` validates the bundled JSON.
+6. If Settings was used to edit the database, export the database JSON and intentionally copy it into `public/data/verbs.json`; then keep `src/data/defaultData.js` aligned if the fallback should change.
+7. Run `npm audit` and review dependency findings.
+8. If publishing the web app, enable GitHub Pages with GitHub Actions as the source.
+9. Run `npm run cap:sync` if native projects should include the latest web build.
