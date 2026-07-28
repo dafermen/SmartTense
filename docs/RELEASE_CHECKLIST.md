@@ -30,6 +30,8 @@ If Chrome is not installed, record the blocker in `docs/PHASE_EXECUTION_LOG.md` 
 - 500 synthetic verbs;
 - screens covered: Home, Theory, Practice, Individual, Complete, Production, Settings;
 - Settings pagination from `1-25` to `26-50`;
+- no horizontal overflow on Home;
+- CEFR level filter visible and contained inside the Home card;
 - quality gates `passed: true`;
 - accessibility: `hasMain`, `hasNamedNavigation`, `hasDocumentLanguage`;
 - no unnamed visible buttons;
@@ -51,6 +53,7 @@ If Chrome is not installed, record the blocker in `docs/PHASE_EXECUTION_LOG.md` 
 
 - `docs/PHASE_EXECUTION_LOG.md`: active phase, tasks, evidence, risks, next block.
 - `docs/CURRICULUM_PHASE_PLAN.md`: phase status, operational tasks, exit criteria, and internal Gantt updated when roadmap scope changes.
+- `docs/SOFTWARE_REQUIREMENTS.md`: requirement IDs, user stories, acceptance criteria, and operational backlog updated when scope changes.
 - `docs/INDEX.md`: documentation map updated when docs are added, removed, or consolidated.
 - `README.md`: commands or release behavior updated when developer workflow changes.
 - `docs/DEVELOPER_GUIDE.md`: implementation notes updated for developers.

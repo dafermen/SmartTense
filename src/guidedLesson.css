@@ -1,0 +1,262 @@
+.guided-lesson {
+  --guided-ink: #18322b;
+  --guided-green: #1f765b;
+  --guided-soft: #eef7f0;
+  --guided-warm: #f6b94b;
+  color: var(--guided-ink);
+  display: grid;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 8px 0 96px;
+}
+
+.guided-header {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.guided-header h1,
+.guided-step-card h2 {
+  margin: 0;
+}
+
+.guided-header h1 {
+  font-size: clamp(1.15rem, 4vw, 1.65rem);
+}
+
+.guided-kicker {
+  color: var(--guided-green);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+.guided-kicker { color: #8b3f22; letter-spacing: 0.025em; text-transform: none; }
+.guided-stage { animation: guided-stage-in .35s ease-out both; }
+@keyframes guided-stage-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .guided-stage { animation: none; } }
+
+.guided-back,
+.guided-controls button,
+.guided-check-button,
+.guided-summary-actions button,
+.guided-start-button {
+  min-height: 44px;
+}
+
+.guided-progress {
+  background: #dce9e2;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.guided-progress span {
+  background: linear-gradient(90deg, var(--guided-green), var(--guided-warm));
+  display: block;
+  height: 100%;
+  transition: width 240ms ease;
+}
+
+.guided-stage {
+  min-height: 430px;
+}
+
+.guided-step-card {
+  background:
+    radial-gradient(circle at top right, rgba(246, 185, 75, 0.18), transparent 38%),
+    #fff;
+  border: 1px solid #dbe7df;
+  border-radius: 22px;
+  box-shadow: 0 14px 40px rgba(24, 50, 43, 0.08);
+  display: grid;
+  gap: 18px;
+  padding: clamp(22px, 5vw, 38px);
+}
+
+.guided-check-list {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.guided-check-list li {
+  background: var(--guided-soft);
+  border-radius: 14px;
+  padding: 14px 16px 14px 42px;
+  position: relative;
+}
+
+.guided-check-list li::before {
+  color: var(--guided-green);
+  content: "OK";
+  font-size: 0.7rem;
+  font-weight: 900;
+  left: 14px;
+  position: absolute;
+  top: 16px;
+}
+
+.guided-check-list.compact {
+  gap: 8px;
+}
+
+.guided-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.guided-chip-row span {
+  background: var(--guided-soft);
+  border-radius: 999px;
+  color: var(--guided-green);
+  font-weight: 700;
+  padding: 7px 11px;
+}
+
+.guided-example-list,
+.guided-drill-list {
+  display: grid;
+  gap: 12px;
+}
+
+.guided-example-list article,
+.guided-drill-list article {
+  border-left: 4px solid var(--guided-warm);
+  padding: 10px 14px;
+}
+
+.guided-example-list p,
+.guided-drill-list p {
+  margin: 6px 0 0;
+}
+
+.guided-answer-field {
+  display: grid;
+  font-weight: 700;
+  gap: 8px;
+}
+
+.guided-answer-field select,
+.guided-step-card textarea {
+  border: 1px solid #afc8bb;
+  border-radius: 12px;
+  font: inherit;
+  min-height: 48px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.guided-step-card textarea {
+  resize: vertical;
+}
+
+.guided-feedback,
+.guided-correction {
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.guided-feedback.correct,
+.guided-correction.right {
+  background: #e7f6ec;
+  color: #18563f;
+}
+
+.guided-feedback.incorrect,
+.guided-correction.wrong {
+  background: #fff0eb;
+  color: #8c3827;
+}
+
+.guided-feedback p {
+  margin: 6px 0 0;
+}
+
+.guided-correction {
+  display: grid;
+  gap: 5px;
+}
+
+.guided-correction span {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.guided-controls {
+  background: rgba(255, 255, 255, 0.95);
+  bottom: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1.4fr;
+  padding: 12px 0 max(12px, env(safe-area-inset-bottom));
+  position: sticky;
+}
+
+.guided-controls button:not(.secondary),
+.guided-check-button,
+.guided-summary-actions button:not(.secondary),
+.guided-start-button {
+  background: var(--guided-green);
+  color: #fff;
+}
+
+.guided-controls .secondary,
+.guided-summary-actions .secondary {
+  background: #fff;
+  border: 1px solid #afc8bb;
+  color: var(--guided-ink);
+}
+
+.guided-summary {
+  text-align: center;
+}
+
+.guided-summary-actions {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.theory-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  .guided-lesson {
+    gap: 12px;
+    padding-top: 0;
+  }
+
+  .guided-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .guided-header .guided-back {
+    min-height: 38px;
+    padding-inline: 10px;
+  }
+
+  .guided-stage {
+    min-height: 400px;
+  }
+
+  .guided-step-card {
+    border-radius: 18px;
+    padding: 22px 18px;
+  }
+
+  .guided-summary-actions {
+    grid-template-columns: 1fr;
+  }
+}

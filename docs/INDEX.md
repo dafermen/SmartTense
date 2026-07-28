@@ -6,8 +6,9 @@ Este indice es el punto de entrada oficial para ubicarse en el proyecto. Si dos 
 
 1. `PHASE_EXECUTION_LOG.md` para estado real, fase activa y evidencia ejecutada.
 2. `CURRICULUM_PHASE_PLAN.md` para nuevas fases ejecutivas y tareas operativas.
-3. `PROJECT_PHASE_ROADMAP.md` para historial del producto y fases cerradas.
-4. Guias por rol para detalles de uso, desarrollo, datos y publicacion.
+3. `SOFTWARE_REQUIREMENTS.md` para requerimientos funcionales, no funcionales, historias de usuario y criterios de aceptacion.
+4. `PROJECT_PHASE_ROADMAP.md` para historial del producto y fases cerradas.
+5. Guias por rol para detalles de uso, desarrollo, datos y publicacion.
 
 ## Leer Primero
 
@@ -15,6 +16,7 @@ Este indice es el punto de entrada oficial para ubicarse en el proyecto. Si dos 
 | --- | --- |
 | Saber que fase esta activa | `PHASE_EXECUTION_LOG.md` |
 | Planear el siguiente nivel curricular A1-B2 | `CURRICULUM_PHASE_PLAN.md` |
+| Ver requerimientos, historias y criterios | `SOFTWARE_REQUIREMENTS.md` |
 | Entender que ya se construyo | `PROJECT_PHASE_ROADMAP.md` |
 | Ejecutar validacion antes de publicar | `RELEASE_CHECKLIST.md` |
 | Trabajar como desarrollador | `DEVELOPER_GUIDE.md` |
@@ -26,8 +28,10 @@ Este indice es el punto de entrada oficial para ubicarse en el proyecto. Si dos 
 ### Producto, fases y evidencia
 
 - `CURRICULUM_PHASE_PLAN.md`: guia oficial para convertir el documento de Dario en una ruta por niveles A1, A2, B1 y B2, con fases ejecutivas, tareas operativas, criterios de salida y Gantt interno.
+- `SOFTWARE_REQUIREMENTS.md`: requerimientos funcionales, no funcionales, historias de usuario, criterios de aceptacion y backlog operativo inmediato.
 - `PHASE_EXECUTION_LOG.md`: bitacora de ejecucion. Registra fase activa, tareas, evidencia, riesgos y cierre.
 - `PROJECT_PHASE_ROADMAP.md`: roadmap historico del producto, con fases ya cerradas y contexto ejecutivo.
+- `CONTENT_GAPS_A1_A2.md`: auditoria de cobertura, calidad editorial y backlog priorizado para A1/A2.
 - `RELEASE_CHECKLIST.md`: checklist obligatorio para cambios de fase, UI, datos, Settings, contenido o Production.
 
 ### Guias tecnicas
@@ -72,6 +76,7 @@ Ese comando ejecuta:
 ```bash
 git diff --check
 node --check scripts/mobile-smoke.cjs
+npm run audit:content
 npm test
 npm run build
 npm run test:e2e:mobile
@@ -85,6 +90,14 @@ No abrir una fase nueva de desarrollo sin:
 
 1. objetivo ejecutivo claro;
 2. tareas operativas detalladas;
-3. criterio de salida verificable;
-4. evidencia esperada;
-5. actualizacion de `PHASE_EXECUTION_LOG.md`.
+3. requerimientos funcionales/no funcionales relacionados;
+4. criterio de salida verificable;
+5. evidencia esperada;
+6. actualizacion de `PHASE_EXECUTION_LOG.md`.
+
+## Continuidad Entre Sesiones
+
+- `../AGENTS.md`: instrucciones breves para cualquier agente que trabaje en el repositorio.
+- `CURRENT_STATUS.md`: estado operativo actual, ultima fase implementada, validacion pendiente y siguientes pasos.
+
+Lea estos dos archivos antes del roadmap cuando retome trabajo iniciado por otra sesion.

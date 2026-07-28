@@ -6,19 +6,22 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "test": "node --test",
+    "audit:content": "node scripts/audit-learning-content.cjs",
     "test:e2e:mobile": "node scripts/mobile-smoke.cjs",
     "build": "vite build",
-    "release:check": "git diff --check && node --check scripts/mobile-smoke.cjs && npm test && npm run build && npm run test:e2e:mobile",
+    "release:check": "git diff --check && node --check scripts/mobile-smoke.cjs && npm run audit:content && npm run audit:translations && npm test && npm run build && npm run test:e2e:mobile",
     "preview": "vite preview --host 127.0.0.1",
     "cap:sync": "npm run build && cap sync",
     "cap:open:ios": "cap open ios",
-    "cap:open:android": "cap open android"
+    "cap:open:android": "cap open android",
+    "audit:translations": "node scripts/audit-spanish-guide.cjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",
     "@capacitor/cli": "^8.4.1",
     "@capacitor/core": "^8.4.1",
     "@capacitor/ios": "^8.4.1",
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
     "@vitejs/plugin-react": "6.0.3",
     "react": "19.2.7",
     "react-dom": "19.2.7",

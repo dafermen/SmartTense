@@ -20,7 +20,7 @@ Settings can import and export this same JSON shape through the Learning content
 
 ```json
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "updatedAt": "2026-07-11",
   "contexts": [],
   "units": []
@@ -29,7 +29,7 @@ Settings can import and export this same JSON shape through the Learning content
 
 Allowed root fields:
 
-- `schemaVersion`: optional integer. Current maximum is `2`.
+- `schemaVersion`: optional integer. Current maximum is `3`.
 - `updatedAt`: optional non-empty string.
 - `contexts`: optional non-empty array when context filtering is used.
 - `units`: required non-empty array of learning units.
@@ -57,10 +57,25 @@ Rules:
   "id": "present-simple-foundation",
   "title": "Present Simple Foundation",
   "level": "basic",
+  "cefrLevel": "A1",
+  "unitOrder": 1,
+  "prerequisiteUnitIds": [],
   "focus": "Use Present Simple for habits, routines, facts, and schedules.",
   "tenseIds": ["simplePresent"],
   "contextTags": ["daily-habits", "it-work"],
   "objectives": ["Recognize when Present Simple is the right tense."],
+  "learnerContext": "daily life, family, IT work",
+  "grammarBlocks": [],
+  "controlledPractice": [],
+  "contrastPractice": [],
+  "mistakeCorrection": [],
+  "translationPractice": [],
+  "pronunciationDrills": [],
+  "productionTask": {
+    "prompt": "Describe a routine sentence in Present Simple and one in Present Continuous.",
+    "requiredStructures": ["affirmative", "negative", "questionPositive"],
+    "checklist": ["Uses the correct verb form", "Uses time context"]
+  },
   "sections": []
 }
 ```
@@ -68,10 +83,28 @@ Rules:
 Rules:
 
 - `id` must be unique and use letters, numbers, or hyphens.
-- `level` must be `basic`, `intermediate`, or `advanced`.
+- `level` must be `basic`, `intermediate`, or `advanced`. This is the internal practice difficulty used by tense filters.
+- `cefrLevel` must be `A1`, `A2`, `B1`, or `B2` for schema version `3`. This is the curricular level used for course planning.
+- `unitOrder` must be a positive integer for schema version `3`. It controls recommended order inside a CEFR level.
+- `prerequisiteUnitIds` is optional and may be an empty array. Every listed ID must point to another unit in the same payload.
 - `tenseIds` links the unit to tense metadata from `src/data/defaultData.js`.
 - `contextTags` controls which context buttons are shown for the unit.
 - `objectives` are learner-facing goals.
+- `learnerContext` is optional. It is a short learner-facing label (string or array of strings) that helps surface the unit's real-world scenario.
+- `grammarBlocks` is optional and stores grammar structures for the unit.
+- `controlledPractice` is optional. It stores practice exercises.
+- `contrastPractice` is optional. It stores tense-comparison / selection practice.
+- `mistakeCorrection` is optional. It stores correction-focused exercises.
+- `translationPractice` is optional. It stores Spanish-to-English translation practice exercises.
+- `pronunciationDrills` is optional. Each item has:
+  - `id` (required): stable identifier
+  - `text` (required): phrase/sentence for pronunciation focus
+  - `focus` (optional): coaching tag
+  - `note` (optional): optional guidance
+- `productionTask` is optional and stores a guided speaking/writing prompt:
+  - `prompt` (required)
+  - `requiredStructures` (optional array): items expected in the student output
+  - `checklist` (optional array): review points for teacher/student self-check
 - `sections` holds the real teaching and practice content.
 
 ## Section Types
@@ -230,7 +263,9 @@ The validator rejects:
 - Unknown context references.
 - Unknown fields.
 - Unsupported schema versions.
-- Unsupported levels, section types, structure forms, or exercise kinds.
+- Unsupported internal levels, CEFR levels, section types, structure forms, or exercise kinds.
+- Unknown prerequisite unit IDs.
+- Duplicate `unitOrder` values inside the same `cefrLevel`.
 - Strings that are empty, too long, or contain `<` or `>`.
 - Oversized collections.
 

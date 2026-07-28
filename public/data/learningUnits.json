@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "updatedAt": "2026-07-11",
   "contexts": [
     {
@@ -35,12 +35,454 @@
   ],
   "units": [
     {
+      "id": "be-have-foundation",
+      "title": "Be and Have Foundation",
+      "level": "basic",
+      "cefrLevel": "A1",
+      "unitOrder": 1,
+      "prerequisiteUnitIds": [],
+      "focus": "Use be, have, and there is/are to introduce people, things, places, and basic situations.",
+      "tenseIds": [
+        "simplePresent"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "family-routines",
+        "it-work"
+      ],
+      "objectives": [
+        "Introduce yourself and other people with be.",
+        "Use have to talk about possession, family, and simple work items.",
+        "Use there is and there are to describe places and objects."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Use be for identity, age, feelings, jobs, and location.",
+            "Use have for possession, family, schedules, and things you use.",
+            "Use there is and there are to say that something exists in a place."
+          ],
+          "signalWords": [
+            "am",
+            "is",
+            "are",
+            "have",
+            "has",
+            "there is",
+            "there are"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + am/is/are + complement",
+              "example": "I am a student."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + have/has + noun",
+              "example": "She has a laptop."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "There is/are + noun + place",
+              "example": "There is a notebook on the desk."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + am/is/are + not + complement",
+              "example": "They are not at home."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Am/Is/Are + subject + complement?",
+              "example": "Are you ready?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "I am have a laptop.",
+              "right": "I have a laptop.",
+              "why": "Do not use be before have when have means possession."
+            },
+            {
+              "wrong": "She have two children.",
+              "right": "She has two children.",
+              "why": "Use has with he, she, and it."
+            },
+            {
+              "wrong": "There are a meeting today.",
+              "right": "There is a meeting today.",
+              "why": "Use there is with one thing and there are with plural things."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "daily-habits",
+              "sentence": "I am ready for class.",
+              "note": "Be describes a current state."
+            },
+            {
+              "context": "family-routines",
+              "sentence": "She has two children.",
+              "note": "Has shows possession or family information."
+            },
+            {
+              "context": "it-work",
+              "sentence": "There is a laptop on the desk.",
+              "note": "There is introduces one object in a place."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "They are at home after school.",
+              "note": "Are links the subject to a location."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "ready",
+              "meaning": "prepared for an activity",
+              "example": "I am ready for class.",
+              "context": "daily-habits"
+            },
+            {
+              "term": "laptop",
+              "meaning": "a portable computer",
+              "example": "She has a laptop.",
+              "context": "it-work"
+            },
+            {
+              "term": "children",
+              "meaning": "sons or daughters",
+              "example": "He has two children.",
+              "context": "family-routines"
+            },
+            {
+              "term": "desk",
+              "meaning": "a table used for work or study",
+              "example": "There is a notebook on the desk.",
+              "context": "it-work"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "be-have-fill-1",
+              "kind": "fillBlank",
+              "prompt": "I _____ ready for class.",
+              "answer": "am",
+              "options": [
+                "am",
+                "is",
+                "are",
+                "have",
+                "has"
+              ],
+              "explanation": "Use am with I.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "be-have-fill-2",
+              "kind": "fillBlank",
+              "prompt": "She _____ a laptop.",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "is",
+                "are",
+                "am"
+              ],
+              "explanation": "Use has with she.",
+              "context": "it-work"
+            },
+            {
+              "id": "be-have-fill-3",
+              "kind": "fillBlank",
+              "prompt": "We _____ ready for the meeting now.",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "am",
+                "have",
+                "has"
+              ],
+              "explanation": "Use are with plural subjects.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "be-have-fill-4",
+              "kind": "fillBlank",
+              "prompt": "She _____ a printer at work.",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "is",
+                "are",
+                "had"
+              ],
+              "explanation": "Use has with singular third-person subjects.",
+              "context": "it-work"
+            },
+            {
+              "id": "be-have-fill-5",
+              "kind": "fillBlank",
+              "prompt": "They _____ three children.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use have with plural subjects.",
+              "context": "family-routines"
+            },
+            {
+              "id": "be-have-fill-6",
+              "kind": "fillBlank",
+              "prompt": "There _____ a whiteboard in the meeting room.",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "has",
+                "have",
+                "was"
+              ],
+              "explanation": "Use there is with a singular object.",
+              "context": "it-work"
+            },
+            {
+              "id": "be-have-fill-7",
+              "kind": "fillBlank",
+              "prompt": "My parents _____ three dogs.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use have with plural subjects.",
+              "context": "family-routines"
+            },
+            {
+              "id": "be-have-fill-8",
+              "kind": "fillBlank",
+              "prompt": "Dad and I _____ in the same building.",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use are with plural subjects.",
+              "context": "family-routines"
+            },
+            {
+              "id": "be-have-transform-1",
+              "kind": "transform",
+              "prompt": "Change to a question: You are ready.",
+              "answer": "Are you ready?",
+              "explanation": "Move are before the subject to form a question.",
+              "context": "daily-habits",
+              "options": [
+                "Are you ready?",
+                "Do you ready?",
+                "Is you ready?",
+                "You are ready?"
+              ]
+            },
+            {
+              "id": "be-have-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: I am have a phone.",
+              "answer": "I have a phone.",
+              "options": [
+                "I am have a phone.",
+                "I has a phone.",
+                "I have a phone.",
+                "I are have a phone.",
+                "I had a phone."
+              ],
+              "explanation": "Use have alone for possession.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "be-have-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: There is a notebook on the desk.",
+              "answer": "there is",
+              "options": [
+                "there is",
+                "there are",
+                "has",
+                "is"
+              ],
+              "explanation": "There is introduces one thing in a place.",
+              "context": "it-work"
+            },
+            {
+              "id": "be-have-fill-7-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "My parents _____ three dogs. (Daily habits)",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use have with plural subjects. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "be-have-fill-4-family-routines-1",
+              "kind": "fillBlank",
+              "prompt": "She _____ a printer at work. (Family routines)",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "is",
+                "are",
+                "had"
+              ],
+              "explanation": "Use has with singular third-person subjects. Family routines context.",
+              "context": "family-routines"
+            },
+            {
+              "id": "be-have-transform-1-family-routines-2",
+              "kind": "transform",
+              "prompt": "Change to a question: You are ready. (Family routines)",
+              "answer": "Are you ready?",
+              "explanation": "Move are before the subject to form a question. Family routines context.",
+              "context": "family-routines",
+              "options": [
+                "Are you ready?",
+                "Do you ready?",
+                "Is you ready?",
+                "You are ready?"
+              ]
+            },
+            {
+              "id": "be-have-fill-8-it-work-1",
+              "kind": "fillBlank",
+              "prompt": "Dad and I _____ in the same building. (IT work)",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use are with plural subjects. IT work context.",
+              "context": "it-work"
+            },
+            {
+              "id": "be-have-translation-1",
+              "kind": "translation",
+              "prompt": "Translate: Tengo una computadora en casa.",
+              "answer": "I have a computer at home.",
+              "options": [
+                "I have a computer at home.",
+                "I am have a computer at home.",
+                "I has a computer at home.",
+                "I have computer in home."
+              ],
+              "explanation": "Use have with I and at home for the location.",
+              "context": "daily-habits"
+            }
+          ]
+        }
+      ],
+      "learnerContext": [
+        "personal introductions",
+        "family and possessions",
+        "basic work situations"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a1-be-have-pronunciation-be",
+          "text": "I am ready and she is at home.",
+          "focus": "Say am and is clearly",
+          "note": "Repeat in two short parts, then as one sentence."
+        },
+        {
+          "id": "a1-be-have-pronunciation-have",
+          "text": "I have a laptop and he has a phone.",
+          "focus": "Contrast have and has",
+          "note": "Stress laptop and phone."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Write three short sentences about who you are, something you have, and something in your home or workplace.",
+        "requiredStructures": [
+          "one sentence with be",
+          "one sentence with have or has",
+          "one sentence with there is or there are"
+        ],
+        "checklist": [
+          "Keep each sentence short.",
+          "Check am, is, are, have, or has.",
+          "Read the three sentences aloud."
+        ]
+      }
+    },
+    {
       "id": "present-simple-foundation",
       "title": "Present Simple Foundation",
       "level": "basic",
+      "cefrLevel": "A1",
+      "unitOrder": 2,
+      "prerequisiteUnitIds": [
+        "be-have-foundation"
+      ],
       "focus": "Use Present Simple for habits, routines, facts, and schedules.",
-      "tenseIds": ["simplePresent"],
-      "contextTags": ["daily-habits", "it-work"],
+      "tenseIds": [
+        "simplePresent"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "it-work",
+        "meetings",
+        "family-routines"
+      ],
       "objectives": [
         "Recognize when Present Simple is the right tense.",
         "Build affirmative, negative, and question forms.",
@@ -55,7 +497,15 @@
             "Present Simple describes habits, routines, general truths, permanent situations, and schedules.",
             "It usually answers the question: what do you usually do?"
           ],
-          "signalWords": ["always", "usually", "often", "sometimes", "never", "every day", "on Mondays"]
+          "signalWords": [
+            "always",
+            "usually",
+            "often",
+            "sometimes",
+            "never",
+            "every day",
+            "on Mondays"
+          ]
         },
         {
           "id": "structures",
@@ -186,6 +636,13 @@
               "kind": "fillBlank",
               "prompt": "Dario _____ as an IT engineer.",
               "answer": "works",
+              "options": [
+                "works",
+                "work",
+                "is",
+                "are",
+                "did"
+              ],
               "explanation": "Dario is he, so the verb work becomes works.",
               "context": "it-work"
             },
@@ -195,13 +652,25 @@
               "prompt": "Change to a question: He works in IT.",
               "answer": "Does he work in IT?",
               "explanation": "Use does + subject + base verb for he/she/it questions.",
-              "context": "it-work"
+              "context": "it-work",
+              "options": [
+                "Does he work in IT?",
+                "Do he work in IT?",
+                "Does he works in IT?",
+                "Is he work in IT?"
+              ]
             },
             {
               "id": "present-simple-choose-1",
               "kind": "chooseTense",
               "prompt": "Choose the tense: Dario checks his email every morning.",
               "answer": "simple present",
+              "options": [
+                "simple present",
+                "simple past",
+                "present continuous",
+                "present perfect"
+              ],
               "explanation": "Every morning signals a repeated routine, so Simple Present is the best tense.",
               "context": "daily-habits"
             },
@@ -210,6 +679,13 @@
               "kind": "fillBlank",
               "prompt": "She _____ the planning meeting every Tuesday.",
               "answer": "joins",
+              "options": [
+                "joins",
+                "join",
+                "joined",
+                "goes",
+                "is"
+              ],
               "explanation": "She needs the -s form in affirmative Present Simple.",
               "context": "meetings"
             },
@@ -218,8 +694,2629 @@
               "kind": "fillBlank",
               "prompt": "He _____ up his kids after school.",
               "answer": "picks",
+              "options": [
+                "picks",
+                "pick",
+                "picked",
+                "is",
+                "are"
+              ],
               "explanation": "He needs the -s form: picks up.",
               "context": "family-routines"
+            },
+            {
+              "id": "present-simple-fill-2",
+              "kind": "fillBlank",
+              "prompt": "She _____ the sprint report every Friday.",
+              "answer": "writes",
+              "options": [
+                "writes",
+                "write",
+                "wrote",
+                "is",
+                "does"
+              ],
+              "explanation": "She needs the -s form in affirmative Present Simple.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-simple-fill-3",
+              "kind": "fillBlank",
+              "prompt": "I _____ breakfast at 7 a.m.",
+              "answer": "eat",
+              "options": [
+                "eat",
+                "eats",
+                "ate",
+                "are",
+                "have"
+              ],
+              "explanation": "With I, use the base form in Present Simple.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-simple-fill-4",
+              "kind": "fillBlank",
+              "prompt": "My parents _____ dinner together on Sundays.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "is",
+                "are",
+                "had"
+              ],
+              "explanation": "Plural subject uses have in Present Simple.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-simple-fill-5",
+              "kind": "fillBlank",
+              "prompt": "The developers _____ a stand-up meeting every morning.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "are",
+                "is"
+              ],
+              "explanation": "Use a plural subject with base verb form in Present Simple.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-simple-fill-6",
+              "kind": "fillBlank",
+              "prompt": "He _____ a workout before dinner.",
+              "answer": "does",
+              "options": [
+                "does",
+                "do",
+                "did",
+                "is",
+                "has"
+              ],
+              "explanation": "Use does with a singular third-person subject.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-simple-fill-7",
+              "kind": "fillBlank",
+              "prompt": "They _____ the logs at the end of each shift.",
+              "answer": "review",
+              "options": [
+                "review",
+                "reviews",
+                "reviewed",
+                "is",
+                "are"
+              ],
+              "explanation": "Use base form with plural subjects in affirmative Present Simple.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-simple-fill-all-1",
+              "kind": "fillBlank",
+              "prompt": "The team _____ a backup plan before each deployment.",
+              "answer": "prepares",
+              "options": [
+                "prepares",
+                "prepare",
+                "prepared",
+                "is",
+                "are"
+              ],
+              "explanation": "Use the third-person singular with team because it is the subject here.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-simple-fill-family-1-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "He _____ up his kids after school. (Daily habits)",
+              "answer": "picks",
+              "options": [
+                "picks",
+                "pick",
+                "picked",
+                "is",
+                "are"
+              ],
+              "explanation": "He needs the -s form: picks up. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-simple-fill-4-daily-habits-2",
+              "kind": "fillBlank",
+              "prompt": "My parents _____ dinner together on Sundays. (Daily habits)",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "is",
+                "are",
+                "had"
+              ],
+              "explanation": "Plural subject uses have in Present Simple. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-simple-meetings-2",
+              "kind": "fillBlank",
+              "prompt": "The project manager _____ the meeting every Monday.",
+              "answer": "leads",
+              "options": [
+                "leads",
+                "lead",
+                "is leading",
+                "led"
+              ],
+              "explanation": "Use leads with the third-person singular subject the project manager.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-simple-meetings-3",
+              "kind": "chooseTense",
+              "prompt": "Our team usually _____ at 9 a.m.",
+              "answer": "meets",
+              "options": [
+                "meets",
+                "is meeting",
+                "meet",
+                "met"
+              ],
+              "explanation": "Usually signals a repeated schedule, so use Present Simple.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-simple-meetings-4",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: She schedule the weekly meeting.",
+              "answer": "She schedules the weekly meeting.",
+              "options": [
+                "She schedules the weekly meeting.",
+                "She schedule the weekly meeting.",
+                "She is schedules the weekly meeting.",
+                "She scheduling the weekly meeting."
+              ],
+              "explanation": "Add -s to schedule with she in Present Simple.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-simple-meetings-5",
+              "kind": "translation",
+              "prompt": "Translate: Nosotros revisamos la agenda antes de la reunion.",
+              "answer": "We review the agenda before the meeting.",
+              "options": [
+                "We review the agenda before the meeting.",
+                "We reviews the agenda before the meeting.",
+                "We are review the agenda before the meeting.",
+                "We review the agenda after the meeting."
+              ],
+              "explanation": "Use the base verb review with we and before for the sequence.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-simple-family-3",
+              "kind": "fillBlank",
+              "prompt": "My father _____ up the children after school.",
+              "answer": "picks",
+              "options": [
+                "picks",
+                "pick",
+                "is pick",
+                "picking"
+              ],
+              "explanation": "Use picks with the third-person singular subject my father.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-simple-family-4",
+              "kind": "transform",
+              "prompt": "Change to a question: Your sister prepares dinner.",
+              "answer": "Does your sister prepare dinner?",
+              "options": [
+                "Does your sister prepare dinner?",
+                "Do your sister prepare dinner?",
+                "Does your sister prepares dinner?",
+                "Is your sister prepare dinner?"
+              ],
+              "explanation": "Use does and return prepare to its base form.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-simple-family-5",
+              "kind": "translation",
+              "prompt": "Translate: Mis padres no trabajan los domingos.",
+              "answer": "My parents do not work on Sundays.",
+              "options": [
+                "My parents do not work on Sundays.",
+                "My parents does not work on Sundays.",
+                "My parents are not work on Sundays.",
+                "My parents do not works on Sundays."
+              ],
+              "explanation": "Use do not with the plural subject parents and the base verb work.",
+              "context": "family-routines"
+            }
+          ]
+        }
+      ],
+      "learnerContext": [
+        "daily routines",
+        "family habits",
+        "simple work schedules"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a1-present-simple-pronunciation-s",
+          "text": "He works in IT and she starts at eight.",
+          "focus": "Keep the final -s audible",
+          "note": "Repeat works and starts before the full sentence."
+        },
+        {
+          "id": "a1-present-simple-pronunciation-question",
+          "text": "Does she work on Mondays?",
+          "focus": "Say does lightly and stress work",
+          "note": "Do not add -s to work after does."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Describe three parts of your normal day and ask one question about another person's routine.",
+        "requiredStructures": [
+          "two affirmative routine sentences",
+          "one negative sentence",
+          "one question with do or does"
+        ],
+        "checklist": [
+          "Use Present Simple in every sentence.",
+          "Check the final -s with he or she.",
+          "Say the question aloud."
+        ]
+      }
+    },
+    {
+      "id": "personal-information-questions",
+      "title": "Personal Information and Basic Questions",
+      "level": "basic",
+      "cefrLevel": "A1",
+      "unitOrder": 3,
+      "prerequisiteUnitIds": [
+        "present-simple-foundation"
+      ],
+      "focus": "Ask and answer basic personal questions about name, origin, job, family, and daily life.",
+      "tenseIds": [
+        "simplePresent"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "family-routines",
+        "meetings"
+      ],
+      "objectives": [
+        "Ask simple personal questions with be, do, and wh- words.",
+        "Answer basic questions about identity, origin, work, and family.",
+        "Use short polite questions in everyday introductions."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Use personal questions to start simple conversations and exchange basic information.",
+            "Use be questions for identity, origin, age, job, and location.",
+            "Use do questions for habits, routines, and simple daily actions."
+          ],
+          "signalWords": [
+            "what",
+            "where",
+            "who",
+            "how",
+            "do",
+            "does",
+            "are",
+            "is"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "questionPositive",
+              "pattern": "Wh-word + am/is/are + subject + complement?",
+              "example": "Where are you from?"
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Wh-word + do/does + subject + base verb?",
+              "example": "What do you do every morning?"
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + am/is/are + short answer",
+              "example": "I am from Colombia."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + simple present answer",
+              "example": "I work in IT."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + do/does + not + base verb",
+              "example": "She does not work on Sundays."
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "Where you are from?",
+              "right": "Where are you from?",
+              "why": "In be questions, put am/is/are before the subject."
+            },
+            {
+              "wrong": "What do you works?",
+              "right": "What do you do?",
+              "why": "Use do as the main verb for job questions, and keep the base form after do."
+            },
+            {
+              "wrong": "Does she has children?",
+              "right": "Does she have children?",
+              "why": "After does, the main verb returns to the base form."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "daily-habits",
+              "sentence": "What do you do every morning?",
+              "note": "Use do to ask about a regular action."
+            },
+            {
+              "context": "family-routines",
+              "sentence": "Does she have children?",
+              "note": "Use does for he, she, or it questions."
+            },
+            {
+              "context": "meetings",
+              "sentence": "Where are you from?",
+              "note": "Use are before you in a be question."
+            },
+            {
+              "context": "meetings",
+              "sentence": "I work in IT.",
+              "note": "A short answer can use Simple Present."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "from",
+              "meaning": "used to say origin or place",
+              "example": "I am from Colombia.",
+              "context": "meetings"
+            },
+            {
+              "term": "job",
+              "meaning": "the work someone does",
+              "example": "What is your job?",
+              "context": "meetings"
+            },
+            {
+              "term": "morning",
+              "meaning": "the early part of the day",
+              "example": "What do you do every morning?",
+              "context": "daily-habits"
+            },
+            {
+              "term": "children",
+              "meaning": "sons or daughters",
+              "example": "Does she have children?",
+              "context": "family-routines"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "personal-info-transform-1",
+              "kind": "transform",
+              "prompt": "Change to a question: You are from Colombia.",
+              "answer": "Are you from Colombia?",
+              "explanation": "Move are before you to form a be question.",
+              "context": "meetings",
+              "options": [
+                "Are you from Colombia?",
+                "Do you from Colombia?",
+                "Is you from Colombia?",
+                "You are from Colombia?"
+              ]
+            },
+            {
+              "id": "personal-info-fill-1",
+              "kind": "fillBlank",
+              "prompt": "Where _____ you from?",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "do"
+              ],
+              "explanation": "Use are with you in be questions.",
+              "context": "meetings"
+            },
+            {
+              "id": "personal-info-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: Does she has children?",
+              "answer": "Does she have children?",
+              "options": [
+                "Does she has children?",
+                "Do she have children?",
+                "Does she having children?",
+                "Does she have children?",
+                "Does she had children?"
+              ],
+              "explanation": "After does, use the base form have.",
+              "context": "family-routines"
+            },
+            {
+              "id": "personal-info-translation-1",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia.",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin.",
+              "context": "meetings",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: What do you do every morning?",
+              "answer": "simple present question",
+              "options": [
+                "simple present question",
+                "simple past question",
+                "present continuous question",
+                "modal question"
+              ],
+              "explanation": "Do + subject + base verb asks about a routine in Simple Present.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "personal-info-fill-1-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "Where _____ you from? (Daily habits)",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "do"
+              ],
+              "explanation": "Use are with you in be questions. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-2",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-fill-1-daily-habits-3",
+              "kind": "fillBlank",
+              "prompt": "Where _____ you from? (Daily habits)",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "do"
+              ],
+              "explanation": "Use are with you in be questions. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-4",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-fill-1-family-routines-1",
+              "kind": "fillBlank",
+              "prompt": "Where _____ you from? (Family routines)",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "do"
+              ],
+              "explanation": "Use are with you in be questions. Family routines context.",
+              "context": "family-routines"
+            },
+            {
+              "id": "personal-info-choose-1-family-routines-2",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: What do you do every morning? (Family routines)",
+              "answer": "simple present question",
+              "options": [
+                "simple present question",
+                "simple past question",
+                "present continuous question",
+                "modal question"
+              ],
+              "explanation": "Do + subject + base verb asks about a routine in Simple Present. Family routines context.",
+              "context": "family-routines"
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-2-family-routines-3",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits) (Family routines)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context. Family routines context.",
+              "context": "family-routines",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-4-family-routines-4",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits) (Family routines)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context. Family routines context.",
+              "context": "family-routines",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-2-meetings-1",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits) (Meetings)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            },
+            {
+              "id": "personal-info-translation-1-daily-habits-4-meetings-2",
+              "kind": "translation",
+              "prompt": "Translate: Soy de Colombia. (Daily habits) (Meetings)",
+              "answer": "I am from Colombia.",
+              "explanation": "Use am with I and from for origin. Daily habits context. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "I am from Colombia.",
+                "I is from Colombia.",
+                "I am of Colombia.",
+                "Am I from Colombia."
+              ]
+            }
+          ]
+        }
+      ],
+      "learnerContext": [
+        "introductions",
+        "family conversations",
+        "first meetings"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a1-personal-info-pronunciation-origin",
+          "text": "Where are you from?",
+          "focus": "Link where are naturally",
+          "note": "Repeat the question and answer with your country."
+        },
+        {
+          "id": "a1-personal-info-pronunciation-work",
+          "text": "What do you do?",
+          "focus": "Keep both uses of do short",
+          "note": "Answer with I work or I study."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Introduce yourself in three sentences and write two polite questions for a new classmate or coworker.",
+        "requiredStructures": [
+          "one sentence with be",
+          "one sentence about work or study",
+          "two personal questions"
+        ],
+        "checklist": [
+          "Put am, is, or are before the subject in be questions.",
+          "Use do or does for action questions.",
+          "Read your introduction aloud."
+        ]
+      }
+    },
+    {
+      "id": "a2-present-continuous-actions",
+      "title": "Present Continuous Actions",
+      "level": "basic",
+      "cefrLevel": "A2",
+      "unitOrder": 1,
+      "prerequisiteUnitIds": [
+        "personal-information-questions"
+      ],
+      "focus": "Use Present Continuous for actions happening now, temporary situations, and current plans.",
+      "tenseIds": [
+        "presentContinuous"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "it-work",
+        "meetings"
+      ],
+      "learnerContext": [
+        "daily routines",
+        "IT work",
+        "online meetings"
+      ],
+      "objectives": [
+        "Recognize actions happening now.",
+        "Build be + verb-ing forms.",
+        "Avoid mixing Present Simple and Present Continuous."
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a2-continuous-pronunciation-ing",
+          "text": "She is working on the project right now.",
+          "focus": "Keep the final -ing clear",
+          "note": "Repeat slowly, then at natural speed."
+        },
+        {
+          "id": "a2-continuous-pronunciation-contraction",
+          "text": "They aren't joining the meeting today.",
+          "focus": "Link they and aren't naturally",
+          "note": "Do not add an extra vowel between words."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Describe three things happening around you or at work right now.",
+        "requiredStructures": [
+          "be + verb-ing",
+          "one affirmative sentence",
+          "one negative sentence"
+        ],
+        "checklist": [
+          "Use am, is, or are before every -ing verb.",
+          "Include a time marker such as now or today.",
+          "Read the answer aloud once."
+        ]
+      },
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Present Continuous describes actions happening now or around now.",
+            "It also describes temporary situations and current arrangements."
+          ],
+          "signalWords": [
+            "now",
+            "right now",
+            "today",
+            "this week",
+            "at the moment"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + am/is/are + verb-ing",
+              "example": "She is joining the meeting now."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + am/is/are + not + verb-ing",
+              "example": "They are not working from home today."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Am/Is/Are + subject + verb-ing?",
+              "example": "Are you reviewing the report?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "She working now.",
+              "right": "She is working now.",
+              "why": "Present Continuous needs be before the -ing verb."
+            },
+            {
+              "wrong": "They are work today.",
+              "right": "They are working today.",
+              "why": "Use the -ing form after am, is, or are."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "Dario is fixing a bug right now.",
+              "note": "Right now shows an action in progress."
+            },
+            {
+              "context": "meetings",
+              "sentence": "We are joining the planning meeting today.",
+              "note": "Today can describe a temporary current plan."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "She is studying after dinner this week.",
+              "note": "This week shows a temporary routine."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "right now",
+              "meaning": "at this exact moment",
+              "example": "He is coding right now.",
+              "context": "it-work"
+            },
+            {
+              "term": "this week",
+              "meaning": "during the current week",
+              "example": "We are testing this week.",
+              "context": "it-work"
+            },
+            {
+              "term": "at the moment",
+              "meaning": "now or around now",
+              "example": "They are busy at the moment.",
+              "context": "meetings"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "present-continuous-fill-1",
+              "kind": "fillBlank",
+              "prompt": "She _____ joining the meeting now.",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use is with she before the -ing verb.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-continuous-fill-2",
+              "kind": "fillBlank",
+              "prompt": "They _____ debugging this bug right now.",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "have"
+              ],
+              "explanation": "Use are with plural subjects in Present Continuous.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-continuous-fill-3",
+              "kind": "fillBlank",
+              "prompt": "I _____ eating dinner at 7 pm.",
+              "answer": "am",
+              "options": [
+                "am",
+                "is",
+                "are",
+                "have",
+                "has"
+              ],
+              "explanation": "Use am with I in Present Continuous.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-continuous-fill-4",
+              "kind": "fillBlank",
+              "prompt": "She _____ writing the release notes now.",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "was",
+                "have",
+                "has"
+              ],
+              "explanation": "Use is with she for actions in progress.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-continuous-fill-5",
+              "kind": "fillBlank",
+              "prompt": "We _____ testing the system right now.",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use are with plural subjects in Present Continuous.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-continuous-fill-6",
+              "kind": "fillBlank",
+              "prompt": "I _____ updating my profile right now.",
+              "answer": "am",
+              "options": [
+                "am",
+                "is",
+                "are",
+                "was",
+                "had"
+              ],
+              "explanation": "Use am with I when the action is happening now.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-continuous-transform-1",
+              "kind": "transform",
+              "prompt": "Change to negative: They are working today.",
+              "answer": "They are not working today.",
+              "explanation": "Place not after are.",
+              "context": "it-work",
+              "options": [
+                "They are not working today.",
+                "They not are working today.",
+                "They do not working today.",
+                "They are not work today."
+              ]
+            },
+            {
+              "id": "present-continuous-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: Dario is fixing a bug right now.",
+              "answer": "present continuous",
+              "options": [
+                "present continuous",
+                "present perfect",
+                "simple past",
+                "simple present"
+              ],
+              "explanation": "Right now points to an action in progress.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-continuous-fill-4-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "She _____ writing the release notes now. (Daily habits)",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "was",
+                "have",
+                "has"
+              ],
+              "explanation": "Use is with she for actions in progress. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-continuous-transform-1-daily-habits-2",
+              "kind": "transform",
+              "prompt": "Change to negative: They are working today. (Daily habits)",
+              "answer": "They are not working today.",
+              "explanation": "Place not after are. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "They are not working today.",
+                "They not are working today.",
+                "They do not working today.",
+                "They are not work today."
+              ]
+            },
+            {
+              "id": "present-continuous-fill-1-daily-habits-3",
+              "kind": "fillBlank",
+              "prompt": "She _____ joining the meeting now. (Daily habits)",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use is with she before the -ing verb. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-continuous-fill-3-meetings-1",
+              "kind": "fillBlank",
+              "prompt": "I _____ eating dinner at 7 pm. (Meetings)",
+              "answer": "am",
+              "options": [
+                "am",
+                "is",
+                "are",
+                "have",
+                "has"
+              ],
+              "explanation": "Use am with I in Present Continuous. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-continuous-fill-5-meetings-2",
+              "kind": "fillBlank",
+              "prompt": "We _____ testing the system right now. (Meetings)",
+              "answer": "are",
+              "options": [
+                "are",
+                "is",
+                "was",
+                "were",
+                "has"
+              ],
+              "explanation": "Use are with plural subjects in Present Continuous. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-continuous-transform-1-meetings-3",
+              "kind": "transform",
+              "prompt": "Change to negative: They are working today. (Meetings)",
+              "answer": "They are not working today.",
+              "explanation": "Place not after are. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "They are not working today.",
+                "They not are working today.",
+                "They do not working today.",
+                "They are not work today."
+              ]
+            },
+            {
+              "id": "present-continuous-fill-4-daily-habits-1-meetings-4",
+              "kind": "fillBlank",
+              "prompt": "She _____ writing the release notes now. (Daily habits) (Meetings)",
+              "answer": "is",
+              "options": [
+                "is",
+                "are",
+                "was",
+                "have",
+                "has"
+              ],
+              "explanation": "Use is with she for actions in progress. Daily habits context. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-continuous-correct-mistake-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: She is work on the release now.",
+              "answer": "She is working on the release now.",
+              "options": [
+                "She is working on the release now.",
+                "She working on the release now.",
+                "She is work on the release now.",
+                "She does working on the release now."
+              ],
+              "explanation": "Present Continuous needs is plus the -ing form working.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-continuous-translation-1",
+              "kind": "translation",
+              "prompt": "Translate: Ellos estan preparando la cena ahora mismo.",
+              "answer": "They are preparing dinner right now.",
+              "options": [
+                "They are preparing dinner right now.",
+                "They preparing dinner right now.",
+                "They prepare dinner right now.",
+                "They are prepare dinner right now."
+              ],
+              "explanation": "Use are plus preparing for an action happening right now.",
+              "context": "daily-habits"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2-present-perfect-experiences",
+      "title": "Present Perfect Experiences",
+      "level": "intermediate",
+      "cefrLevel": "A2",
+      "unitOrder": 2,
+      "prerequisiteUnitIds": [
+        "a2-present-continuous-actions"
+      ],
+      "focus": "Use Present Perfect to talk about experiences and results connected to now.",
+      "tenseIds": [
+        "presentPerfect"
+      ],
+      "contextTags": [
+        "it-work",
+        "travel-vacation",
+        "daily-habits",
+        "family-routines"
+      ],
+      "learnerContext": [
+        "work achievements",
+        "travel experiences",
+        "family experiences"
+      ],
+      "objectives": [
+        "Use have or has with a past participle.",
+        "Talk about experiences without a finished past time.",
+        "Use already, yet, and ever in simple contexts."
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a2-perfect-pronunciation-has",
+          "text": "She has finished the report already.",
+          "focus": "Keep has short and stress finished",
+          "note": "Repeat once slowly and twice at natural speed."
+        },
+        {
+          "id": "a2-perfect-pronunciation-question",
+          "text": "Have you ever visited Colombia?",
+          "focus": "Link have you and keep the question rhythm",
+          "note": "Raise your voice slightly at the end."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Describe two experiences and one recent result from your work, travel, or family life.",
+        "requiredStructures": [
+          "have or has + past participle",
+          "one sentence with already or yet",
+          "one experience question"
+        ],
+        "checklist": [
+          "Do not use a finished past time such as yesterday.",
+          "Use the correct past participle.",
+          "Read one sentence and the question aloud."
+        ]
+      },
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Present Perfect connects a past action to now.",
+            "Use it for experiences, recent results, and completed actions when the exact time is not important."
+          ],
+          "signalWords": [
+            "already",
+            "yet",
+            "ever",
+            "never",
+            "just",
+            "recently"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + have/has + past participle",
+              "example": "She has finished the report."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + have/has + not + past participle",
+              "example": "They have not visited the office yet."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Have/Has + subject + past participle?",
+              "example": "Have you ever traveled for work?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "She has finish the report.",
+              "right": "She has finished the report.",
+              "why": "Present Perfect needs the past participle."
+            },
+            {
+              "wrong": "I have visited Miami yesterday.",
+              "right": "I visited Miami yesterday.",
+              "why": "Use Simple Past with a finished time like yesterday."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "I have already sent the update.",
+              "note": "Already shows a completed result connected to now."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "We have visited that hotel before.",
+              "note": "Before points to an experience."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "She has not finished breakfast yet.",
+              "note": "Yet is common in negative Present Perfect."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "already",
+              "meaning": "sooner than expected or before now",
+              "example": "I have already sent the file.",
+              "context": "it-work"
+            },
+            {
+              "term": "yet",
+              "meaning": "up to now, often in negatives and questions",
+              "example": "She has not answered yet.",
+              "context": "meetings"
+            },
+            {
+              "term": "ever",
+              "meaning": "at any time in life",
+              "example": "Have you ever traveled alone?",
+              "context": "travel-vacation"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "present-perfect-fill-1",
+              "kind": "fillBlank",
+              "prompt": "She has _____ the report.",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishes",
+                "finishing",
+                "has"
+              ],
+              "explanation": "Use the past participle after has.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-fill-2",
+              "kind": "fillBlank",
+              "prompt": "We have _____ a backup for this release.",
+              "answer": "made",
+              "options": [
+                "made",
+                "make",
+                "making",
+                "makes",
+                "do"
+              ],
+              "explanation": "Use the past participle after have in Present Perfect.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-fill-3",
+              "kind": "fillBlank",
+              "prompt": "She has _____ the meeting room every day this week.",
+              "answer": "cleaned",
+              "options": [
+                "cleaned",
+                "clean",
+                "cleaning",
+                "cleans",
+                "cleaner"
+              ],
+              "explanation": "Use past participle with present perfect.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-fill-4",
+              "kind": "fillBlank",
+              "prompt": "She has _____ the design review.",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishing",
+                "finishes",
+                "had"
+              ],
+              "explanation": "Use past participle after has.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-fill-5",
+              "kind": "fillBlank",
+              "prompt": "We have _____ all tickets from the sprint.",
+              "answer": "resolved",
+              "options": [
+                "resolved",
+                "resolve",
+                "resolving",
+                "resolves",
+                "resolution"
+              ],
+              "explanation": "Use past participle after have in Present Perfect.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-fill-6",
+              "kind": "fillBlank",
+              "prompt": "My family _____ cooked dinner together all weekend.",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "The subject uses has when treated as one family group.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-transform-1",
+              "kind": "transform",
+              "prompt": "Change to a question: You have visited that hotel.",
+              "answer": "Have you visited that hotel?",
+              "explanation": "Move have before the subject.",
+              "context": "travel-vacation",
+              "options": [
+                "Have you visited that hotel?",
+                "Did you have visited that hotel?",
+                "Have you visit that hotel?",
+                "You have visited that hotel?"
+              ]
+            },
+            {
+              "id": "present-perfect-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: She has finish the report.",
+              "answer": "She has finished the report.",
+              "options": [
+                "She has finish the report.",
+                "She have finished the report.",
+                "She has finished the report.",
+                "She has finishing the report.",
+                "She finish the report."
+              ],
+              "explanation": "Present Perfect needs has + past participle.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-fill-2-travel-vacation-1",
+              "kind": "fillBlank",
+              "prompt": "We have _____ a backup for this release. (Travel and vacation)",
+              "answer": "made",
+              "options": [
+                "made",
+                "make",
+                "making",
+                "makes",
+                "do"
+              ],
+              "explanation": "Use the past participle after have in Present Perfect. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "present-perfect-fill-4-travel-vacation-2",
+              "kind": "fillBlank",
+              "prompt": "She has _____ the design review. (Travel and vacation)",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishing",
+                "finishes",
+                "had"
+              ],
+              "explanation": "Use past participle after has. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "present-perfect-fill-6-travel-vacation-3",
+              "kind": "fillBlank",
+              "prompt": "My family _____ cooked dinner together all weekend. (Travel and vacation)",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "The subject uses has when treated as one family group. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "present-perfect-fill-1-travel-vacation-4",
+              "kind": "fillBlank",
+              "prompt": "She has _____ the report. (Travel and vacation)",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishes",
+                "finishing",
+                "has"
+              ],
+              "explanation": "Use the past participle after has. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "present-perfect-fill-2-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "We have _____ a backup for this release. (Daily habits)",
+              "answer": "made",
+              "options": [
+                "made",
+                "make",
+                "making",
+                "makes",
+                "do"
+              ],
+              "explanation": "Use the past participle after have in Present Perfect. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-fill-5-daily-habits-2",
+              "kind": "fillBlank",
+              "prompt": "We have _____ all tickets from the sprint. (Daily habits)",
+              "answer": "resolved",
+              "options": [
+                "resolved",
+                "resolve",
+                "resolving",
+                "resolves",
+                "resolution"
+              ],
+              "explanation": "Use past participle after have in Present Perfect. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-transform-1-daily-habits-3",
+              "kind": "transform",
+              "prompt": "Change to a question: You have visited that hotel. (Daily habits)",
+              "answer": "Have you visited that hotel?",
+              "explanation": "Move have before the subject. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "Have you visited that hotel?",
+                "Did you have visited that hotel?",
+                "Have you visit that hotel?",
+                "You have visited that hotel?"
+              ]
+            },
+            {
+              "id": "present-perfect-fill-2-travel-vacation-1-daily-habits-4",
+              "kind": "fillBlank",
+              "prompt": "We have _____ a backup for this release. (Travel and vacation) (Daily habits)",
+              "answer": "made",
+              "options": [
+                "made",
+                "make",
+                "making",
+                "makes",
+                "do"
+              ],
+              "explanation": "Use the past participle after have in Present Perfect. Travel and vacation context. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-family-2",
+              "kind": "fillBlank",
+              "prompt": "My parents have _____ dinner for the family.",
+              "answer": "prepared",
+              "options": [
+                "prepared",
+                "prepare",
+                "preparing",
+                "prepares"
+              ],
+              "explanation": "Use the past participle prepared after have.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-family-3",
+              "kind": "fillBlank",
+              "prompt": "She has _____ her grandmother this month.",
+              "answer": "visited",
+              "options": [
+                "visited",
+                "visit",
+                "visiting",
+                "visits"
+              ],
+              "explanation": "Use has plus the past participle visited.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-family-4",
+              "kind": "transform",
+              "prompt": "Change to a question: They have finished their chores.",
+              "answer": "Have they finished their chores?",
+              "options": [
+                "Have they finished their chores?",
+                "Did they have finished their chores?",
+                "Have they finish their chores?",
+                "They have finished their chores?"
+              ],
+              "explanation": "Move have before they and keep the past participle finished.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-family-5",
+              "kind": "translation",
+              "prompt": "Translate: Ya hemos planeado la cena familiar.",
+              "answer": "We have already planned the family dinner.",
+              "options": [
+                "We have already planned the family dinner.",
+                "We already plan the family dinner.",
+                "We have already plan the family dinner.",
+                "We are already planned the family dinner."
+              ],
+              "explanation": "Use have plus planned; already normally goes between have and the participle.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-choose-tense-1",
+              "kind": "chooseTense",
+              "prompt": "The team _____ three bugs so far today.",
+              "answer": "has fixed",
+              "options": [
+                "has fixed",
+                "fixed",
+                "is fixing",
+                "fixes"
+              ],
+              "explanation": "So far today connects a completed result to the present, so use Present Perfect.",
+              "context": "it-work"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2-present-perfect-continuous-duration",
+      "title": "Present Perfect Continuous Duration",
+      "level": "advanced",
+      "cefrLevel": "A2",
+      "unitOrder": 3,
+      "prerequisiteUnitIds": [
+        "a2-present-perfect-experiences"
+      ],
+      "focus": "Use Present Perfect Continuous for actions that started before now and continue or have visible results.",
+      "tenseIds": [
+        "presentPerfectContinuous"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "it-work",
+        "meetings",
+        "family-routines"
+      ],
+      "learnerContext": [
+        "ongoing work",
+        "study duration",
+        "family routines"
+      ],
+      "objectives": [
+        "Build have or has been plus verb-ing.",
+        "Use for and since with ongoing actions.",
+        "Explain duration connected to now."
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a2-perfect-continuous-pronunciation-contraction",
+          "text": "I've been working on this task for two hours.",
+          "focus": "Link I've been without adding an extra vowel",
+          "note": "Stress working and two hours."
+        },
+        {
+          "id": "a2-perfect-continuous-pronunciation-since",
+          "text": "She has been studying since eight o'clock.",
+          "focus": "Keep has been light and stress since eight",
+          "note": "Repeat the sentence as one continuous thought."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Explain how long three activities have been happening in your life today or this week.",
+        "requiredStructures": [
+          "have or has been + verb-ing",
+          "one sentence with for",
+          "one sentence with since"
+        ],
+        "checklist": [
+          "Use for with a duration.",
+          "Use since with a starting point.",
+          "Say all three sentences aloud without stopping."
+        ]
+      },
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Present Perfect Continuous shows duration from the past to now.",
+            "It often answers: how long has this been happening?"
+          ],
+          "signalWords": [
+            "for",
+            "since",
+            "all morning",
+            "recently",
+            "lately"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + have/has + been + verb-ing",
+              "example": "He has been studying since 8 a.m."
+            },
+            {
+              "form": "negative",
+              "pattern": "Subject + have/has + not + been + verb-ing",
+              "example": "We have not been testing all morning."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Have/Has + subject + been + verb-ing?",
+              "example": "Have you been working on the app?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "He has studying since 8.",
+              "right": "He has been studying since 8.",
+              "why": "Present Perfect Continuous needs been before the -ing verb."
+            },
+            {
+              "wrong": "She has been work for two hours.",
+              "right": "She has been working for two hours.",
+              "why": "Use the -ing form after been."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "We have been testing the app all morning.",
+              "note": "All morning shows duration up to now."
+            },
+            {
+              "context": "daily-habits",
+              "sentence": "She has been studying English for two hours.",
+              "note": "For two hours tells how long."
+            },
+            {
+              "context": "meetings",
+              "sentence": "They have been discussing the plan since noon.",
+              "note": "Since noon gives the start time."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "for",
+              "meaning": "used with a period of time",
+              "example": "She has been studying for two hours.",
+              "context": "daily-habits"
+            },
+            {
+              "term": "since",
+              "meaning": "used with a starting point",
+              "example": "They have been meeting since noon.",
+              "context": "meetings"
+            },
+            {
+              "term": "lately",
+              "meaning": "recently or in the recent period",
+              "example": "I have been practicing lately.",
+              "context": "daily-habits"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "present-perfect-continuous-fill-1",
+              "kind": "fillBlank",
+              "prompt": "She has _____ studying for two hours.",
+              "answer": "been",
+              "options": [
+                "been",
+                "be",
+                "being",
+                "was",
+                "were"
+              ],
+              "explanation": "Use has been before the -ing verb.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-continuous-fill-2",
+              "kind": "fillBlank",
+              "prompt": "We _____ been waiting for support since morning.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "was",
+                "were"
+              ],
+              "explanation": "With we, use have before present perfect continuous.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-continuous-fill-3",
+              "kind": "fillBlank",
+              "prompt": "My family _____ been visiting our friends every weekend.",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use have with plural subjects.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-continuous-fill-4",
+              "kind": "fillBlank",
+              "prompt": "She _____ been practicing for interviews for two months.",
+              "answer": "has",
+              "options": [
+                "has",
+                "have",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use has with she in Present Perfect Continuous.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-continuous-transform-1",
+              "kind": "transform",
+              "prompt": "Change to a question: You have been working on the app.",
+              "answer": "Have you been working on the app?",
+              "explanation": "Move have before the subject.",
+              "context": "it-work",
+              "options": [
+                "Have you been working on the app?",
+                "Do you have been working on the app?",
+                "Have you working on the app?",
+                "You have been working on the app?"
+              ]
+            },
+            {
+              "id": "present-perfect-continuous-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: We have been testing all morning.",
+              "answer": "present perfect continuous",
+              "options": [
+                "present perfect continuous",
+                "present perfect",
+                "past perfect",
+                "simple present"
+              ],
+              "explanation": "All morning shows duration connected to now.",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-continuous-fill-5",
+              "kind": "fillBlank",
+              "prompt": "The team _____ been waiting for the security sign-off since yesterday.",
+              "answer": "has",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "are",
+                "is"
+              ],
+              "explanation": "Use has before present perfect continuous with the singular noun \"team.\"",
+              "context": "it-work"
+            },
+            {
+              "id": "present-perfect-continuous-transform-2",
+              "kind": "transform",
+              "prompt": "Change to a question: She has been updating the dashboard all day.",
+              "answer": "Has she been updating the dashboard all day?",
+              "explanation": "Move has before the subject to form a question.",
+              "context": "it-work",
+              "options": [
+                "Has she been updating the dashboard all day?",
+                "Have she been updating the dashboard all day?",
+                "Has she updating the dashboard all day?",
+                "Does she has been updating the dashboard all day?"
+              ]
+            },
+            {
+              "id": "present-perfect-continuous-transform-1-daily-habits-1",
+              "kind": "transform",
+              "prompt": "Change to a question: You have been working on the app. (Daily habits)",
+              "answer": "Have you been working on the app?",
+              "explanation": "Move have before the subject. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "Have you been working on the app?",
+                "Do you have been working on the app?",
+                "Have you working on the app?",
+                "You have been working on the app?"
+              ]
+            },
+            {
+              "id": "present-perfect-continuous-fill-5-daily-habits-2",
+              "kind": "fillBlank",
+              "prompt": "The team _____ been waiting for the security sign-off since yesterday. (Daily habits)",
+              "answer": "has",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "are",
+                "is"
+              ],
+              "explanation": "Use has before present perfect continuous with the singular noun \"team.\" Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-continuous-fill-2-daily-habits-3",
+              "kind": "fillBlank",
+              "prompt": "We _____ been waiting for support since morning. (Daily habits)",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "was",
+                "were"
+              ],
+              "explanation": "With we, use have before present perfect continuous. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "present-perfect-continuous-fill-1-meetings-1",
+              "kind": "fillBlank",
+              "prompt": "She has _____ studying for two hours. (Meetings)",
+              "answer": "been",
+              "options": [
+                "been",
+                "be",
+                "being",
+                "was",
+                "were"
+              ],
+              "explanation": "Use has been before the -ing verb. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-perfect-continuous-fill-3-meetings-2",
+              "kind": "fillBlank",
+              "prompt": "My family _____ been visiting our friends every weekend. (Meetings)",
+              "answer": "have",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "is",
+                "are"
+              ],
+              "explanation": "Use have with plural subjects. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-perfect-continuous-transform-1-meetings-3",
+              "kind": "transform",
+              "prompt": "Change to a question: You have been working on the app. (Meetings)",
+              "answer": "Have you been working on the app?",
+              "explanation": "Move have before the subject. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "Have you been working on the app?",
+                "Do you have been working on the app?",
+                "Have you working on the app?",
+                "You have been working on the app?"
+              ]
+            },
+            {
+              "id": "present-perfect-continuous-fill-5-meetings-4",
+              "kind": "fillBlank",
+              "prompt": "The team _____ been waiting for the security sign-off since yesterday. (Meetings)",
+              "answer": "has",
+              "options": [
+                "have",
+                "has",
+                "had",
+                "are",
+                "is"
+              ],
+              "explanation": "Use has before present perfect continuous with the singular noun \"team.\" Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "present-perfect-continuous-transform-1-daily-habits-1-meetings-5",
+              "kind": "transform",
+              "prompt": "Change to a question: You have been working on the app. (Daily habits) (Meetings)",
+              "answer": "Have you been working on the app?",
+              "explanation": "Move have before the subject. Daily habits context. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "Have you been working on the app?",
+                "Do you have been working on the app?",
+                "Have you working on the app?",
+                "You have been working on the app?"
+              ]
+            },
+            {
+              "id": "present-perfect-continuous-family-2",
+              "kind": "fillBlank",
+              "prompt": "My mother has been _____ for an hour.",
+              "answer": "cooking",
+              "options": [
+                "cooking",
+                "cook",
+                "cooked",
+                "cooks"
+              ],
+              "explanation": "Use verb-ing after has been to emphasize duration.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-continuous-family-3",
+              "kind": "fillBlank",
+              "prompt": "They have been _____ the children since 3 p.m.",
+              "answer": "helping",
+              "options": [
+                "helping",
+                "help",
+                "helped",
+                "helps"
+              ],
+              "explanation": "Use helping after have been for an activity continuing from a starting time.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-continuous-family-4",
+              "kind": "transform",
+              "prompt": "Change to a question: Your brother has been studying all afternoon.",
+              "answer": "Has your brother been studying all afternoon?",
+              "options": [
+                "Has your brother been studying all afternoon?",
+                "Have your brother been studying all afternoon?",
+                "Does your brother has been studying all afternoon?",
+                "Has your brother studying all afternoon?"
+              ],
+              "explanation": "Move has before the subject and keep been plus studying.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-continuous-family-5",
+              "kind": "translation",
+              "prompt": "Translate: Hemos estado limpiando la casa desde esta manana.",
+              "answer": "We have been cleaning the house since this morning.",
+              "options": [
+                "We have been cleaning the house since this morning.",
+                "We have cleaning the house since this morning.",
+                "We are been cleaning the house since this morning.",
+                "We have been cleaned the house since this morning."
+              ],
+              "explanation": "Use have been plus cleaning and since for the starting point.",
+              "context": "family-routines"
+            },
+            {
+              "id": "present-perfect-continuous-correct-mistake-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: They have been help the children since 3 p.m.",
+              "answer": "They have been helping the children since 3 p.m.",
+              "options": [
+                "They have been helping the children since 3 p.m.",
+                "They have helping the children since 3 p.m.",
+                "They have been help the children since 3 p.m.",
+                "They are been helping the children since 3 p.m."
+              ],
+              "explanation": "Present Perfect Continuous needs have been plus the -ing form helping.",
+              "context": "family-routines"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2-prepositions-daily-habits",
+      "title": "Prepositions and Daily Habits",
+      "level": "basic",
+      "cefrLevel": "A2",
+      "unitOrder": 4,
+      "prerequisiteUnitIds": [
+        "a2-present-perfect-continuous-duration"
+      ],
+      "focus": "Use common prepositions of time, place, direction, and movement in daily-habit sentences.",
+      "tenseIds": [
+        "simplePresent",
+        "presentContinuous",
+        "presentPerfect"
+      ],
+      "contextTags": [
+        "daily-habits",
+        "prepositions",
+        "travel-vacation",
+        "family-routines",
+        "it-work"
+      ],
+      "learnerContext": [
+        "daily schedules",
+        "home and workplace locations",
+        "travel and movement"
+      ],
+      "objectives": [
+        "Use in, on, and at for time and place.",
+        "Use to, from, into, and through for movement.",
+        "Combine prepositions with daily routine and travel examples."
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "a2-prepositions-pronunciation-time",
+          "text": "I start work at eight on Monday morning.",
+          "focus": "Keep at and on short but clear",
+          "note": "Stress eight, Monday, and morning."
+        },
+        {
+          "id": "a2-prepositions-pronunciation-movement",
+          "text": "She walks through the station and into the office.",
+          "focus": "Link through the and into the",
+          "note": "Use one smooth rhythm for the full route."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Describe your morning schedule and your route from home to work or school.",
+        "requiredStructures": [
+          "one preposition of time",
+          "one preposition of place",
+          "two prepositions of movement"
+        ],
+        "checklist": [
+          "Use at, on, or in for the schedule.",
+          "Describe where one object or person is.",
+          "Say the route aloud in chronological order."
+        ]
+      },
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "Prepositions connect actions to time, place, and movement.",
+            "Use in for months, years, rooms, and enclosed places.",
+            "Use on for days, dates, and surfaces. Use at for exact times and specific points."
+          ],
+          "signalWords": [
+            "in",
+            "on",
+            "at",
+            "to",
+            "from",
+            "into",
+            "through"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Subject + verb + preposition + time/place",
+              "example": "She studies at night."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + movement verb + to/from/into + place",
+              "example": "He goes to school in the morning."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "Wh-word + auxiliary + subject + verb + preposition phrase?",
+              "example": "Where do you work on Mondays?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "I work in Monday.",
+              "right": "I work on Monday.",
+              "why": "Use on with days."
+            },
+            {
+              "wrong": "She arrives to the office at 8.",
+              "right": "She arrives at the office at 8.",
+              "why": "Use arrive at for a specific place."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "daily-habits",
+              "sentence": "I study English in the morning.",
+              "note": "Use in with parts of the day."
+            },
+            {
+              "context": "prepositions",
+              "sentence": "The notebook is on the desk.",
+              "note": "Use on for surfaces."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "We travel to the hotel after lunch.",
+              "note": "Use to for movement toward a place."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "in",
+              "meaning": "inside a place or during a period",
+              "example": "I study in the morning.",
+              "context": "prepositions"
+            },
+            {
+              "term": "on",
+              "meaning": "used with days and surfaces",
+              "example": "The keys are on the table.",
+              "context": "prepositions"
+            },
+            {
+              "term": "at",
+              "meaning": "used with exact times and points",
+              "example": "The class starts at 8.",
+              "context": "prepositions"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "prepositions-fill-1",
+              "kind": "fillBlank",
+              "prompt": "I work _____ Monday.",
+              "answer": "on",
+              "options": [
+                "on",
+                "at",
+                "in",
+                "for",
+                "by"
+              ],
+              "explanation": "Use on with days.",
+              "context": "prepositions"
+            },
+            {
+              "id": "prepositions-fill-2",
+              "kind": "fillBlank",
+              "prompt": "She leaves _____ 6:00 am.",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "for",
+                "to"
+              ],
+              "explanation": "Use at for exact times.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "prepositions-fill-3",
+              "kind": "fillBlank",
+              "prompt": "They moved there _____ the end of July.",
+              "answer": "at",
+              "options": [
+                "at",
+                "in",
+                "on",
+                "for",
+                "to"
+              ],
+              "explanation": "Use in for months, but at the end of July is a point in time.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "prepositions-fill-4",
+              "kind": "fillBlank",
+              "prompt": "He leaves _____ 7:00 a.m. every day.",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "for",
+                "to"
+              ],
+              "explanation": "Use at for exact times.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "prepositions-fill-5",
+              "kind": "fillBlank",
+              "prompt": "My family lives _____ the city center.",
+              "answer": "in",
+              "options": [
+                "in",
+                "on",
+                "at",
+                "near",
+                "to"
+              ],
+              "explanation": "Use in for area/location expressions.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-fill-6",
+              "kind": "fillBlank",
+              "prompt": "She has a meeting _____ the 25th floor.",
+              "answer": "on",
+              "options": [
+                "on",
+                "in",
+                "at",
+                "above",
+                "through"
+              ],
+              "explanation": "Use on for floor levels and surfaces in this context.",
+              "context": "it-work"
+            },
+            {
+              "id": "prepositions-fill-7",
+              "kind": "fillBlank",
+              "prompt": "The server room is located _____ the second floor.",
+              "answer": "on",
+              "options": [
+                "on",
+                "in",
+                "at",
+                "by",
+                "under"
+              ],
+              "explanation": "Use on for specific building floor levels.",
+              "context": "it-work"
+            },
+            {
+              "id": "prepositions-fill-8",
+              "kind": "fillBlank",
+              "prompt": "We start stand-up at 9 _____ a.m. every weekday.",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "by",
+                "to"
+              ],
+              "explanation": "Use at with exact times.",
+              "context": "it-work"
+            },
+            {
+              "id": "prepositions-fill-9",
+              "kind": "fillBlank",
+              "prompt": "I have a meeting _____ the lounge after lunch.",
+              "answer": "in",
+              "options": [
+                "in",
+                "on",
+                "at",
+                "to",
+                "near"
+              ],
+              "explanation": "Use in for general room locations.",
+              "context": "it-work"
+            },
+            {
+              "id": "prepositions-fill-10",
+              "kind": "fillBlank",
+              "prompt": "We go _____ the office at 8:30 every day.",
+              "answer": "into",
+              "options": [
+                "into",
+                "on",
+                "in",
+                "at",
+                "from"
+              ],
+              "explanation": "Use into to show movement toward a place.",
+              "context": "it-work"
+            },
+            {
+              "id": "prepositions-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: She arrives to the office at 8.",
+              "answer": "She arrives at the office at 8.",
+              "options": [
+                "She arrives to the office at 8.",
+                "She arrive at the office at 8.",
+                "She arrives at the office at 8.",
+                "She arrives in the office at 8.",
+                "She arrives on the office at 8."
+              ],
+              "explanation": "Use arrive at for a specific place.",
+              "context": "prepositions"
+            },
+            {
+              "id": "prepositions-translation-1",
+              "kind": "translation",
+              "prompt": "Translate: Estudio ingles en la manana.",
+              "answer": "I study English in the morning.",
+              "explanation": "Use in with parts of the day.",
+              "context": "daily-habits",
+              "options": [
+                "I study English in the morning.",
+                "I study English on the morning.",
+                "I study English at the morning.",
+                "I am study English in the morning."
+              ]
+            },
+            {
+              "id": "prepositions-fill-8-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "We start stand-up at 9 _____ a.m. every weekday. (Daily habits)",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "by",
+                "to"
+              ],
+              "explanation": "Use at with exact times. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "prepositions-fill-4-prepositions-1",
+              "kind": "fillBlank",
+              "prompt": "He leaves _____ 7:00 a.m. every day. (Prepositions)",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "for",
+                "to"
+              ],
+              "explanation": "Use at for exact times. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "prepositions-fill-6-prepositions-2",
+              "kind": "fillBlank",
+              "prompt": "She has a meeting _____ the 25th floor. (Prepositions)",
+              "answer": "on",
+              "options": [
+                "on",
+                "in",
+                "at",
+                "above",
+                "through"
+              ],
+              "explanation": "Use on for floor levels and surfaces in this context. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "prepositions-fill-8-prepositions-3",
+              "kind": "fillBlank",
+              "prompt": "We start stand-up at 9 _____ a.m. every weekday. (Prepositions)",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "by",
+                "to"
+              ],
+              "explanation": "Use at with exact times. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "prepositions-fill-1-travel-vacation-1",
+              "kind": "fillBlank",
+              "prompt": "I work _____ Monday. (Travel and vacation)",
+              "answer": "on",
+              "options": [
+                "on",
+                "at",
+                "in",
+                "for",
+                "by"
+              ],
+              "explanation": "Use on with days. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "prepositions-fill-3-travel-vacation-2",
+              "kind": "fillBlank",
+              "prompt": "They moved there _____ the end of July. (Travel and vacation)",
+              "answer": "at",
+              "options": [
+                "at",
+                "in",
+                "on",
+                "for",
+                "to"
+              ],
+              "explanation": "Use in for months, but at the end of July is a point in time. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "prepositions-fill-5-travel-vacation-3",
+              "kind": "fillBlank",
+              "prompt": "My family lives _____ the city center. (Travel and vacation)",
+              "answer": "in",
+              "options": [
+                "in",
+                "on",
+                "at",
+                "near",
+                "to"
+              ],
+              "explanation": "Use in for area/location expressions. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "prepositions-fill-7-travel-vacation-4",
+              "kind": "fillBlank",
+              "prompt": "The server room is located _____ the second floor. (Travel and vacation)",
+              "answer": "on",
+              "options": [
+                "on",
+                "in",
+                "at",
+                "by",
+                "under"
+              ],
+              "explanation": "Use on for specific building floor levels. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "prepositions-fill-9-travel-vacation-5",
+              "kind": "fillBlank",
+              "prompt": "I have a meeting _____ the lounge after lunch. (Travel and vacation)",
+              "answer": "in",
+              "options": [
+                "in",
+                "on",
+                "at",
+                "to",
+                "near"
+              ],
+              "explanation": "Use in for general room locations. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "prepositions-family-2",
+              "kind": "fillBlank",
+              "prompt": "Our family has dinner _____ 7 p.m.",
+              "answer": "at",
+              "options": [
+                "at",
+                "on",
+                "in",
+                "from"
+              ],
+              "explanation": "Use at with a specific clock time.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-family-3",
+              "kind": "fillBlank",
+              "prompt": "The family photos are _____ the wall.",
+              "answer": "on",
+              "options": [
+                "on",
+                "at",
+                "in",
+                "under"
+              ],
+              "explanation": "Use on for something attached to a surface.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-family-4",
+              "kind": "fillBlank",
+              "prompt": "The children's toys are _____ the bed.",
+              "answer": "under",
+              "options": [
+                "under",
+                "on",
+                "at",
+                "between"
+              ],
+              "explanation": "Use under for a lower position beneath something.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-family-5",
+              "kind": "translation",
+              "prompt": "Translate: Mis abuelos llegan el domingo.",
+              "answer": "My grandparents arrive on Sunday.",
+              "options": [
+                "My grandparents arrive on Sunday.",
+                "My grandparents arrive at Sunday.",
+                "My grandparents arrive in Sunday.",
+                "My grandparents arrive Sunday on."
+              ],
+              "explanation": "Use on with days of the week.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-transform-1",
+              "kind": "transform",
+              "prompt": "Rewrite with under: The cat is below the table.",
+              "answer": "The cat is under the table.",
+              "options": [
+                "The cat is under the table.",
+                "The cat is on the table.",
+                "The cat is into the table.",
+                "The cat is at the table under."
+              ],
+              "explanation": "Use under before the noun phrase to describe a lower position.",
+              "context": "family-routines"
+            },
+            {
+              "id": "prepositions-choose-tense-1",
+              "kind": "chooseTense",
+              "prompt": "Every Monday, she _____ to work at 8 a.m.",
+              "answer": "goes",
+              "options": [
+                "goes",
+                "is going",
+                "has gone",
+                "went"
+              ],
+              "explanation": "Every Monday signals Present Simple; at introduces the specific time.",
+              "context": "daily-habits"
             }
           ]
         }
@@ -229,6 +3326,11 @@
       "id": "past-future-conditional-foundation",
       "title": "Past, Future and Conditional Foundation",
       "level": "intermediate",
+      "cefrLevel": "B1",
+      "unitOrder": 1,
+      "prerequisiteUnitIds": [
+        "a2-prepositions-daily-habits"
+      ],
       "focus": "Use time markers and sequence markers to choose and build past, future, and conditional forms.",
       "tenseIds": [
         "simplePast",
@@ -245,7 +3347,8 @@
         "daily-habits",
         "it-work",
         "travel-vacation",
-        "prepositions"
+        "prepositions",
+        "meetings"
       ],
       "objectives": [
         "Differentiate past, future, and conditional meaning in short situations.",
@@ -391,8 +3494,90 @@
               "kind": "fillBlank",
               "prompt": "By 8 a.m. she _____ already left the office.",
               "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "would",
+                "was"
+              ],
               "explanation": "Past perfect is used for the action done before a past reference point.",
               "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-fill-2",
+              "kind": "fillBlank",
+              "prompt": "By this time tomorrow, the team _____ finished the release.",
+              "answer": "will have",
+              "options": [
+                "will have",
+                "had",
+                "has",
+                "have",
+                "would have"
+              ],
+              "explanation": "Use future perfect for completion before a future reference point.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-fill-3",
+              "kind": "fillBlank",
+              "prompt": "If it rains, we _____ not arrive on time.",
+              "answer": "will",
+              "options": [
+                "will",
+                "would",
+                "do",
+                "can",
+                "had"
+              ],
+              "explanation": "Use will in first conditional result clause.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "past-future-conditional-fill-4",
+              "kind": "fillBlank",
+              "prompt": "By the time he arrives, we _____ sent the final report.",
+              "answer": "will have",
+              "options": [
+                "will have",
+                "have",
+                "has",
+                "had",
+                "would have"
+              ],
+              "explanation": "Use future perfect for completion before a future moment.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-fill-5",
+              "kind": "fillBlank",
+              "prompt": "If you had more time, you _____ in the workshop.",
+              "answer": "would",
+              "options": [
+                "would",
+                "will",
+                "can",
+                "could",
+                "had"
+              ],
+              "explanation": "Use would in the result clause of a conditional sentence.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-fill-6",
+              "kind": "fillBlank",
+              "prompt": "If the meeting is tomorrow, we _____ start at 9:00 a.m.",
+              "answer": "will",
+              "options": [
+                "will",
+                "would",
+                "would have",
+                "have",
+                "had"
+              ],
+              "explanation": "Use will for future plans.",
+              "context": "meetings"
             },
             {
               "id": "past-future-conditional-transform-1",
@@ -400,13 +3585,26 @@
               "prompt": "Change to negative: He is working on the report now.",
               "answer": "He is not working on the report now.",
               "explanation": "Insert the negative after auxiliary: is not + present participle.",
-              "context": "it-work"
+              "context": "it-work",
+              "options": [
+                "He is not working on the report now.",
+                "He are not working on the report now.",
+                "He is working on the report now.",
+                "is He not working on the report now.",
+                "He not working on the report now."
+              ]
             },
             {
               "id": "past-future-conditional-choose-1",
               "kind": "chooseTense",
               "prompt": "Choose the tense: By next year, we ____ the client proposal.",
               "answer": "future perfect",
+              "options": [
+                "future perfect",
+                "simple future",
+                "future continuous",
+                "conditional"
+              ],
               "explanation": "Future perfect expresses an action completed before a future time.",
               "context": "it-work"
             },
@@ -415,6 +3613,13 @@
               "kind": "correctMistake",
               "prompt": "Correct this sentence: If you would came earlier, we would talk now.",
               "answer": "If you came earlier, we would talk now.",
+              "options": [
+                "If you would came earlier, we would talk now.",
+                "If you had came earlier, we would talk now.",
+                "If you came earlier, we would talk now.",
+                "If you come earlier, we would talk now.",
+                "If you would have came earlier, we would have talk now."
+              ],
               "explanation": "After if, the hypothetical clause uses simple past in this pattern.",
               "context": "it-work"
             },
@@ -424,13 +3629,26 @@
               "prompt": "Translate to English: Si ella tuviera tiempo, viajaría más.",
               "answer": "If she had time, she would travel more.",
               "explanation": "Use if + past form in condition and would + base verb in result.",
-              "context": "travel-vacation"
+              "context": "travel-vacation",
+              "options": [
+                "If she had time, she would travel more.",
+                "If she have time, she would travel more.",
+                "If she had time, she will travel more.",
+                "If she had not time, she would travel more.",
+                "she If had time, she would travel more."
+              ]
             },
             {
               "id": "past-future-conditional-transfer-1",
               "kind": "chooseTense",
               "prompt": "Choose the tense: By the time the test starts, she ____ already sent the final report.",
               "answer": "future perfect",
+              "options": [
+                "future perfect",
+                "simple future",
+                "simple conditional",
+                "present perfect"
+              ],
               "explanation": "Future perfect is used when an action is complete before a future reference time.",
               "context": "it-work"
             },
@@ -439,12 +3657,1340 @@
               "kind": "chooseTense",
               "prompt": "Choose the tense: If you had more time, you ____ in the workshop.",
               "answer": "simple conditional",
+              "options": [
+                "simple conditional",
+                "present continuous",
+                "simple past",
+                "future perfect"
+              ],
               "explanation": "If + past form in the condition and would + base verb in the result.",
+              "context": "it-work"
+            },
+            {
+              "id": "past-future-conditional-fill-2-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "By this time tomorrow, the team _____ finished the release. (Daily habits)",
+              "answer": "will have",
+              "options": [
+                "will have",
+                "had",
+                "has",
+                "have",
+                "would have"
+              ],
+              "explanation": "Use future perfect for completion before a future reference point. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "past-future-conditional-fill-5-daily-habits-2",
+              "kind": "fillBlank",
+              "prompt": "If you had more time, you _____ in the workshop. (Daily habits)",
+              "answer": "would",
+              "options": [
+                "would",
+                "will",
+                "can",
+                "could",
+                "had"
+              ],
+              "explanation": "Use would in the result clause of a conditional sentence. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "past-future-conditional-transform-1-daily-habits-3",
+              "kind": "transform",
+              "prompt": "Change to negative: He is working on the report now. (Daily habits)",
+              "answer": "He is not working on the report now.",
+              "explanation": "Insert the negative after auxiliary: is not + present participle. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "He is not working on the report now.",
+                "He are not working on the report now.",
+                "He is working on the report now.",
+                "is He not working on the report now.",
+                "He not working on the report now."
+              ]
+            },
+            {
+              "id": "past-future-conditional-correct-1-daily-habits-4",
+              "kind": "correctMistake",
+              "prompt": "Correct this sentence: If you would came earlier, we would talk now. (Daily habits)",
+              "answer": "If you came earlier, we would talk now.",
+              "options": [
+                "If you would came earlier, we would talk now.",
+                "If you had came earlier, we would talk now.",
+                "If you came earlier, we would talk now.",
+                "If you come earlier, we would talk now.",
+                "If you would have came earlier, we would have talk now."
+              ],
+              "explanation": "After if, the hypothetical clause uses simple past in this pattern. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "past-future-conditional-fill-2-travel-vacation-1",
+              "kind": "fillBlank",
+              "prompt": "By this time tomorrow, the team _____ finished the release. (Travel and vacation)",
+              "answer": "will have",
+              "options": [
+                "will have",
+                "had",
+                "has",
+                "have",
+                "would have"
+              ],
+              "explanation": "Use future perfect for completion before a future reference point. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "past-future-conditional-fill-4-travel-vacation-2",
+              "kind": "fillBlank",
+              "prompt": "By the time he arrives, we _____ sent the final report. (Travel and vacation)",
+              "answer": "will have",
+              "options": [
+                "will have",
+                "have",
+                "has",
+                "had",
+                "would have"
+              ],
+              "explanation": "Use future perfect for completion before a future moment. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "past-future-conditional-fill-6-travel-vacation-3",
+              "kind": "fillBlank",
+              "prompt": "If the meeting is tomorrow, we _____ start at 9:00 a.m. (Travel and vacation)",
+              "answer": "will",
+              "options": [
+                "will",
+                "would",
+                "would have",
+                "have",
+                "had"
+              ],
+              "explanation": "Use will for future plans. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "past-future-conditional-choose-1-travel-vacation-4",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By next year, we ____ the client proposal. (Travel and vacation)",
+              "answer": "future perfect",
+              "options": [
+                "future perfect",
+                "simple future",
+                "future continuous",
+                "conditional"
+              ],
+              "explanation": "Future perfect expresses an action completed before a future time. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "past-future-conditional-fill-1-prepositions-1",
+              "kind": "fillBlank",
+              "prompt": "By 8 a.m. she _____ already left the office. (Prepositions)",
+              "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "would",
+                "was"
+              ],
+              "explanation": "Past perfect is used for the action done before a past reference point. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "past-future-conditional-fill-3-prepositions-2",
+              "kind": "fillBlank",
+              "prompt": "If it rains, we _____ not arrive on time. (Prepositions)",
+              "answer": "will",
+              "options": [
+                "will",
+                "would",
+                "do",
+                "can",
+                "had"
+              ],
+              "explanation": "Use will in first conditional result clause. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "past-future-conditional-fill-5-prepositions-3",
+              "kind": "fillBlank",
+              "prompt": "If you had more time, you _____ in the workshop. (Prepositions)",
+              "answer": "would",
+              "options": [
+                "would",
+                "will",
+                "can",
+                "could",
+                "had"
+              ],
+              "explanation": "Use would in the result clause of a conditional sentence. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "past-future-conditional-transform-1-prepositions-4",
+              "kind": "transform",
+              "prompt": "Change to negative: He is working on the report now. (Prepositions)",
+              "answer": "He is not working on the report now.",
+              "explanation": "Insert the negative after auxiliary: is not + present participle. Prepositions context.",
+              "context": "prepositions",
+              "options": [
+                "He is not working on the report now.",
+                "He are not working on the report now.",
+                "He is working on the report now.",
+                "is He not working on the report now.",
+                "He not working on the report now."
+              ]
+            },
+            {
+              "id": "past-future-conditional-correct-1-prepositions-5",
+              "kind": "correctMistake",
+              "prompt": "Correct this sentence: If you would came earlier, we would talk now. (Prepositions)",
+              "answer": "If you came earlier, we would talk now.",
+              "options": [
+                "If you would came earlier, we would talk now.",
+                "If you had came earlier, we would talk now.",
+                "If you came earlier, we would talk now.",
+                "If you come earlier, we would talk now.",
+                "If you would have came earlier, we would have talk now."
+              ],
+              "explanation": "After if, the hypothetical clause uses simple past in this pattern. Prepositions context.",
+              "context": "prepositions"
+            },
+            {
+              "id": "b1-foundation-meetings-fill-2",
+              "kind": "fillBlank",
+              "prompt": "Before the meeting started, the team _____ shared the agenda.",
+              "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "was"
+              ],
+              "explanation": "Use past perfect for an action completed before the meeting started.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-foundation-meetings-choose-3",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By the next meeting, we will have completed the review.",
+              "answer": "future perfect",
+              "options": [
+                "future perfect",
+                "simple future",
+                "past perfect",
+                "conditional"
+              ],
+              "explanation": "Future perfect marks completion before a future meeting.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-foundation-meetings-correct-4",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: If the manager will arrive early, we will start at nine.",
+              "answer": "If the manager arrives early, we will start at nine.",
+              "options": [
+                "If the manager arrives early, we will start at nine.",
+                "If the manager will arrive early, we will start at nine.",
+                "If the manager arrived early, we will start at nine.",
+                "If the manager arriving early, we will start at nine."
+              ],
+              "explanation": "Use Present Simple in the if-clause of a real future condition.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-foundation-meetings-translation-5",
+              "kind": "translation",
+              "prompt": "Translate: Si tuviera mas tiempo, prepararia una agenda mejor.",
+              "answer": "If I had more time, I would prepare a better agenda.",
+              "options": [
+                "If I had more time, I would prepare a better agenda.",
+                "If I have more time, I would prepare a better agenda.",
+                "If I had more time, I will prepare a better agenda.",
+                "If I would have more time, I prepared a better agenda."
+              ],
+              "explanation": "Use past form in the hypothetical condition and would in the result.",
+              "context": "meetings"
+            }
+          ]
+        }
+      ],
+      "learnerContext": [
+        "work deadlines and project changes",
+        "travel plans",
+        "hypothetical decisions"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "b1-time-sequence-pronunciation",
+          "text": "By the time the meeting started, we had finished the report.",
+          "focus": "Stress the two time references",
+          "note": "Pause lightly after started and keep had unstressed."
+        },
+        {
+          "id": "b1-conditional-pronunciation",
+          "text": "If I had more time, I would improve the documentation.",
+          "focus": "Use a clear pause between condition and result",
+          "note": "Stress time and improve."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Explain a completed event, a future plan, and one hypothetical alternative connected to your work or daily life.",
+        "requiredStructures": [
+          "one past perfect sequence",
+          "one future form",
+          "one conditional sentence"
+        ],
+        "checklist": [
+          "Use a time marker in each idea.",
+          "Check the auxiliary before the main verb.",
+          "Read the three ideas aloud with clear pauses."
+        ]
+      }
+    },
+    {
+      "id": "b1-narratives-plans-problems",
+      "title": "B1 Narratives, Plans and Problems",
+      "level": "intermediate",
+      "cefrLevel": "B1",
+      "unitOrder": 2,
+      "prerequisiteUnitIds": [
+        "past-future-conditional-foundation"
+      ],
+      "focus": "Use past, future, and conditional forms to tell short stories, explain plans, and solve everyday problems.",
+      "tenseIds": [
+        "simplePast",
+        "pastContinuous",
+        "pastPerfect",
+        "simpleFuture",
+        "simpleConditional"
+      ],
+      "contextTags": [
+        "it-work",
+        "meetings",
+        "travel-vacation",
+        "daily-habits",
+        "family-routines"
+      ],
+      "objectives": [
+        "Tell a short sequence of past events.",
+        "Explain future plans and expected results.",
+        "Use would to describe possible solutions."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "B1 communication often combines several tenses in one situation.",
+            "Use past forms to explain what happened, future forms for plans, and conditional forms for possible solutions."
+          ],
+          "signalWords": [
+            "first",
+            "then",
+            "after that",
+            "by the time",
+            "next",
+            "would",
+            "could"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Past event + sequence marker + result",
+              "example": "The system failed, so we restarted the service."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + will + base verb + future time",
+              "example": "We will review the issue tomorrow."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + would + base verb + if-clause",
+              "example": "I would call support if the error returned."
+            },
+            {
+              "form": "questionPositive",
+              "pattern": "What would + subject + base verb?",
+              "example": "What would you do next?"
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "Yesterday we will fix the bug.",
+              "right": "Yesterday we fixed the bug.",
+              "why": "Use Simple Past with a finished past time."
+            },
+            {
+              "wrong": "I would called the client.",
+              "right": "I would call the client.",
+              "why": "After would, use the base verb."
+            },
+            {
+              "wrong": "By the time I arrived, they fix it.",
+              "right": "By the time I arrived, they had fixed it.",
+              "why": "Use Past Perfect for the earlier action."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "The app crashed during the demo, so we restarted it and checked the logs.",
+              "note": "A short narrative uses past forms and sequence."
+            },
+            {
+              "context": "meetings",
+              "sentence": "We will send the summary after the meeting.",
+              "note": "Will explains a future plan."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "If the flight changed, I would call the hotel.",
+              "note": "Would describes a possible solution."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "issue",
+              "meaning": "a problem that needs attention",
+              "example": "We found the issue after testing.",
+              "context": "it-work"
+            },
+            {
+              "term": "summary",
+              "meaning": "a short version of the main points",
+              "example": "She will send the meeting summary.",
+              "context": "meetings"
+            },
+            {
+              "term": "solution",
+              "meaning": "an answer to a problem",
+              "example": "I would suggest a simple solution.",
+              "context": "it-work"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "b1-narrative-fill-1",
+              "kind": "fillBlank",
+              "prompt": "Yesterday we _____ the bug.",
+              "answer": "fixed",
+              "options": [
+                "fixed",
+                "fix",
+                "fixes",
+                "fixing",
+                "had"
+              ],
+              "explanation": "Use Simple Past with yesterday.",
+              "context": "it-work"
+            },
+            {
+              "id": "b1-narrative-fill-2",
+              "kind": "fillBlank",
+              "prompt": "My family _____ dinner together every Saturday.",
+              "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "having",
+                "did"
+              ],
+              "explanation": "Past Simple with yesterday-like routine in narrative context.",
+              "context": "family-routines"
+            },
+            {
+              "id": "b1-narrative-fill-3",
+              "kind": "fillBlank",
+              "prompt": "On Sundays, we _____ to the park.",
+              "answer": "went",
+              "options": [
+                "went",
+                "go",
+                "gone",
+                "goes",
+                "going"
+              ],
+              "explanation": "Use simple past with yesterday/last week/story context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b1-narrative-fill-4",
+              "kind": "fillBlank",
+              "prompt": "Last week, my father _____ the whole team call at 4:00.",
+              "answer": "ended",
+              "options": [
+                "ended",
+                "end",
+                "ending",
+                "ends",
+                "stopped"
+              ],
+              "explanation": "Use past simple for a specific finished action.",
+              "context": "family-routines"
+            },
+            {
+              "id": "b1-narrative-fill-5",
+              "kind": "fillBlank",
+              "prompt": "The lead developer _____ two prototypes before lunch.",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishing",
+                "finishes",
+                "done"
+              ],
+              "explanation": "Use past simple in a clear time sequence.",
+              "context": "it-work"
+            },
+            {
+              "id": "b1-narrative-transform-1",
+              "kind": "transform",
+              "prompt": "Change to conditional: I call support if the error returns.",
+              "answer": "I would call support if the error returned.",
+              "explanation": "Use would + base verb and past form in the if-clause.",
+              "context": "it-work",
+              "options": [
+                "I would call support if the error returned.",
+                "I will call support if the error returned.",
+                "I would not call support if the error returned.",
+                "would I call support if the error returned.",
+                "I call support if the error returned."
+              ]
+            },
+            {
+              "id": "b1-narrative-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By the time I arrived, they had fixed the issue.",
+              "answer": "past perfect",
+              "options": [
+                "past perfect",
+                "past continuous",
+                "simple past",
+                "past perfect continuous"
+              ],
+              "explanation": "Had fixed shows the earlier completed action.",
+              "context": "it-work"
+            },
+            {
+              "id": "b1-narrative-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: I would called the client.",
+              "answer": "I would call the client.",
+              "options": [
+                "I would called the client.",
+                "I would have called the client.",
+                "I would call the client.",
+                "I called the client.",
+                "I would be called the client."
+              ],
+              "explanation": "After would, use the base verb.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-narrative-fill-6",
+              "kind": "fillBlank",
+              "prompt": "By the time the manager arrived, they _____ already finished the deployment.",
+              "answer": "had",
+              "options": [
+                "had",
+                "have",
+                "has",
+                "have had",
+                "was"
+              ],
+              "explanation": "Use had to complete a past action before another past action.",
+              "context": "it-work"
+            },
+            {
+              "id": "b1-narrative-fill-2-meetings-1",
+              "kind": "fillBlank",
+              "prompt": "My family _____ dinner together every Saturday. (Meetings)",
+              "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "having",
+                "did"
+              ],
+              "explanation": "Past Simple with yesterday-like routine in narrative context. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-narrative-fill-4-meetings-2",
+              "kind": "fillBlank",
+              "prompt": "Last week, my father _____ the whole team call at 4:00. (Meetings)",
+              "answer": "ended",
+              "options": [
+                "ended",
+                "end",
+                "ending",
+                "ends",
+                "stopped"
+              ],
+              "explanation": "Use past simple for a specific finished action. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-narrative-transform-1-meetings-3",
+              "kind": "transform",
+              "prompt": "Change to conditional: I call support if the error returns. (Meetings)",
+              "answer": "I would call support if the error returned.",
+              "explanation": "Use would + base verb and past form in the if-clause. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "I would call support if the error returned.",
+                "I will call support if the error returned.",
+                "I would not call support if the error returned.",
+                "would I call support if the error returned.",
+                "I call support if the error returned."
+              ]
+            },
+            {
+              "id": "b1-narrative-fill-6-meetings-4",
+              "kind": "fillBlank",
+              "prompt": "By the time the manager arrived, they _____ already finished the deployment. (Meetings)",
+              "answer": "had",
+              "options": [
+                "had",
+                "have",
+                "has",
+                "have had",
+                "was"
+              ],
+              "explanation": "Use had to complete a past action before another past action. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "b1-narrative-fill-1-travel-vacation-1",
+              "kind": "fillBlank",
+              "prompt": "Yesterday we _____ the bug. (Travel and vacation)",
+              "answer": "fixed",
+              "options": [
+                "fixed",
+                "fix",
+                "fixes",
+                "fixing",
+                "had"
+              ],
+              "explanation": "Use Simple Past with yesterday. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b1-narrative-fill-3-travel-vacation-2",
+              "kind": "fillBlank",
+              "prompt": "On Sundays, we _____ to the park. (Travel and vacation)",
+              "answer": "went",
+              "options": [
+                "went",
+                "go",
+                "gone",
+                "goes",
+                "going"
+              ],
+              "explanation": "Use simple past with yesterday/last week/story context. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b1-narrative-fill-5-travel-vacation-3",
+              "kind": "fillBlank",
+              "prompt": "The lead developer _____ two prototypes before lunch. (Travel and vacation)",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishing",
+                "finishes",
+                "done"
+              ],
+              "explanation": "Use past simple in a clear time sequence. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b1-narrative-choose-1-travel-vacation-4",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By the time I arrived, they had fixed the issue. (Travel and vacation)",
+              "answer": "past perfect",
+              "options": [
+                "past perfect",
+                "past continuous",
+                "simple past",
+                "past perfect continuous"
+              ],
+              "explanation": "Had fixed shows the earlier completed action. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b1-narrative-fill-6-travel-vacation-5",
+              "kind": "fillBlank",
+              "prompt": "By the time the manager arrived, they _____ already finished the deployment. (Travel and vacation)",
+              "answer": "had",
+              "options": [
+                "had",
+                "have",
+                "has",
+                "have had",
+                "was"
+              ],
+              "explanation": "Use had to complete a past action before another past action. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b1-narrative-fill-2-daily-habits-1",
+              "kind": "fillBlank",
+              "prompt": "My family _____ dinner together every Saturday. (Daily habits)",
+              "answer": "had",
+              "options": [
+                "had",
+                "has",
+                "have",
+                "having",
+                "did"
+              ],
+              "explanation": "Past Simple with yesterday-like routine in narrative context. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b1-narrative-fill-5-daily-habits-2",
+              "kind": "fillBlank",
+              "prompt": "The lead developer _____ two prototypes before lunch. (Daily habits)",
+              "answer": "finished",
+              "options": [
+                "finished",
+                "finish",
+                "finishing",
+                "finishes",
+                "done"
+              ],
+              "explanation": "Use past simple in a clear time sequence. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b1-narrative-choose-1-daily-habits-3",
+              "kind": "chooseTense",
+              "prompt": "Choose the tense: By the time I arrived, they had fixed the issue. (Daily habits)",
+              "answer": "past perfect",
+              "options": [
+                "past perfect",
+                "past continuous",
+                "simple past",
+                "past perfect continuous"
+              ],
+              "explanation": "Had fixed shows the earlier completed action. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b1-narrative-fill-6-daily-habits-4",
+              "kind": "fillBlank",
+              "prompt": "By the time the manager arrived, they _____ already finished the deployment. (Daily habits)",
+              "answer": "had",
+              "options": [
+                "had",
+                "have",
+                "has",
+                "have had",
+                "was"
+              ],
+              "explanation": "Use had to complete a past action before another past action. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b1-narrative-family-translation-3",
+              "kind": "translation",
+              "prompt": "Translate: Cuando llegue, mi familia estaba cenando.",
+              "answer": "When I arrived, my family was having dinner.",
+              "options": [
+                "When I arrived, my family was having dinner.",
+                "When I was arriving, my family had dinner.",
+                "When I arrive, my family was having dinner.",
+                "When I arrived, my family is having dinner."
+              ],
+              "explanation": "Use Past Simple for the arrival and Past Continuous for the action in progress.",
+              "context": "family-routines"
+            },
+            {
+              "id": "b1-narrative-family-choose-4",
+              "kind": "chooseTense",
+              "prompt": "Choose the contrast: My sister was cooking when the phone rang.",
+              "answer": "past continuous + past simple",
+              "options": [
+                "past continuous + past simple",
+                "past simple + past continuous",
+                "present perfect + past simple",
+                "past perfect + present simple"
+              ],
+              "explanation": "Past Continuous gives the background; Past Simple marks the interrupting event.",
+              "context": "family-routines"
+            },
+            {
+              "id": "b1-narrative-family-correct-5",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: We were watch television when the lights went out.",
+              "answer": "We were watching television when the lights went out.",
+              "options": [
+                "We were watching television when the lights went out.",
+                "We were watch television when the lights went out.",
+                "We watched television when the lights were go out.",
+                "We are watching television when the lights went out."
+              ],
+              "explanation": "Past Continuous requires was or were plus the -ing form.",
+              "context": "family-routines"
+            }
+          ]
+        }
+      ],
+      "learnerContext": [
+        "telling a personal story",
+        "explaining a work problem",
+        "agreeing on a practical plan"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "b1-narrative-pronunciation",
+          "text": "I was checking the system when the connection suddenly failed.",
+          "focus": "Stress the interrupting event",
+          "note": "Say was checking smoothly and emphasize suddenly failed."
+        },
+        {
+          "id": "b1-plan-pronunciation",
+          "text": "We are going to review the issue before we make a decision.",
+          "focus": "Group the plan into two thought units",
+          "note": "Pause lightly before before."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Tell a short story about a problem, explain what was happening, and describe the plan you made afterward.",
+        "requiredStructures": [
+          "past simple and past continuous",
+          "at least two sequence connectors",
+          "one future plan"
+        ],
+        "checklist": [
+          "Make the order of events clear.",
+          "Include the result of the problem.",
+          "Speak for about one minute after writing notes."
+        ]
+      }
+    },
+    {
+      "id": "b2-mixed-tenses-independent-production",
+      "title": "B2 Mixed Tenses and Independent Production",
+      "level": "advanced",
+      "cefrLevel": "B2",
+      "unitOrder": 1,
+      "prerequisiteUnitIds": [
+        "b1-narratives-plans-problems"
+      ],
+      "focus": "Combine mixed tenses, passive ideas, reported speech, conditionals, and connectors in longer speaking and writing.",
+      "tenseIds": [
+        "simplePast",
+        "presentPerfect",
+        "pastPerfect",
+        "simpleConditional",
+        "perfectConditional"
+      ],
+      "contextTags": [
+        "it-work",
+        "meetings",
+        "travel-vacation",
+        "daily-habits"
+      ],
+      "objectives": [
+        "Combine tenses to explain complex situations.",
+        "Use passive-style meaning when the action is more important than the actor.",
+        "Report information and add connectors for coherence."
+      ],
+      "sections": [
+        {
+          "id": "meaning",
+          "type": "theory",
+          "title": "Meaning",
+          "body": [
+            "B2 communication connects ideas across time and explains cause, contrast, and consequence.",
+            "Use mixed tenses to show sequence, reported speech to repeat information, and passive meaning when the result matters more than the actor."
+          ],
+          "signalWords": [
+            "although",
+            "however",
+            "therefore",
+            "because",
+            "had",
+            "would have",
+            "was told"
+          ]
+        },
+        {
+          "id": "structures",
+          "type": "structures",
+          "title": "Structures",
+          "structures": [
+            {
+              "form": "affirmative",
+              "pattern": "Past context + present result + connector",
+              "example": "The team missed the deadline, but they have improved the process."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + was/were + past participle",
+              "example": "The report was reviewed before the meeting."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "Subject + said/told + reported clause",
+              "example": "She said the client had approved the plan."
+            },
+            {
+              "form": "affirmative",
+              "pattern": "If + past perfect, subject + would have + past participle",
+              "example": "If we had tested earlier, we would have found the error."
+            }
+          ]
+        },
+        {
+          "id": "common-mistakes",
+          "type": "commonMistakes",
+          "title": "Common mistakes",
+          "mistakes": [
+            {
+              "wrong": "The report reviewed before the meeting.",
+              "right": "The report was reviewed before the meeting.",
+              "why": "Passive meaning needs be + past participle."
+            },
+            {
+              "wrong": "She said the client approves the plan yesterday.",
+              "right": "She said the client had approved the plan.",
+              "why": "Reported speech often shifts the tense back when reporting past information."
+            },
+            {
+              "wrong": "If we tested earlier, we would have found it.",
+              "right": "If we had tested earlier, we would have found it.",
+              "why": "Past unreal results use if + past perfect and would have + participle."
+            }
+          ]
+        },
+        {
+          "id": "examples",
+          "type": "examples",
+          "title": "Examples",
+          "examples": [
+            {
+              "context": "it-work",
+              "sentence": "Although the release was delayed, the team has already fixed the critical issue.",
+              "note": "Although connects contrast across past and present result."
+            },
+            {
+              "context": "meetings",
+              "sentence": "She said the client had approved the plan before the call.",
+              "note": "Reported speech uses had approved to show earlier information."
+            },
+            {
+              "context": "travel-vacation",
+              "sentence": "If we had booked earlier, we would have paid less.",
+              "note": "This describes an unreal past result."
+            }
+          ]
+        },
+        {
+          "id": "context-vocabulary",
+          "type": "vocabulary",
+          "title": "Context vocabulary",
+          "vocabulary": [
+            {
+              "term": "although",
+              "meaning": "used to connect contrast",
+              "example": "Although it was late, we finished the task.",
+              "context": "meetings"
+            },
+            {
+              "term": "therefore",
+              "meaning": "used to show a result",
+              "example": "The test failed; therefore, we delayed the release.",
+              "context": "it-work"
+            },
+            {
+              "term": "approved",
+              "meaning": "accepted or officially agreed",
+              "example": "The client had approved the plan.",
+              "context": "meetings"
+            }
+          ]
+        },
+        {
+          "id": "starter-practice",
+          "type": "exercises",
+          "title": "Starter practice",
+          "exercises": [
+            {
+              "id": "b2-mixed-transform-1",
+              "kind": "transform",
+              "prompt": "Change to passive meaning: The manager reviewed the report.",
+              "answer": "The report was reviewed by the manager.",
+              "explanation": "Use was + past participle for passive meaning in the past.",
+              "context": "meetings",
+              "options": [
+                "The report was reviewed by the manager.",
+                "The report were reviewed by the manager.",
+                "The report was not reviewed by the manager.",
+                "report The was reviewed by the manager.",
+                "The was reviewed by the manager."
+              ]
+            },
+            {
+              "id": "b2-mixed-correct-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: If we tested earlier, we would have found it.",
+              "answer": "If we had tested earlier, we would have found it.",
+              "options": [
+                "If we tested earlier, we would have found it.",
+                "If we have tested earlier, we would have found it.",
+                "If we had tested earlier, we would have found it.",
+                "If we would had tested earlier, we would found it.",
+                "If we tested earlier, we found it."
+              ],
+              "explanation": "Use had + past participle in the if-clause for unreal past results.",
+              "context": "it-work"
+            },
+            {
+              "id": "b2-mixed-choose-1",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the plan.",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "past continuous"
+              ],
+              "explanation": "Had approved reports earlier information from a past reporting point.",
+              "context": "meetings"
+            },
+            {
+              "id": "b2-mixed-translation-1",
+              "kind": "translation",
+              "prompt": "Translate: Si hubieramos reservado antes, habriamos pagado menos.",
+              "answer": "If we had booked earlier, we would have paid less.",
+              "explanation": "Use if + past perfect and would have + past participle.",
+              "context": "travel-vacation",
+              "options": [
+                "If we had booked earlier, we would have paid less.",
+                "If we had booked earlier, we would has paid less.",
+                "If we have booked earlier, we would have paid less.",
+                "If we had booked earlier, we will have paid less.",
+                "If we had not booked earlier, we would have paid less."
+              ]
+            },
+            {
+              "id": "b2-mixed-transform-2",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager.",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action.",
+              "context": "it-work",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-correct-2",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: The report was reviewing by the team.",
+              "answer": "The report was reviewed by the team.",
+              "options": [
+                "The report was reviewing by the team.",
+                "The report reviewed by the team.",
+                "The report was reviewed by the team.",
+                "The report is reviewing by the team.",
+                "The report will reviewed by the team."
+              ],
+              "explanation": "Passive voice needs the past participle after was/were.",
+              "context": "it-work"
+            },
+            {
+              "id": "b2-mixed-choose-2",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the requirements.",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "present perfect"
+              ],
+              "explanation": "Reported speech shifts to past perfect for prior information.",
+              "context": "it-work"
+            },
+            {
+              "id": "b2-mixed-translation-2",
+              "kind": "translation",
+              "prompt": "Translate: El director dijo que el sistema estuvo listo antes de la reunión.",
+              "answer": "The director said that the system had been ready before the meeting.",
+              "explanation": "Reported speech often uses past-perfect-style structure for earlier completed state.",
+              "context": "it-work",
+              "options": [
+                "The director said that the system had been ready before the meeting.",
+                "The director said that the system have been ready before the meeting.",
+                "The director said that the system had being ready before the meeting.",
+                "The director said that the system had not been ready before the meeting.",
+                "director The said that the system had been ready before the meeting."
+              ]
+            },
+            {
+              "id": "b2-mixed-transform-2-meetings-1",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager. (Meetings)",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action. Meetings context.",
+              "context": "meetings",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-choose-2-meetings-2",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the requirements. (Meetings)",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "present perfect"
+              ],
+              "explanation": "Reported speech shifts to past perfect for prior information. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "b2-mixed-correct-1-meetings-3",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: If we tested earlier, we would have found it. (Meetings)",
+              "answer": "If we had tested earlier, we would have found it.",
+              "options": [
+                "If we tested earlier, we would have found it.",
+                "If we have tested earlier, we would have found it.",
+                "If we had tested earlier, we would have found it.",
+                "If we would had tested earlier, we would found it.",
+                "If we tested earlier, we found it."
+              ],
+              "explanation": "Use had + past participle in the if-clause for unreal past results. Meetings context.",
+              "context": "meetings"
+            },
+            {
+              "id": "b2-mixed-correct-1-travel-vacation-1",
+              "kind": "correctMistake",
+              "prompt": "Correct the sentence: If we tested earlier, we would have found it. (Travel and vacation)",
+              "answer": "If we had tested earlier, we would have found it.",
+              "options": [
+                "If we tested earlier, we would have found it.",
+                "If we have tested earlier, we would have found it.",
+                "If we had tested earlier, we would have found it.",
+                "If we would had tested earlier, we would found it.",
+                "If we tested earlier, we found it."
+              ],
+              "explanation": "Use had + past participle in the if-clause for unreal past results. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b2-mixed-transform-2-travel-vacation-2",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager. (Travel and vacation)",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action. Travel and vacation context.",
+              "context": "travel-vacation",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-choose-2-travel-vacation-3",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the requirements. (Travel and vacation)",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "present perfect"
+              ],
+              "explanation": "Reported speech shifts to past perfect for prior information. Travel and vacation context.",
+              "context": "travel-vacation"
+            },
+            {
+              "id": "b2-mixed-transform-2-meetings-1-travel-vacation-4",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager. (Meetings) (Travel and vacation)",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action. Meetings context. Travel and vacation context.",
+              "context": "travel-vacation",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-transform-1-daily-habits-1",
+              "kind": "transform",
+              "prompt": "Change to passive meaning: The manager reviewed the report. (Daily habits)",
+              "answer": "The report was reviewed by the manager.",
+              "explanation": "Use was + past participle for passive meaning in the past. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "The report was reviewed by the manager.",
+                "The report were reviewed by the manager.",
+                "The report was not reviewed by the manager.",
+                "report The was reviewed by the manager.",
+                "The was reviewed by the manager."
+              ]
+            },
+            {
+              "id": "b2-mixed-choose-1-daily-habits-2",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the plan. (Daily habits)",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "past continuous"
+              ],
+              "explanation": "Had approved reports earlier information from a past reporting point. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b2-mixed-transform-2-daily-habits-3",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager. (Daily habits)",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-choose-2-daily-habits-4",
+              "kind": "chooseTense",
+              "prompt": "Choose the structure: She said the client had approved the requirements. (Daily habits)",
+              "answer": "reported speech with past perfect",
+              "options": [
+                "reported speech with past perfect",
+                "reported speech present",
+                "simple past",
+                "present perfect"
+              ],
+              "explanation": "Reported speech shifts to past perfect for prior information. Daily habits context.",
+              "context": "daily-habits"
+            },
+            {
+              "id": "b2-mixed-transform-2-meetings-1-daily-habits-5",
+              "kind": "transform",
+              "prompt": "Change to active voice: The update was approved by the project manager. (Meetings) (Daily habits)",
+              "answer": "The project manager approved the update.",
+              "explanation": "In active voice, the actor performs the action. Meetings context. Daily habits context.",
+              "context": "daily-habits",
+              "options": [
+                "The project manager approved the update.",
+                "project The manager approved the update.",
+                "The manager approved the update.",
+                "The The project manager approved the update."
+              ]
+            },
+            {
+              "id": "b2-mixed-fill-it-work-1",
+              "kind": "fillBlank",
+              "prompt": "The final report _____ by the team before the director arrived.",
+              "answer": "had been reviewed",
+              "options": [
+                "had been reviewed",
+                "has reviewed",
+                "was reviewing",
+                "would review"
+              ],
+              "explanation": "Use past perfect passive for a completed action before another past event.",
               "context": "it-work"
             }
           ]
         }
-      ]
+      ],
+      "learnerContext": [
+        "professional reports",
+        "complex decisions",
+        "summarizing what other people said"
+      ],
+      "pronunciationDrills": [
+        {
+          "id": "b2-reporting-pronunciation",
+          "text": "She explained that the client had already approved the proposal.",
+          "focus": "Keep the reporting clause lighter than the key message",
+          "note": "Stress client, approved, and proposal."
+        },
+        {
+          "id": "b2-passive-pronunciation",
+          "text": "The final decision will be announced after the review has been completed.",
+          "focus": "Maintain rhythm across two passive verb groups",
+          "note": "Repeat will be announced and has been completed separately first."
+        }
+      ],
+      "productionTask": {
+        "prompt": "Write or record a concise professional update that reports prior information, describes a result, and recommends a next step.",
+        "requiredStructures": [
+          "one reported statement",
+          "one passive structure",
+          "accurate contrast between at least three tenses"
+        ],
+        "checklist": [
+          "Use connectors to show cause and sequence.",
+          "Check tense consistency across the whole response.",
+          "Revise one sentence for clarity before finishing."
+        ]
+      }
     }
   ]
 }

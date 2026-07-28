@@ -6,17 +6,34 @@ import { validateVerbData } from "./data/validation.js";
 import { translate } from "./i18n.js";
 import { buildLearningContentPayload, cloneLearningContent, getLearningContentSummary } from "./learningContentAdmin.js";
 import { ALL_CONTEXTS, getUnitContexts, getVocabularyItems, filterByContext } from "./learningContexts.js";
-import { getNextLearningStep, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
+import { DIAGNOSTIC_CHECKS, getDiagnosticResult, toggleDiagnosticAnswer } from "./learningDiagnostic.js";
+import { getLearningUnitsByCefrFilter, getNextLearningStep, getOrderedLearningUnits, getRecommendedLearningUnit, getRecommendedLearningUnitForLevel, getUnitProgress, markUnitProgress, resetUnitProgress } from "./learningPath.js";
 import { SUPPORTED_LEARNER_LANGUAGES, getLearnerMeaning, getLearnerObject } from "./learnerLanguages/index.js";
 import { getPracticeExercises, scorePracticeAnswer } from "./practice.js";
 import { PRODUCTION_PROMPTS, PRODUCTION_STATUSES } from "./data/productionPrompts.js";
+import GuidedLessonPage from "./GuidedLessonPage.jsx";
+import { getSkillMasterySummary, recordExerciseResult, resetUnitSkillProgress } from "./skillMastery.js";
+import AdaptiveReviewPage from "./AdaptiveReviewPage.jsx";
+import { CoursePage, MobileHomeFocus, ProgressPage } from "./LearningHubPages.jsx";
+import FocusedPracticePage from "./FocusedPracticePage.jsx";
+import OnboardingDiagnostic from "./OnboardingDiagnostic.jsx";
+import { buildGuidedLessonSteps } from "./guidedLesson.js";
+import { getJourneyPercent, getJourneyStatus, getUnitJourney, resetUnitJourney, updateUnitJourney } from "./learningJourney.js";
+import ManualPage from "./ManualPage.jsx";
+import UiIcon from "./UiIcon.jsx";
 
 const INITIAL_ALERT_MS = 6000;
 const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
-const MENU_ITEMS = ["home", "theory", "practice", "individual", "complete", "production", "settings", "documentation", "about"];
+const MENU_ITEMS = ["home", "course", "theory", "manual", "practice", "progress", "individual", "complete", "production", "settings", "documentation", "about"];
+const MOBILE_NAV_ITEMS = [
+  { page: "home", labelKey: "home", icon: "home", activePages: ["home"] },
+  { page: "course", labelKey: "course", icon: "course", activePages: ["course", "theory", "lesson"] },
+  { page: "practice", labelKey: "practice", icon: "practice", activePages: ["practice", "review"] },
+  { page: "progress", labelKey: "progress", icon: "progress", activePages: ["progress"] }
+];
 const INDIVIDUAL_TENSE_GROUPS = [
   { id: "past", labelKey: "past", tenseIds: ["simplePast", "pastPerfect", "pastContinuous"] },
   { id: "present", labelKey: "present", tenseIds: ["simplePresent", "presentPerfect", "presentContinuous"] },
@@ -28,6 +45,8 @@ const COMPLETE_FORM_COLUMNS = ["affirmative", "negative", "questionPositive", "q
 const DATA_MANAGER_FIELDS = ["id", "label", "meaningEs", "base", "third", "past", "participle", "gerund", "object", "objectEs", "type"];
 const DATA_TABLE_PAGE_SIZES = [10, 25, 50, 100];
 const PRODUCTION_MODES = ["all", "speaking", "writing"];
+const PRODUCTION_PROMPT_SCOPES = ["suggested", "all"];
+const CEFR_FILTERS = ["all", "A1", "A2", "B1", "B2"];
 const EMPTY_VERB_FORM = {
   id: "",
   label: "",
@@ -42,13 +61,118 @@ const EMPTY_VERB_FORM = {
   type: ""
 };
 
+function shuffleArray(values) {
+  const list = [...values];
+  for (let index = list.length - 1; index > 0; index -= 1) {
+    const nextIndex = (index * 31 + 7) % list.length;
+    [list[index], list[nextIndex]] = [list[nextIndex], list[index]];
+  }
+  return list;
+}
+
+function capitalizeWord(value) {
+  if (!value) return value;
+  return `${value[0].toUpperCase()}${value.slice(1)}`;
+}
+
+function buildFallbackOptionsForExercise(exercise) {
+  if (!exercise || typeof exercise.answer !== "string") return [];
+
+  const rawAnswer = exercise.answer.trim();
+  if (!rawAnswer) return [];
+
+  const punctuation = rawAnswer.match(/[?!.]+$/)?.[0] || ".";
+  const cleanAnswer = rawAnswer.replace(/[?!.]+$/g, "").trim();
+  const tokens = cleanAnswer.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return [rawAnswer];
+
+  const options = new Set([rawAnswer]);
+  const first = tokens[0] ? tokens[0].toLowerCase() : "";
+  const rest = tokens.slice(1);
+
+  const addOption = (value) => {
+    const option = String(value || "").trim();
+    if (!option) return;
+    options.add(option);
+  };
+
+  const auxMap = {
+    are: ["is", "am", "was", "were", "do"],
+    is: ["are", "was", "were", "does", "did"],
+    am: ["are", "is", "was"],
+    do: ["does", "did", "are", "do"],
+    does: ["do", "did", "is", "does"],
+    did: ["do", "does", "will", "had"],
+    have: ["has", "had", "are", "were"],
+    has: ["have", "had", "is"],
+    had: ["have", "has", "did"],
+    will: ["would", "can", "does"],
+    would: ["will", "could", "does"],
+    can: ["could", "will", "do"],
+    could: ["can", "will", "would"],
+    should: ["would", "could", "has"],
+    must: ["might", "can", "should"],
+    may: ["can", "might", "would"]
+  };
+
+  const pronounMap = {
+    i: ["he", "she", "we", "they"],
+    you: ["I", "he", "she", "we", "they"],
+    he: ["I", "you", "she", "we"],
+    she: ["I", "you", "he", "we"],
+    we: ["I", "you", "he", "she", "they"],
+    they: ["I", "you", "he", "she"],
+    it: ["he", "she", "they", "we"]
+  };
+
+  if (rest.length > 0) {
+    if (Array.isArray(auxMap[first])) {
+      const alternatives = auxMap[first].slice(0, 2);
+      for (const aux of alternatives) {
+        addOption(`${capitalizeWord(aux)} ${rest.join(' ')}${punctuation}`);
+      }
+    }
+
+    const pronouns = pronounMap[first] || [];
+    for (const pronoun of pronouns.slice(0, 2)) {
+      addOption(`${capitalizeWord(pronoun)} ${rest.join(' ')}${punctuation}`);
+    }
+  }
+
+  const lowerTokens = tokens.map((token) => token.toLowerCase());
+  const notIndex = lowerTokens.indexOf("not");
+  if (notIndex >= 0) {
+    const withoutNot = [...tokens];
+    withoutNot.splice(notIndex, 1);
+    if (withoutNot.length > 0) {
+      addOption(`${capitalizeWord(withoutNot[0])} ${withoutNot.slice(1).join(' ')}${punctuation}`);
+    }
+  }
+
+  if (tokens.length >= 2) {
+    const swapped = [tokens[1], tokens[0], ...tokens.slice(2)];
+    addOption(`${capitalizeWord(swapped[0])} ${swapped.slice(1).join(' ')}${punctuation}`);
+  }
+
+  while (options.size < 3) {
+    const fallbackOption = `${capitalizeWord(tokens[0])} ${tokens.slice(1).join(' ')}${punctuation}`;
+    if (options.has(fallbackOption)) {
+      addOption(`${capitalizeWord(tokens[0])} ${tokens.slice(1).join(' ')}?`);
+      break;
+    }
+    addOption(fallbackOption);
+  }
+
+  return shuffleArray(Array.from(options)).slice(0, 4);
+}
+
 export default function App() {
   const [storedSettings] = useState(readStoredSettings);
   // Most state in this component represents visible learner choices. The grammar
   // rules themselves stay in conjugation.js so UI changes do not affect output.
   const [appData, setAppData] = useState(DEFAULT_DATA);
-  const [learningContent, setLearningContent] = useState({ schemaVersion: 1, units: [] });
-  const [learningContentDraft, setLearningContentDraft] = useState({ schemaVersion: 2, contexts: [], units: [] });
+  const [learningContent, setLearningContent] = useState({ schemaVersion: 3, units: [] });
+  const [learningContentDraft, setLearningContentDraft] = useState({ schemaVersion: 3, contexts: [], units: [] });
   const [activeLearningUnitId, setActiveLearningUnitId] = useState(storedSettings.activeLearningUnitId || "");
   const [verbId, setVerbId] = useState(storedSettings.verbId || DEFAULT_DATA.verbs[0].id);
   const [subjectId, setSubjectId] = useState(storedSettings.subjectId || SUBJECTS[0].id);
@@ -66,19 +190,27 @@ export default function App() {
   const [verbPattern, setVerbPattern] = useState(storedSettings.verbPattern || "all");
   const [verbSearch, setVerbSearch] = useState(storedSettings.verbSearch || "");
   const [activePage, setActivePage] = useState(storedSettings.activePage || "home");
+  const [completionCelebration, setCompletionCelebration] = useState(null);
   const [interfaceLanguage, setInterfaceLanguage] = useState(storedSettings.interfaceLanguage || storedSettings.language || "en");
   const [learnerLanguage, setLearnerLanguage] = useState(storedSettings.learnerLanguage || "es");
   const [showAllSubjects, setShowAllSubjects] = useState(storedSettings.showAllSubjects ?? false);
   const [showTranslations, setShowTranslations] = useState(storedSettings.showTranslations ?? true);
   const [showSentenceParts, setShowSentenceParts] = useState(storedSettings.showSentenceParts ?? true);
+  const [showFormExplanations, setShowFormExplanations] = useState(storedSettings.showFormExplanations ?? true);
   const [completeFormColumns, setCompleteFormColumns] = useState(() => {
     if (Array.isArray(storedSettings.completeFormColumns) && storedSettings.completeFormColumns.length) return storedSettings.completeFormColumns;
     return COMPLETE_FORM_COLUMNS;
   });
   const [visitedVerbIds, setVisitedVerbIds] = useState(storedSettings.visitedVerbIds || []);
   const [unitProgress, setUnitProgress] = useState(storedSettings.unitProgress || {});
+  const [skillProgress, setSkillProgress] = useState(storedSettings.skillProgress || {});
+  const [journeyProgress, setJourneyProgress] = useState(storedSettings.journeyProgress || {});
+  const [diagnosticAnswers, setDiagnosticAnswers] = useState(storedSettings.diagnosticAnswers || {});
+  const [diagnosticCompleted, setDiagnosticCompleted] = useState(storedSettings.diagnosticCompleted || false);
+  const [cefrFilter, setCefrFilter] = useState(storedSettings.cefrFilter || "all");
   const [selectedContextTag, setSelectedContextTag] = useState(storedSettings.selectedContextTag || ALL_CONTEXTS);
   const [productionDraftPromptId, setProductionDraftPromptId] = useState(storedSettings.productionDraftPromptId || PRODUCTION_PROMPTS[0]?.id || "");
+  const [productionPromptScope, setProductionPromptScope] = useState(storedSettings.productionPromptScope || "suggested");
   const [productionModeFilter, setProductionModeFilter] = useState(storedSettings.productionModeFilter || "all");
   const [productionStatusFilter, setProductionStatusFilter] = useState(storedSettings.productionStatusFilter || "all");
   const [productionResponse, setProductionResponse] = useState(storedSettings.productionResponse || "");
@@ -90,6 +222,10 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
     if (typeof window === "undefined") return true;
     return !window.matchMedia(MOBILE_MENU_QUERY).matches;
+  });
+  const [isHomeNarrow, setIsHomeNarrow] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(MOBILE_MENU_QUERY).matches;
   });
   const [alert, setAlert] = useState(null);
   const [practiceAnswers, setPracticeAnswers] = useState({});
@@ -116,8 +252,10 @@ export default function App() {
   useEffect(() => {
     const mediaQuery = window.matchMedia(MOBILE_MENU_QUERY);
     const syncMenuToViewport = (event) => {
-      setIsMenuOpen(!event.matches);
-      if (!event.matches) setIsFiltersOpen(false);
+      const isNarrow = event.matches;
+      setIsMenuOpen(!isNarrow);
+      setIsHomeNarrow(isNarrow);
+      if (!isNarrow) setIsFiltersOpen(false);
     };
 
     syncMenuToViewport(mediaQuery);
@@ -166,8 +304,8 @@ export default function App() {
       } catch (error) {
         console.error(error);
         if (!isMounted) return;
-        setLearningContent({ schemaVersion: 1, units: [] });
-        setLearningContentDraft({ schemaVersion: 2, contexts: [], units: [] });
+        setLearningContent({ schemaVersion: 3, units: [] });
+        setLearningContentDraft({ schemaVersion: 3, contexts: [], units: [] });
         showTimedAlert(t("learningContentFallback"), "error");
       }
     }
@@ -200,15 +338,15 @@ export default function App() {
   );
 
   const currentVerb = useMemo(
-    () => filteredVerbs.find((verb) => verb.id === verbId) || filteredVerbs[0] || appData.verbs.find((verb) => verb.id === verbId) || appData.verbs[0],
-    [appData.verbs, filteredVerbs, verbId]
+    () => appData.verbs.find((verb) => verb.id === verbId) || patternVerbs[0] || appData.verbs[0],
+    [appData.verbs, patternVerbs, verbId]
   );
 
   useEffect(() => {
-    if (filteredVerbs.length === 0) return;
-    if (filteredVerbs.some((verb) => verb.id === verbId)) return;
-    setVerbId(filteredVerbs[0]?.id ?? appData.verbs[0]?.id ?? "");
-  }, [appData.verbs, filteredVerbs, verbId]);
+    if (patternVerbs.length === 0) return;
+    if (patternVerbs.some((verb) => verb.id === verbId)) return;
+    setVerbId(patternVerbs[0]?.id ?? appData.verbs[0]?.id ?? "");
+  }, [appData.verbs, patternVerbs, verbId]);
 
   const subjects = useMemo(() => {
     if (showAllSubjects) return SUBJECTS;
@@ -251,8 +389,8 @@ export default function App() {
   );
   const progressPercent = appData.verbs.length ? Math.round((progressCount / appData.verbs.length) * 100) : 0;
   const recommendedVerb = useMemo(
-    () => filteredVerbs.find((verb) => !visitedVerbIds.includes(verb.id)) || filteredVerbs.find((verb) => verb.id !== currentVerb?.id) || currentVerb,
-    [currentVerb, filteredVerbs, visitedVerbIds]
+    () => patternVerbs.find((verb) => !visitedVerbIds.includes(verb.id)) || patternVerbs.find((verb) => verb.id !== currentVerb?.id) || currentVerb,
+    [currentVerb, patternVerbs, visitedVerbIds]
   );
   const recommendedSummary = useMemo(() => getVerbSummary(recommendedVerb || currentVerb, learnerLanguage), [currentVerb, learnerLanguage, recommendedVerb]);
   const homePreviewRow = useMemo(() => {
@@ -260,23 +398,37 @@ export default function App() {
     const previewTense = TENSES.find((tense) => tense.id === "simplePresent") || tenses[0] || TENSES[0];
     return buildRows(currentVerb, [previewSubject], [previewTense], interfaceLanguage, { learnerLanguage, useContractions })[0];
   }, [currentVerb, interfaceLanguage, learnerLanguage, subjectId, tenses, useContractions]);
+  const orderedLearningUnits = useMemo(() => getOrderedLearningUnits(learningContent.units), [learningContent.units]);
+  const visibleLearningUnits = useMemo(
+    () => getLearningUnitsByCefrFilter(orderedLearningUnits, cefrFilter),
+    [cefrFilter, orderedLearningUnits]
+  );
+  const diagnosticResult = useMemo(() => getDiagnosticResult(diagnosticAnswers), [diagnosticAnswers]);
+  const diagnosticRecommendedUnit = useMemo(
+    () => getRecommendedLearningUnitForLevel(orderedLearningUnits, unitProgress, diagnosticResult?.cefrLevel),
+    [diagnosticResult?.cefrLevel, orderedLearningUnits, unitProgress]
+  );
+  const cefrRecommendedUnit = useMemo(
+    () => cefrFilter === "all" ? null : getRecommendedLearningUnitForLevel(orderedLearningUnits, unitProgress, cefrFilter),
+    [cefrFilter, orderedLearningUnits, unitProgress]
+  );
   const defaultLearningUnit = useMemo(
-    () => learningContent.units.find((unit) => unit.tenseIds.includes("simplePresent")) || learningContent.units[0],
-    [learningContent.units]
+    () => cefrRecommendedUnit || diagnosticRecommendedUnit || getRecommendedLearningUnit(visibleLearningUnits, unitProgress) || visibleLearningUnits.find((unit) => unit.tenseIds.includes("simplePresent")) || orderedLearningUnits[0],
+    [cefrRecommendedUnit, diagnosticRecommendedUnit, orderedLearningUnits, unitProgress, visibleLearningUnits]
   );
   const primaryLearningUnit = useMemo(
-    () => learningContent.units.find((unit) => unit.id === activeLearningUnitId) || defaultLearningUnit,
-    [activeLearningUnitId, defaultLearningUnit, learningContent.units]
+    () => visibleLearningUnits.find((unit) => unit.id === activeLearningUnitId) || defaultLearningUnit,
+    [activeLearningUnitId, defaultLearningUnit, visibleLearningUnits]
   );
   useEffect(() => {
-    if (!learningContent.units.length) return;
+    if (!visibleLearningUnits.length) return;
     if (!activeLearningUnitId) {
-      setActiveLearningUnitId(defaultLearningUnit?.id || learningContent.units[0].id);
+      setActiveLearningUnitId(defaultLearningUnit?.id || visibleLearningUnits[0].id);
       return;
     }
-    if (learningContent.units.some((unit) => unit.id === activeLearningUnitId)) return;
-    setActiveLearningUnitId(defaultLearningUnit?.id || learningContent.units[0].id);
-  }, [activeLearningUnitId, defaultLearningUnit, learningContent.units]);
+    if (visibleLearningUnits.some((unit) => unit.id === activeLearningUnitId)) return;
+    setActiveLearningUnitId(defaultLearningUnit?.id || visibleLearningUnits[0].id);
+  }, [activeLearningUnitId, defaultLearningUnit, visibleLearningUnits]);
   const unitContexts = useMemo(
     () => getUnitContexts(primaryLearningUnit, learningContent.contexts || []),
     [learningContent.contexts, primaryLearningUnit]
@@ -291,9 +443,21 @@ export default function App() {
     [primaryLearningUnit?.id, unitProgress]
   );
   const productionPrompts = useMemo(() => PRODUCTION_PROMPTS, []);
+  const suggestedProductionPrompts = useMemo(
+    () => getSuggestedProductionPrompts(productionPrompts, primaryLearningUnit),
+    [primaryLearningUnit, productionPrompts]
+  );
+  const composerProductionPrompts = useMemo(() => {
+    const scopedPrompts = productionPromptScope === "suggested" ? suggestedProductionPrompts : productionPrompts;
+    const currentPrompt = productionPrompts.find((prompt) => prompt.id === productionDraftPromptId);
+    if (currentPrompt && !scopedPrompts.some((prompt) => prompt.id === currentPrompt.id)) {
+      return [currentPrompt, ...scopedPrompts];
+    }
+    return scopedPrompts;
+  }, [productionDraftPromptId, productionPromptScope, productionPrompts, suggestedProductionPrompts]);
   const currentProductionPrompt = useMemo(
-    () => productionPrompts.find((prompt) => prompt.id === productionDraftPromptId) || productionPrompts[0] || null,
-    [productionPrompts, productionDraftPromptId]
+    () => composerProductionPrompts.find((prompt) => prompt.id === productionDraftPromptId) || composerProductionPrompts[0] || null,
+    [composerProductionPrompts, productionDraftPromptId]
   );
   const productionQueueRows = useMemo(() => {
     const rows = [];
@@ -333,10 +497,17 @@ export default function App() {
   }, [selectedContextTag, unitContexts]);
 
   useEffect(() => {
-    if (!productionPrompts.length) return;
-    if (productionDraftPromptId && productionPrompts.some((prompt) => prompt.id === productionDraftPromptId)) return;
-    setProductionDraftPromptId(productionPrompts[0].id);
-  }, [productionDraftPromptId, productionPrompts]);
+    if (!composerProductionPrompts.length) return;
+    if (productionDraftPromptId && composerProductionPrompts.some((prompt) => prompt.id === productionDraftPromptId)) return;
+    setProductionDraftPromptId(composerProductionPrompts[0].id);
+  }, [composerProductionPrompts, productionDraftPromptId]);
+
+  useEffect(() => {
+    if (productionPromptScope !== "suggested" || productionEditingAttemptId) return;
+    if (!suggestedProductionPrompts.length) return;
+    if (suggestedProductionPrompts.some((prompt) => prompt.id === productionDraftPromptId)) return;
+    setProductionDraftPromptId(suggestedProductionPrompts[0].id);
+  }, [productionDraftPromptId, productionEditingAttemptId, productionPromptScope, suggestedProductionPrompts]);
 
   useEffect(() => {
     if (activePage !== "theory" || !primaryLearningUnit?.id) return;
@@ -366,11 +537,18 @@ export default function App() {
       showAllSubjects,
       showTranslations,
       showSentenceParts,
+      showFormExplanations,
       completeFormColumns,
       visitedVerbIds,
       unitProgress,
+      skillProgress,
+      journeyProgress,
+      diagnosticAnswers,
+      diagnosticCompleted,
+      cefrFilter,
       selectedContextTag,
       productionDraftPromptId,
+      productionPromptScope,
       productionModeFilter,
       productionStatusFilter,
       productionResponse,
@@ -379,7 +557,30 @@ export default function App() {
       productionEditingAttemptId,
       productionAttempts
     });
-  }, [activePage, completeFormColumns, group, individualSubjectIds, individualTenseIds, interfaceLanguage, learnerLanguage, level, productionDraftPromptId, productionEditingAttemptId, productionModeFilter, productionReview, productionResponse, productionStatus, productionStatusFilter, selectedContextTag, showAllSubjects, showSentenceParts, showTranslations, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds, productionAttempts]);
+  }, [activePage, cefrFilter, completeFormColumns, diagnosticAnswers, diagnosticCompleted, group, individualSubjectIds, individualTenseIds, interfaceLanguage, journeyProgress, learnerLanguage, level, productionDraftPromptId, productionEditingAttemptId, productionModeFilter, productionPromptScope, productionReview, productionResponse, productionStatus, productionStatusFilter, selectedContextTag, showAllSubjects, showFormExplanations, showSentenceParts, showTranslations, skillProgress, subjectId, unitProgress, verbId, verbPattern, verbSearch, visitedVerbIds, productionAttempts]);
+
+  useEffect(() => {
+    if (activePage !== "production" || !primaryLearningUnit?.id) return;
+    const journey = getUnitJourney(journeyProgress, primaryLearningUnit.id);
+    if (journey.productionCompleted) return;
+    const unitPromptIds = PRODUCTION_PROMPTS.filter((prompt) => (prompt.unitIds || []).includes(primaryLearningUnit.id)).map((prompt) => prompt.id);
+    const hasSavedAttempt = unitPromptIds.some((promptId) => (productionAttempts[promptId] || []).length > 0);
+    if (!hasSavedAttempt) return;
+
+    setJourneyProgress((current) => updateUnitJourney(current, primaryLearningUnit.id, { productionCompleted: true }));
+    setUnitProgress((current) => markUnitProgress(current, primaryLearningUnit.id, { theoryViewed: true, practiceCompleted: true }));
+    const currentIndex = orderedLearningUnits.findIndex((unit) => unit.id === primaryLearningUnit.id);
+    const nextUnit = orderedLearningUnits[currentIndex + 1];
+    if (nextUnit) {
+      setActiveLearningUnitId(nextUnit.id);
+      setCefrFilter(nextUnit.cefrLevel);
+    }
+    setActivePage("home");
+    setCompletionCelebration({
+      unitTitle: primaryLearningUnit.title,
+      nextUnitTitle: nextUnit?.title || ""
+    });
+  }, [activePage, journeyProgress, orderedLearningUnits, primaryLearningUnit?.id, productionAttempts]);
 
   function showTimedAlert(message, type = "success") {
     setAlert({ message, type });
@@ -655,6 +856,9 @@ export default function App() {
     clearStoredSettings();
     setVisitedVerbIds([]);
     setUnitProgress({});
+    setSkillProgress({});
+    setJourneyProgress({});
+    setDiagnosticCompleted(false);
     showTimedAlert(t("progressReset"));
   }
 
@@ -662,9 +866,44 @@ export default function App() {
     if (!primaryLearningUnit?.id || !window.confirm(t("resetUnitProgressConfirm"))) return;
 
     setUnitProgress((current) => resetUnitProgress(current, primaryLearningUnit.id));
+    setSkillProgress((current) => resetUnitSkillProgress(current, primaryLearningUnit.id));
+    setJourneyProgress((current) => resetUnitJourney(current, primaryLearningUnit.id));
     setPracticeAnswers({});
     setPracticeResults({});
     showTimedAlert(t("unitProgressReset"));
+  }
+
+  function handleToggleDiagnosticAnswer(checkId) {
+    setDiagnosticAnswers((current) => toggleDiagnosticAnswer(current, checkId));
+  }
+
+  function handleApplyDiagnosticRecommendation() {
+    if (!diagnosticRecommendedUnit?.id) return;
+
+    setCefrFilter(diagnosticRecommendedUnit.cefrLevel || "all");
+    setActiveLearningUnitId(diagnosticRecommendedUnit.id);
+    setActivePage("lesson");
+    showTimedAlert(t("diagnosticRecommendationApplied"));
+  }
+
+  function handleResetDiagnostic() {
+    if (!window.confirm(t("resetDiagnosticConfirm"))) return;
+
+    setDiagnosticAnswers({});
+    setDiagnosticCompleted(false);
+    showTimedAlert(t("diagnosticReset"));
+  }
+
+  function handleCefrFilterChange(nextFilter) {
+    setCefrFilter(nextFilter);
+    if (nextFilter === "all") {
+      const nextUnit = diagnosticRecommendedUnit || getRecommendedLearningUnit(orderedLearningUnits, unitProgress) || orderedLearningUnits[0];
+      if (nextUnit?.id) setActiveLearningUnitId(nextUnit.id);
+      return;
+    }
+
+    const nextUnit = getRecommendedLearningUnitForLevel(orderedLearningUnits, unitProgress, nextFilter);
+    if (nextUnit?.id) setActiveLearningUnitId(nextUnit.id);
   }
 
 
@@ -758,6 +997,7 @@ export default function App() {
   }
 
   function handleEditProductionAttempt(promptId, attempt) {
+    setProductionPromptScope("all");
     setProductionDraftPromptId(promptId);
     setProductionEditingAttemptId(attempt.id);
     setProductionResponse(attempt.response || "");
@@ -828,35 +1068,135 @@ export default function App() {
   function renderDashboard() {
     const levelLabel = LEVELS.find((entry) => entry.id === level)?.[interfaceLanguage];
     const unitTitle = primaryLearningUnit?.title || "";
+    const skillSummary = getSkillMasterySummary(skillProgress);
+    const activeJourneySummary = getJourneySummary(primaryLearningUnit);
+    const activeGuidedSteps = buildGuidedLessonSteps(primaryLearningUnit);
+    const activeResumeIndex = Math.min(activeJourneySummary.journey.guidedStepIndex || 0, Math.max(0, activeGuidedSteps.length - 1));
+    const guidedStepKey = {
+      objective: "guidedStepObjective",
+      theory: "guidedStepTheory",
+      examples: "guidedStepExamples",
+      practice: "guidedStepPractice",
+      correction: "guidedStepCorrection",
+      pronunciation: "guidedStepPronunciation",
+      production: "guidedStepProduction",
+      summary: "guidedStepSummary"
+    }[activeGuidedSteps[activeResumeIndex]?.type] || "guidedStepActivity";
+    const activeResumeStep = activeGuidedSteps.length ? `${t("journeyStep")} ${activeResumeIndex + 1} ${t("of")} ${activeGuidedSteps.length} - ${t(guidedStepKey)}` : "";
+    const resumePage = !activeJourneySummary.journey.guidedCompleted
+      ? "lesson"
+      : !activeJourneySummary.journey.practiceCompleted
+        ? "practice"
+        : "production";
+    const levelProgressRows = ["A1", "A2", "B1", "B2"].map((courseLevel) => {
+      const levelUnits = orderedLearningUnits.filter((unit) => unit.cefrLevel === courseLevel);
+      const completed = levelUnits.filter((unit) => getJourneySummary(unit).status === "completed").length;
+      return { level: courseLevel, total: levelUnits.length, completed, percent: levelUnits.length ? Math.round((completed / levelUnits.length) * 100) : 0, active: courseLevel === primaryLearningUnit?.cefrLevel };
+    });
+    const activeLevelUnits = orderedLearningUnits.filter((unit) => unit.cefrLevel === primaryLearningUnit?.cefrLevel);
+    const activeUnitPosition = Math.max(1, activeLevelUnits.findIndex((unit) => unit.id === primaryLearningUnit?.id) + 1);
+    const unitLearningPercent = activeJourneySummary.percent;
+    const homePrimaryActions = [
+      { page: "theory", label: t("openTheory") },
+      { page: "practice", label: t("openPractice") },
+      { page: "production", label: t("production") }
+    ];
+    const homeSecondaryActions = [
+      { page: "individual", label: t("practiceIndividual") },
+      { page: "complete", label: t("viewComplete") }
+    ];
+    const goToHomePage = (page) => setActivePage(page);
+    const isHomeCardOpen = (defaultOpen) => !isHomeNarrow || defaultOpen;
 
     return (
-      <section className="home-board" aria-label={t("home")}>
+      <section className={`home-board ${diagnosticCompleted ? "diagnostic-complete" : "diagnostic-pending"}`} aria-label={t("home")}>
+        <MobileHomeFocus
+          unit={primaryLearningUnit}
+          unitPosition={activeUnitPosition}
+          unitCount={activeLevelUnits.length}
+          unitStatus={activeJourneySummary.status}
+          unitPercent={unitLearningPercent}
+          resumeStep={activeResumeStep}
+          skillSummary={skillSummary}
+          levelProgress={levelProgressRows}
+          t={t}
+          onContinue={() => setActivePage(resumePage)}
+          onReview={() => setActivePage("review")}
+          onCourse={() => setActivePage("course")}
+        />
+        {!diagnosticCompleted && (
+          <OnboardingDiagnostic
+            checks={DIAGNOSTIC_CHECKS}
+            answers={diagnosticAnswers}
+            result={diagnosticResult}
+            t={t}
+            onToggle={handleToggleDiagnosticAnswer}
+            onApply={() => { setDiagnosticCompleted(true); handleApplyDiagnosticRecommendation(); }}
+            onStartA1={() => {
+              const firstA1Unit = orderedLearningUnits.find((unit) => unit.cefrLevel === "A1");
+              setCefrFilter("A1");
+              if (firstA1Unit) setActiveLearningUnitId(firstA1Unit.id);
+              setDiagnosticCompleted(true);
+              setActivePage("lesson");
+            }}
+          />
+        )}
         <div className="home-hero-grid">
           <article className="home-primary-card">
             <div>
               <p className="eyebrow">{t("workspace")}</p>
               <h3>{t("learningUnit")}</h3>
+              <div className="cefr-filter" aria-label={t("levelFilter")}>
+                {CEFR_FILTERS.map((filter) => (
+                  <button
+                    type="button"
+                    key={filter}
+                    className={cefrFilter === filter ? "active" : ""}
+                    aria-pressed={cefrFilter === filter}
+                    onClick={() => handleCefrFilterChange(filter)}
+                  >
+                    {filter === "all" ? t("allLevels") : filter}
+                  </button>
+                ))}
+              </div>
               <SelectField
                 label={t("activeLearningUnit")}
                 value={primaryLearningUnit?.id || ""}
                 onChange={setActiveLearningUnitId}
                 variant="light"
               >
-                {learningContent.units.map((unit) => (
+                {visibleLearningUnits.map((unit) => (
                   <option key={unit.id} value={unit.id}>
-                    {unit.title}
+                    {unit.cefrLevel} - {unit.title}
                   </option>
                 ))}
               </SelectField>
-              <h2>{currentVerb.label}</h2>
-              <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
+              <button type="button" className="home-mobile-continue" onClick={() => setActivePage(resumePage)}>
+                {t("continueLearning")}
+              </button>
+              <div className="home-verb-summary">
+                <h2>{currentVerb.label}</h2>
+                <p>{verbSummary.meaning || t("noLearnerMeaning")} | {verbSummary.object || currentVerb.object || "core form"}</p>
+              </div>
             </div>
-            <div className="dashboard-actions compact-home-actions" aria-label={t("homeActions")}>
-              <button type="button" onClick={() => setActivePage("theory")}>{t("openTheory")}</button>
-              <button type="button" onClick={() => setActivePage("practice")}>{t("openPractice")}</button>
-              <button type="button" onClick={() => setActivePage("individual")}>{t("practiceIndividual")}</button>
-              <button type="button" onClick={() => setActivePage("complete")}>{t("viewComplete")}</button>
-              <button type="button" onClick={() => setActivePage("production")}>{t("production")}</button>
+            <div className="home-action-cluster" aria-label={t("homeActions")}>
+              <div className="dashboard-actions compact-home-actions">
+                {homePrimaryActions.map((action) => (
+                  <button type="button" key={action.page} onClick={() => goToHomePage(action.page)}>
+                    {action.label}
+                  </button>
+                ))}
+              </div>
+              <details className="home-extra-actions" open={!isHomeNarrow}>
+                <summary>{t("homeMoreActions")}</summary>
+                <div className="dashboard-actions compact-home-actions">
+                  {homeSecondaryActions.map((action) => (
+                    <button type="button" key={action.page} onClick={() => goToHomePage(action.page)}>
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              </details>
             </div>
           </article>
 
@@ -880,49 +1220,109 @@ export default function App() {
           </article>
           <article className="home-stat-card"><span>{levelLabel}</span><small>{t("level")}</small></article>
           <article className="home-stat-card"><span>{tenses.length}</span><small>{t("tenses")}</small></article>
-          <article className="home-stat-card"><span>{filteredVerbs.length}</span><small>{t("verbs")}</small></article>
+          <article className="home-stat-card"><span>{patternVerbs.length}</span><small>{t("verbs")}</small></article>
         </section>
 
         <section className="home-content-grid">
-          <article className="home-info-card">
-            <div className="home-card-heading">
-              <p className="eyebrow">{t("profileSnapshot")}</p>
-              <h3>{currentVerb.label}</h3>
-            </div>
-            <dl className="home-compact-list">
-              <div><dt>{t("learnerMeaning")}</dt><dd>{verbSummary.meaning || t("noLearnerMeaning")}</dd></div>
-              <div><dt>{t("baseExample")}</dt><dd>{verbSummary.object || currentVerb.object || "core form"}</dd></div>
-              <div><dt>{t("verbType")}</dt><dd>{verbTypeLabel(verbSummary.type, t)}</dd></div>
-              <div><dt>{t("verbPattern")}</dt><dd>{verbPatternLabel(verbSummary.pattern, t)}</dd></div>
-              <div><dt>{t("keyForms")}</dt><dd>{verbSummary.base} / {verbSummary.past} / {verbSummary.participle} / {verbSummary.gerund}</dd></div>
-            </dl>
+          <article className="home-info-card home-profile-card">
+            <details className="home-content-section" open={isHomeCardOpen(true)}>
+              <summary className="home-card-heading">
+                <p className="eyebrow">{t("profileSnapshot")}</p>
+                <h3>{currentVerb.label}</h3>
+              </summary>
+              <dl className="home-content-body home-compact-list">
+                <div><dt>{t("learnerMeaning")}</dt><dd>{verbSummary.meaning || t("noLearnerMeaning")}</dd></div>
+                <div><dt>{t("baseExample")}</dt><dd>{verbSummary.object || currentVerb.object || "core form"}</dd></div>
+                <div><dt>{t("verbType")}</dt><dd>{verbTypeLabel(verbSummary.type, t)}</dd></div>
+                <div><dt>{t("verbPattern")}</dt><dd>{verbPatternLabel(verbSummary.pattern, t)}</dd></div>
+                <div><dt>{t("keyForms")}</dt><dd>{verbSummary.base} / {verbSummary.past} / {verbSummary.participle} / {verbSummary.gerund}</dd></div>
+              </dl>
+            </details>
           </article>
 
           <article className="home-info-card home-recommend-card">
-            <div className="home-card-heading">
-              <p className="eyebrow">{t("recommendedNow")}</p>
-              <h3>{unitTitle || nextLearningStep.title || recommendedVerb?.label || currentVerb.label}</h3>
-            </div>
-            <dl className="home-compact-list">
-              <div><dt>{t("unitStatus")}</dt><dd>{t(primaryUnitProgress.status)}</dd></div>
-              <div><dt>{t("nextStep")}</dt><dd>{t(nextLearningStep.labelKey)}</dd></div>
-              <div><dt>{t("suggestedTense")}</dt><dd>{TENSES.find((tense) => tense.id === "simplePresent")?.[interfaceLanguage]}</dd></div>
-              <div><dt>{t("learnerMeaning")}</dt><dd>{recommendedSummary.meaning || t("noLearnerMeaning")}</dd></div>
-            </dl>
-            <button
-              type="button"
-              className="home-recommend-button"
-              onClick={() => {
-                if (recommendedVerb?.id) setVerbId(recommendedVerb.id);
-                setActivePage(nextLearningStep.page);
-              }}
-            >
-              {t(nextLearningStep.labelKey)}
-            </button>
+            <details className="home-content-section" open={isHomeCardOpen(false)}>
+              <summary className="home-card-heading">
+                <p className="eyebrow">{t("recommendedNow")}</p>
+                <h3>{unitTitle || nextLearningStep.title || recommendedVerb?.label || currentVerb.label}</h3>
+              </summary>
+              <div className="home-content-body">
+                <dl className="home-compact-list">
+                  <div><dt>{t("unitStatus")}</dt><dd>{t(primaryUnitProgress.status)}</dd></div>
+                  <div><dt>{t("nextStep")}</dt><dd>{t(nextLearningStep.labelKey)}</dd></div>
+                  <div><dt>{t("courseLevel")}</dt><dd>{primaryLearningUnit?.cefrLevel || t("allLevels")}</dd></div>
+                  <div><dt>{t("suggestedTense")}</dt><dd>{TENSES.find((tense) => tense.id === "simplePresent")?.[interfaceLanguage]}</dd></div>
+                  <div><dt>{t("learnerMeaning")}</dt><dd>{recommendedSummary.meaning || t("noLearnerMeaning")}</dd></div>
+                  <div><dt>Skill focus</dt><dd>{skillSummary.priority?.label || "Complete a practice answer"}</dd></div>
+                  <div><dt>Skill mastery</dt><dd>{skillSummary.averageMastery}% across {skillSummary.practicedCount} skills</dd></div>
+                </dl>
+                <button
+                  type="button"
+                  className="home-recommend-button"
+                  onClick={() => {
+                    if (recommendedVerb?.id) setVerbId(recommendedVerb.id);
+                    setActivePage(nextLearningStep.page);
+                  }}
+                >
+                  {t(nextLearningStep.labelKey)}
+                </button>
+                <button type="button" className="home-recommend-button" onClick={() => setActivePage("review")}>
+                  {t("startAdaptiveReview")}
+                </button>
+              </div>
+            </details>
+          </article>
+
+          <article className="home-info-card home-diagnostic-card">
+            <details className="home-content-section" open={isHomeCardOpen(false)}>
+              <summary className="home-card-heading">
+                <p className="eyebrow">{t("diagnostic")}</p>
+                <h3>{diagnosticResult?.cefrLevel || t("diagnosticNotTaken")}</h3>
+              </summary>
+              <div className="home-content-body">
+                <p>{t("diagnosticIntro")}</p>
+                <div className="diagnostic-check-list">
+                  {DIAGNOSTIC_CHECKS.map((check) => (
+                      <label className="check-row check-row-light diagnostic-check-row" key={check.id}>
+                        <input
+                          type="checkbox"
+                          checked={Boolean(diagnosticAnswers[check.id])}
+                          onChange={() => handleToggleDiagnosticAnswer(check.id)}
+                        />
+                      <span><strong>{t(check.labelKey)}</strong>{t(check.descriptionKey)}</span>
+                    </label>
+                  ))}
+                </div>
+                <dl className="home-compact-list">
+                  <div><dt>{t("diagnosticSuggestedLevel")}</dt><dd>{diagnosticResult?.cefrLevel || t("notStarted")}</dd></div>
+                  <div><dt>{t("recommendedUnit")}</dt><dd>{diagnosticRecommendedUnit?.title || t("noLearningContent")}</dd></div>
+                </dl>
+                <div className="diagnostic-actions">
+                  <button type="button" onClick={handleApplyDiagnosticRecommendation} disabled={!diagnosticRecommendedUnit}>
+                    {t("useDiagnosticRecommendation")}
+                  </button>
+                  <button type="button" className="secondary-button" onClick={handleResetDiagnostic} disabled={!diagnosticResult}>
+                    {t("resetDiagnostic")}
+                  </button>
+                </div>
+              </div>
+            </details>
           </article>
         </section>
       </section>
     );
+  }
+
+  function getJourneySummary(unit) {
+    if (!unit?.id) return { journey: {}, totals: { guidedSteps: 0, practiceExercises: 0 }, percent: 0, status: "notStarted" };
+    const journey = getUnitJourney(journeyProgress, unit.id);
+    const totals = {
+      guidedSteps: buildGuidedLessonSteps(unit).length,
+      practiceExercises: getPracticeExercises(unit).length
+    };
+    const legacyCompleted = getUnitProgress(unit.id, unitProgress).status === "completed" && !journey.updatedAt;
+    const status = getJourneyStatus(journey, totals, legacyCompleted);
+    return { journey, totals, status, percent: status === "completed" ? 100 : getJourneyPercent(journey, totals) };
   }
 
   function renderFilterPanel() {
@@ -931,8 +1331,20 @@ export default function App() {
     return (
       <section className="workspace-filters" aria-label={t("filters")}>
         <div className="filter-primary-grid">
-          <TextField label={t("verbSearch")} value={verbSearch} onChange={setVerbSearch} placeholder={t("verbSearchPlaceholder")} />
-          <SelectField label={t("verb")} value={filteredVerbs.length ? verbId : ""} onChange={setVerbId} variant="light" disabled={filteredVerbs.length === 0}>{filteredVerbs.length === 0 ? <option value="">{t("noVerbMatches")}</option> : filteredVerbs.map((verb) => <option key={verb.id} value={verb.id}>{verb.label}</option>)}</SelectField>
+          <VerbCombobox
+            label={t("verb")}
+            verbs={filteredVerbs}
+            selectedVerb={currentVerb}
+            query={verbSearch}
+            learnerLanguage={learnerLanguage}
+            placeholder={t("verbSearchPlaceholder")}
+            t={t}
+            onQueryChange={setVerbSearch}
+            onSelect={(nextVerbId) => {
+              setVerbId(nextVerbId);
+              setVerbSearch("");
+            }}
+          />
           <SelectField label={t("verbPatternFilter")} value={verbPattern} onChange={setVerbPattern} variant="light">{VERB_PATTERN_FILTERS.map((pattern) => <option key={pattern} value={pattern}>{verbPatternFilterLabel(pattern, t)}</option>)}</SelectField>
           <SelectField label={t("level")} value={level} onChange={setLevel} variant="light">{LEVELS.map((entry) => <option key={entry.id} value={entry.id}>{entry[interfaceLanguage]}</option>)}</SelectField>
         </div>
@@ -963,10 +1375,10 @@ export default function App() {
             )}
             <label className="check-row check-row-light"><input type="checkbox" checked={showTranslations} onChange={(event) => setShowTranslations(event.target.checked)} /><span>{t("showTranslations")}</span></label>
             <label className="check-row check-row-light"><input type="checkbox" checked={showSentenceParts} onChange={(event) => setShowSentenceParts(event.target.checked)} /><span>{t("showSentenceParts")}</span></label>
+            {isCompletePage && <label className="check-row check-row-light"><input type="checkbox" checked={showFormExplanations} onChange={(event) => setShowFormExplanations(event.target.checked)} /><span>{t("showWhyThisForm")}</span></label>}
             <div className="filter-table-actions" aria-label={t("tableActions")}>{!isIndividualPage && <button type="button" className="compact-action" onClick={handleExportCsv} aria-label={t("exportCsv")}>CSV</button>}{!isIndividualPage && <button type="button" className="compact-action" onClick={handleExportJson} aria-label={t("exportJson")}>JSON</button>}</div>
           </div>
         </details>
-        {filteredVerbs.length === 0 && <p className="empty-filter-message">{t("noVerbMatchesHelp")}</p>}
       </section>
     );
   }
@@ -1026,6 +1438,16 @@ export default function App() {
                 <div><dt>{t("nextStep")}</dt><dd>{t(nextLearningStep.labelKey)}</dd></div>
               </dl>
               <button type="button" className="reset-progress-button" onClick={handleResetCurrentUnitProgress}>{t("resetUnitProgress")}</button>
+            </div>
+            <div className="unit-progress-box">
+              <p className="eyebrow">{t("diagnostic")}</p>
+              <dl className="data-summary-grid">
+                <div><dt>{t("diagnosticSuggestedLevel")}</dt><dd>{diagnosticResult?.cefrLevel || t("notStarted")}</dd></div>
+                <div><dt>{t("recommendedUnit")}</dt><dd>{diagnosticRecommendedUnit?.title || t("noLearningContent")}</dd></div>
+                <div><dt>{t("diagnosticAnswered")}</dt><dd>{diagnosticResult ? `${diagnosticResult.completedCount}/${diagnosticResult.totalCount}` : "0/4"}</dd></div>
+                <div><dt>{t("storage")}</dt><dd>{t("localBrowser")}</dd></div>
+              </dl>
+              <button type="button" className="reset-progress-button" onClick={handleResetDiagnostic} disabled={!diagnosticResult}>{t("resetDiagnostic")}</button>
             </div>
           </article>
 
@@ -1216,6 +1638,11 @@ export default function App() {
         {status === "all" ? t("allStatuses") : t(status)}
       </option>
     ));
+    const promptScopeOptions = PRODUCTION_PROMPT_SCOPES.map((scope) => (
+      <option key={scope} value={scope}>
+        {t(scope === "suggested" ? "suggestedPrompts" : "allPrompts")}
+      </option>
+    ));
 
     return (
       <section className="settings-page" aria-label={t("production")}>
@@ -1234,16 +1661,33 @@ export default function App() {
           <article className="settings-card">
             <p className="eyebrow">{t("productionComposer")}</p>
             <h3>{t("createNewAttempt")}</h3>
+            <div className="unit-progress-box">
+              <p className="eyebrow">{t("productionGuidance")}</p>
+              <dl className="data-summary-grid">
+                <div><dt>{t("activeLearningUnit")}</dt><dd>{primaryLearningUnit?.title || t("noLearningContent")}</dd></div>
+                <div><dt>{t("diagnosticSuggestedLevel")}</dt><dd>{primaryLearningUnit?.cefrLevel || t("notStarted")}</dd></div>
+                <div><dt>{t("suggestedPrompts")}</dt><dd>{suggestedProductionPrompts.length}</dd></div>
+                <div><dt>{t("allPrompts")}</dt><dd>{productionPrompts.length}</dd></div>
+              </dl>
+            </div>
 
             {currentProductionPrompt ? (
               <div className="production-composer">
+                <SelectField
+                  label={t("promptScope")}
+                  value={productionPromptScope}
+                  onChange={setProductionPromptScope}
+                  variant="light"
+                >
+                  {promptScopeOptions}
+                </SelectField>
                 <SelectField
                   label={t("productionPrompt")}
                   value={currentProductionPrompt.id}
                   onChange={handleProductionPromptChange}
                   variant="light"
                 >
-                  {productionPrompts.map((prompt) => (
+                  {composerProductionPrompts.map((prompt) => (
                     <option key={prompt.id} value={prompt.id}>
                       {prompt.title}
                     </option>
@@ -1253,8 +1697,12 @@ export default function App() {
                 <div className="production-prompt-meta">
                   <span>{t("mode")}: {t(currentProductionPrompt.mode)}</span>
                   <span>{t("tenseCol")}: {tenseLabel(currentProductionPrompt.tenseId, interfaceLanguage)}</span>
+                  <span>{t("diagnosticSuggestedLevel")}: {currentProductionPrompt.cefrLevel}</span>
                   <span>{t("durationMinutes")}: {currentProductionPrompt.suggestedTimeMinutes || 1}</span>
                 </div>
+                <p className="settings-note">
+                  {t("promptScopeNote")}: {(currentProductionPrompt.unitIds || []).join(", ") || t("allPrompts")}
+                </p>
 
                 <p className="production-prompt-text">{currentProductionPrompt.prompt}</p>
 
@@ -1380,7 +1828,7 @@ export default function App() {
                 </tr>
               </thead>
               <tbody>
-                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} visibleColumns={completeFormColumns} t={t} />
+                <ConjugationRows rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} visibleColumns={completeFormColumns} t={t} />
               </tbody>
             </table>
           </div>
@@ -1393,7 +1841,7 @@ export default function App() {
               <p>{t("caption")}</p>
             </div>
           </div>
-          <ConjugationCards rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
+          <ConjugationCards rows={rows} language={interfaceLanguage} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} t={t} />
         </section>
       </>
     );
@@ -1409,40 +1857,34 @@ export default function App() {
         t={t}
         language={interfaceLanguage}
         onContextChange={setSelectedContextTag}
+        onGuidedLesson={() => setActivePage("lesson")}
         onPractice={() => setActivePage("individual")}
       />
     );
   }
 
   function renderPracticeView() {
+    const journey = getUnitJourney(journeyProgress, primaryLearningUnit?.id);
     return (
-      <PracticePage
+      <FocusedPracticePage
         unit={primaryLearningUnit}
         contexts={unitContexts}
         selectedContext={selectedContextTag}
         exercises={practiceExercises}
-        answers={practiceAnswers}
-        results={practiceResults}
+        totalUnitExercises={getPracticeExercises(primaryLearningUnit).length}
+        journey={journey}
         t={t}
         onContextChange={setSelectedContextTag}
-        onAnswerChange={(exerciseId, value) => {
-          setPracticeAnswers((current) => ({ ...current, [exerciseId]: value }));
-          setPracticeResults((current) => {
-            const next = { ...current };
-            delete next[exerciseId];
-            return next;
-          });
+        onProgressChange={(patch) => {
+          setJourneyProgress((current) => updateUnitJourney(current, primaryLearningUnit.id, patch));
+          if (patch.practiceCompleted) {
+            setUnitProgress((current) => markUnitProgress(current, primaryLearningUnit.id, { theoryViewed: true, practiceCompleted: true }));
+          }
         }}
-        onCheck={(exercise) => {
-          setPracticeResults((current) => ({
-            ...current,
-            [exercise.id]: scorePracticeAnswer(exercise.answer, practiceAnswers[exercise.id])
-          }));
+        onAnswerResult={(exercise, isCorrect) => {
+          setSkillProgress((current) => recordExerciseResult(current, primaryLearningUnit, exercise, isCorrect));
         }}
-        onReset={() => {
-          setPracticeAnswers({});
-          setPracticeResults({});
-        }}
+        onContinueProduction={() => setActivePage("production")}
       />
     );
   }
@@ -1627,7 +2069,77 @@ export default function App() {
 
       <main className="content">
         {renderAlert()}
+        {activePage === "home" && completionCelebration && (
+          <section className="completion-celebration" role="status">
+            <span className="completion-celebration-icon"><UiIcon name="spark" size={24} /></span>
+            <div>
+              <strong>{t("celebrationTitle")}</strong>
+              <span>{completionCelebration.nextUnitTitle
+                ? `${completionCelebration.unitTitle}. ${t("celebrationNext")}: ${completionCelebration.nextUnitTitle}`
+                : `${completionCelebration.unitTitle}. ${t("celebrationFinal")}`}</span>
+            </div>
+            <button type="button" aria-label={t("close")} onClick={() => setCompletionCelebration(null)}>
+              <UiIcon name="close" size={18} />
+            </button>
+          </section>
+        )}
         {activePage === "home" && renderDashboard()}
+        {activePage === "course" && (
+          <CoursePage
+            units={orderedLearningUnits}
+            getUnitStatus={(unit) => getJourneySummary(unit).status}
+            activeUnitId={primaryLearningUnit?.id}
+            recommendedUnitId={primaryLearningUnit?.id}
+            t={t}
+            onOpenUnit={(unit) => {
+              setCefrFilter(unit.cefrLevel);
+              setActiveLearningUnitId(unit.id);
+              setActivePage("lesson");
+            }}
+          />
+        )}
+        {activePage === "progress" && (
+          <ProgressPage
+            levelProgress={["A1", "A2", "B1", "B2"].map((courseLevel) => {
+              const levelUnits = orderedLearningUnits.filter((unit) => unit.cefrLevel === courseLevel);
+              const completed = levelUnits.filter((unit) => getJourneySummary(unit).status === "completed").length;
+              return { level: courseLevel, total: levelUnits.length, completed, percent: levelUnits.length ? Math.round((completed / levelUnits.length) * 100) : 0 };
+            })}
+            skillSummary={getSkillMasterySummary(skillProgress)}
+            t={t}
+            onReview={() => setActivePage("review")}
+            onCourse={() => setActivePage("course")}
+          />
+        )}
+        {activePage === "review" && (
+          <AdaptiveReviewPage
+            units={visibleLearningUnits}
+            skillProgress={skillProgress}
+            t={t}
+            onAnswerResult={(unit, exercise, isCorrect) => {
+              setSkillProgress((current) => recordExerciseResult(current, unit, exercise, isCorrect));
+            }}
+            onBack={() => setActivePage("home")}
+            onPractice={() => setActivePage("practice")}
+          />
+        )}
+        {activePage === "lesson" && (
+          <GuidedLessonPage
+            key={primaryLearningUnit?.id}
+            unit={primaryLearningUnit}
+            initialProgress={getUnitJourney(journeyProgress, primaryLearningUnit?.id)}
+            t={t}
+            onProgressChange={(patch) => {
+              setJourneyProgress((current) => updateUnitJourney(current, primaryLearningUnit.id, patch));
+              setUnitProgress((current) => markUnitProgress(current, primaryLearningUnit.id, { theoryViewed: true }));
+            }}
+            onBack={() => setActivePage("theory")}
+            onPractice={() => setActivePage("practice")}
+            onAnswerResult={(exercise, isCorrect) => {
+              setSkillProgress((current) => recordExerciseResult(current, primaryLearningUnit, exercise, isCorrect));
+            }}
+          />
+        )}
         {activePage === "theory" && renderTheoryView()}
         {activePage === "practice" && renderPracticeView()}
         {activePage === "individual" && renderIndividualView()}
@@ -1635,13 +2147,28 @@ export default function App() {
         {activePage === "production" && renderProductionView()}
         {activePage === "settings" && renderSettingsView()}
         {activePage === "documentation" && <DocumentationPage t={t} learnerLanguage={learnerLanguage} />}
+        {activePage === "manual" && <ManualPage t={t} />}
         {activePage === "about" && <AboutPage t={t} />}
       </main>
+      <nav className="mobile-primary-nav" aria-label={t("primaryNavigation")}>
+        {MOBILE_NAV_ITEMS.map((item) => (
+          <button
+            type="button"
+            key={item.page}
+            className={item.activePages.includes(activePage) ? "active" : ""}
+            aria-current={item.activePages.includes(activePage) ? "page" : undefined}
+            onClick={() => setActivePage(item.page)}
+          >
+            <UiIcon name={item.icon} size={19} />
+            <span>{t(item.labelKey)}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
 
-function TheoryPage({ unit, contexts, selectedContext, vocabularyItems, t, language, onContextChange, onPractice }) {
+function TheoryPage({ unit, contexts, selectedContext, vocabularyItems, t, language, onContextChange, onGuidedLesson, onPractice }) {
   if (!unit) {
     return (
       <section className="theory-page">
@@ -1664,7 +2191,12 @@ function TheoryPage({ unit, contexts, selectedContext, vocabularyItems, t, langu
           <h2>{unit.title}</h2>
           <p>{unit.focus}</p>
         </div>
-        <button type="button" onClick={onPractice}>{t("practiceIndividual")}</button>
+        <div className="theory-header-actions">
+          {unit.productionTask && (
+            <button type="button" className="guided-start-button" onClick={onGuidedLesson}>Start guided lesson</button>
+          )}
+          <button type="button" onClick={onPractice}>{t("practiceIndividual")}</button>
+        </div>
       </div>
 
       <ContextFilter
@@ -1890,6 +2422,7 @@ function PracticePage({ unit, contexts, selectedContext, exercises, answers, res
         <div className="practice-list">
           {exercises.map((exercise, index) => {
             const result = results[exercise.id];
+            const options = Array.isArray(exercise.options) && exercise.options.length > 0 ? exercise.options : buildFallbackOptionsForExercise(exercise);
 
             return (
               <article className={`practice-card ${result?.isCorrect ? "correct" : result ? "incorrect" : ""}`} key={exercise.id}>
@@ -1900,10 +2433,23 @@ function PracticePage({ unit, contexts, selectedContext, exercises, answers, res
                   </div>
                   <span className="pattern-pill">{exercise.kind}</span>
                 </div>
-                <label className="field field-light">
-                  <span>{t("yourAnswer")}</span>
-                  <input value={answers[exercise.id] || ""} onChange={(event) => onAnswerChange(exercise.id, event.target.value)} />
-                </label>
+                {options.length > 0 ? (
+                  <label className="field field-light">
+                    <span>{t("yourAnswer")}</span>
+                    <select value={answers[exercise.id] || ""} onChange={(event) => onAnswerChange(exercise.id, event.target.value)}>
+                      <option value="" disabled>{t("selectAnswer")}</option>
+                      {options.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </label>
+                ) : (
+                  <label className="field field-light">
+                    <span>{t("yourAnswer")}</span>
+                    <input value={answers[exercise.id] || ""} onChange={(event) => onAnswerChange(exercise.id, event.target.value)} />
+                    <small>{t("practiceNoOptions")}</small>
+                  </label>
+                )}
                 <div className="practice-actions">
                   <button type="button" onClick={() => onCheck(exercise)}>{t("checkAnswer")}</button>
                 </div>
@@ -1972,6 +2518,107 @@ function AboutPage({ t }) {
   );
 }
 
+function VerbCombobox({ label, verbs, selectedVerb, query, learnerLanguage, placeholder, t, onQueryChange, onSelect }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const visibleVerbs = verbs.slice(0, 10);
+  const listId = "verb-combobox-results";
+  const inputValue = isOpen ? query : selectedVerb?.label || "";
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query, verbs]);
+
+  function chooseVerb(verb) {
+    onSelect(verb.id);
+    setIsOpen(false);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setIsOpen(true);
+      setActiveIndex((index) => Math.min(index + 1, Math.max(visibleVerbs.length - 1, 0)));
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setIsOpen(true);
+      setActiveIndex((index) => Math.max(index - 1, 0));
+    } else if (event.key === "Enter" && isOpen && visibleVerbs[activeIndex]) {
+      event.preventDefault();
+      chooseVerb(visibleVerbs[activeIndex]);
+    } else if (event.key === "Escape") {
+      setIsOpen(false);
+    }
+  }
+
+  return (
+    <div className="field field-light verb-combobox" onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+    }}>
+      <span>{label}</span>
+      <div className="verb-combobox-control">
+        <input
+          type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={isOpen}
+          aria-controls={listId}
+          aria-activedescendant={isOpen && visibleVerbs[activeIndex] ? "verb-option-" + visibleVerbs[activeIndex].id : undefined}
+          value={inputValue}
+          placeholder={placeholder}
+          onFocus={() => setIsOpen(true)}
+          onChange={(event) => {
+            onQueryChange(event.target.value);
+            setIsOpen(true);
+          }}
+          onKeyDown={handleKeyDown}
+        />
+        {isOpen && query && (
+          <button type="button" className="verb-combobox-clear" aria-label={t("clearVerbSearch")} onClick={() => onQueryChange("")}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        )}
+      </div>
+      {isOpen && (
+        <div className="verb-combobox-menu" id={listId} role="listbox" aria-label={t("verbSearchResults")}>
+          {visibleVerbs.length === 0 ? (
+            <div className="verb-combobox-empty">
+              <strong>{t("noVerbMatches")}</strong>
+              <span>{t("noVerbMatchesHelp")}</span>
+            </div>
+          ) : visibleVerbs.map((verb, index) => {
+            const meaning = learnerLanguage === "es"
+              ? verb.meaningEs || verb.meaning?.es || verb.learner?.meaningEs || ""
+              : verb.meaningEn || verb.meaning?.en || verb.learner?.meaningEn || "";
+            const forms = [verb.base, verb.past, verb.participle, verb.forms?.base, verb.forms?.past, verb.forms?.participle]
+              .filter((value, position, values) => value && values.indexOf(value) === position)
+              .slice(0, 3)
+              .join(" / ");
+            return (
+              <button
+                type="button"
+                id={"verb-option-" + verb.id}
+                key={verb.id}
+                role="option"
+                aria-selected={verb.id === selectedVerb?.id}
+                className={"verb-combobox-option " + (index === activeIndex ? "active " : "") + (verb.id === selectedVerb?.id ? "selected" : "")}
+                onMouseDown={(event) => event.preventDefault()}
+                onMouseEnter={() => setActiveIndex(index)}
+                onClick={() => chooseVerb(verb)}
+              >
+                <strong>{verb.label}</strong>
+                {meaning && <span>{meaning}</span>}
+                {forms && <small>{forms}</small>}
+              </button>
+            );
+          })}
+          {verbs.length > visibleVerbs.length && <div className="verb-combobox-more">+{verbs.length - visibleVerbs.length} {t("moreResults")}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SelectField({ label, value, onChange, children, disabled = false, variant = "dark" }) {
   return (
     <label className={`field ${variant === "light" ? "field-light" : ""}`}>
@@ -2025,7 +2672,7 @@ function VerbProfile({ verb, summary, t }) {
   );
 }
 
-function ConjugationRows({ rows, language, showTranslations, showSentenceParts, visibleColumns = COMPLETE_FORM_COLUMNS, t }) {
+function ConjugationRows({ rows, language, showTranslations, showSentenceParts, showFormExplanations, visibleColumns = COMPLETE_FORM_COLUMNS, t }) {
   let activeGroup = "";
 
   return rows.map((row) => {
@@ -2042,6 +2689,7 @@ function ConjugationRows({ rows, language, showTranslations, showSentenceParts, 
         showGroup={shouldRenderGroup}
         showTranslations={showTranslations}
         showSentenceParts={showSentenceParts}
+        showFormExplanations={showFormExplanations}
         visibleColumns={visibleColumns}
         t={t}
       />
@@ -2049,7 +2697,7 @@ function ConjugationRows({ rows, language, showTranslations, showSentenceParts, 
   });
 }
 
-function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts, visibleColumns, t }) {
+function FragmentRow({ row, language, showGroup, showTranslations, showSentenceParts, showFormExplanations, visibleColumns, t }) {
   return (
     <>
       {showGroup && (
@@ -2072,6 +2720,7 @@ function FragmentRow({ row, language, showGroup, showTranslations, showSentenceP
             translation={row.translations[columnId]}
             showTranslations={showTranslations}
             showSentenceParts={showSentenceParts}
+            showFormExplanations={showFormExplanations}
             t={t}
           />
         ))}
@@ -2080,18 +2729,18 @@ function FragmentRow({ row, language, showGroup, showTranslations, showSentenceP
   );
 }
 
-function SentenceCell({ sentence, parts, explanation, translation, showTranslations, showSentenceParts, t }) {
+function SentenceCell({ sentence, parts, explanation, translation, showTranslations, showSentenceParts, showFormExplanations, t }) {
   return (
     <td>
       <span className="sentence">{sentence}</span>
       {showSentenceParts && <SentenceParts parts={parts} />}
-      <ExplanationPanel explanation={explanation} t={t} />
+      {showFormExplanations && <ExplanationPanel explanation={explanation} t={t} />}
       {showTranslations && <span className="translation">{translation}</span>}
     </td>
   );
 }
 
-function ConjugationCards({ rows, language, showTranslations, showSentenceParts, t }) {
+function ConjugationCards({ rows, language, showTranslations, showSentenceParts, showFormExplanations, t }) {
   let activeGroup = "";
 
   return rows.map((row) => {
@@ -2109,17 +2758,17 @@ function ConjugationCards({ rows, language, showTranslations, showSentenceParts,
           </div>
         </div>
         <div className="mobile-form-list">
-          <CardLine label={t("affirmative")} value={row.affirmative} translation={row.translations.affirmative} parts={row.breakdown.affirmative} explanation={row.explanations.affirmative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} defaultOpen />
-          <CardLine label={t("negative")} value={row.negative} translation={row.translations.negative} parts={row.breakdown.negative} explanation={row.explanations.negative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
-          <CardLine label={t("questionPositive")} value={row.questionPositive} translation={row.translations.questionPositive} parts={row.breakdown.questionPositive} explanation={row.explanations.questionPositive} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
-          <CardLine label={t("questionNegative")} value={row.questionNegative} translation={row.translations.questionNegative} parts={row.breakdown.questionNegative} explanation={row.explanations.questionNegative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} t={t} />
+          <CardLine label={t("affirmative")} value={row.affirmative} translation={row.translations.affirmative} parts={row.breakdown.affirmative} explanation={row.explanations.affirmative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} t={t} defaultOpen />
+          <CardLine label={t("negative")} value={row.negative} translation={row.translations.negative} parts={row.breakdown.negative} explanation={row.explanations.negative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} t={t} />
+          <CardLine label={t("questionPositive")} value={row.questionPositive} translation={row.translations.questionPositive} parts={row.breakdown.questionPositive} explanation={row.explanations.questionPositive} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} t={t} />
+          <CardLine label={t("questionNegative")} value={row.questionNegative} translation={row.translations.questionNegative} parts={row.breakdown.questionNegative} explanation={row.explanations.questionNegative} showTranslations={showTranslations} showSentenceParts={showSentenceParts} showFormExplanations={showFormExplanations} t={t} />
         </div>
       </article>
     );
   });
 }
 
-function CardLine({ label, value, translation, parts, explanation, showTranslations, showSentenceParts, t, defaultOpen = false }) {
+function CardLine({ label, value, translation, parts, explanation, showTranslations, showSentenceParts, showFormExplanations, t, defaultOpen = false }) {
   return (
     <details className="mobile-form-line" open={defaultOpen}>
       <summary>
@@ -2128,7 +2777,7 @@ function CardLine({ label, value, translation, parts, explanation, showTranslati
       </summary>
       <div className="mobile-form-detail">
         {showSentenceParts && <SentenceParts parts={parts} />}
-        <ExplanationPanel explanation={explanation} t={t} />
+        {showFormExplanations && <ExplanationPanel explanation={explanation} t={t} />}
         {showTranslations && <p className="card-translation">{translation}</p>}
       </div>
     </details>
@@ -2197,6 +2846,17 @@ function tenseLabel(tenseId, language) {
   const tense = TENSES.find((entry) => entry.id === tenseId);
   return tense?.[language] || tense?.en || tenseId;
 }
+
+function getSuggestedProductionPrompts(prompts, unit) {
+  if (!unit?.id) return prompts;
+
+  const directMatches = prompts.filter((prompt) => Array.isArray(prompt.unitIds) && prompt.unitIds.includes(unit.id));
+  if (directMatches.length > 0) return directMatches;
+
+  const levelMatches = prompts.filter((prompt) => prompt.cefrLevel && prompt.cefrLevel === unit.cefrLevel);
+  return levelMatches.length > 0 ? levelMatches : prompts;
+}
+
 function verbTypeLabel(type, t) {
   if (type === "be") return t("beVerb");
   if (type === "modal") return t("modalVerb");

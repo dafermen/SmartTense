@@ -1,4 +1,4 @@
-const MAX_SCHEMA_VERSION = 2;
+const MAX_SCHEMA_VERSION = 3;
 const MAX_UNITS = 50;
 const MAX_SECTIONS = 40;
 const MAX_ITEMS = 60;
@@ -7,13 +7,34 @@ const MAX_STRING_LENGTH = 300;
 const MAX_ID_LENGTH = 64;
 
 const LEVELS = new Set(["basic", "intermediate", "advanced"]);
+const CEFR_LEVELS = new Set(["A1", "A2", "B1", "B2"]);
 const SECTION_TYPES = new Set(["theory", "structures", "commonMistakes", "examples", "exercises", "vocabulary"]);
 const STRUCTURE_FORMS = new Set(["affirmative", "negative", "questionPositive", "questionNegative"]);
 const EXERCISE_KINDS = new Set(["fillBlank", "transform", "chooseTense", "correctMistake", "translation", "shortAnswer"]);
-
+const EXERCISE_KEYS = new Set(["id", "kind", "prompt", "answer", "explanation", "context", "options"]);
 const ALLOWED_PAYLOAD_KEYS = new Set(["schemaVersion", "updatedAt", "contexts", "units"]);
 const ALLOWED_CONTEXT_KEYS = new Set(["id", "title", "description"]);
-const ALLOWED_UNIT_KEYS = new Set(["id", "title", "level", "focus", "tenseIds", "contextTags", "objectives", "sections"]);
+const ALLOWED_UNIT_KEYS = new Set([
+  "id",
+  "title",
+  "level",
+  "cefrLevel",
+  "unitOrder",
+  "prerequisiteUnitIds",
+  "focus",
+  "tenseIds",
+  "contextTags",
+  "objectives",
+  "sections",
+  "learnerContext",
+  "grammarBlocks",
+  "controlledPractice",
+  "contrastPractice",
+  "mistakeCorrection",
+  "translationPractice",
+  "pronunciationDrills",
+  "productionTask"
+]);
 const ALLOWED_SECTION_KEYS = new Set([
   "id",
   "type",
@@ -25,6 +46,17 @@ const ALLOWED_SECTION_KEYS = new Set([
   "examples",
   "exercises",
   "vocabulary"
+]);
+const ALLOWED_PRODUCTION_TASK_KEYS = new Set([
+  "prompt",
+  "requiredStructures",
+  "checklist"
+]);
+const ALLOWED_PRONUNCIATION_DRILL_KEYS = new Set([
+  "id",
+  "text",
+  "focus",
+  "note"
 ]);
 
 export function validateLearningContent(payload) {
@@ -51,8 +83,9 @@ export function validateLearningContent(payload) {
   const contextIds = validateContexts(payload.contexts);
   const seenUnitIds = new Set();
   for (const unit of payload.units) {
-    validateUnit(unit, seenUnitIds, contextIds);
+    validateUnit(unit, seenUnitIds, contextIds, payload.schemaVersion || 1);
   }
+  validateCurriculumLinks(payload.units, seenUnitIds);
 
   return payload;
 }
@@ -83,7 +116,7 @@ function validateContexts(contexts) {
   return seenContextIds;
 }
 
-function validateUnit(unit, seenUnitIds, contextIds) {
+function validateUnit(unit, seenUnitIds, contextIds, schemaVersion) {
   if (!unit || typeof unit !== "object" || Array.isArray(unit)) {
     throw new Error("Invalid learning unit");
   }
@@ -107,10 +140,34 @@ function validateUnit(unit, seenUnitIds, contextIds) {
     throw new Error(`Invalid unit level: ${unit.level}`);
   }
 
+  if (schemaVersion >= 3 && (unit.cefrLevel === undefined || unit.unitOrder === undefined)) {
+    throw new Error("Missing curriculum metadata");
+  }
+
+  if (unit.cefrLevel !== undefined) {
+    if (!isSafeString(unit.cefrLevel, MAX_ID_LENGTH) || !CEFR_LEVELS.has(unit.cefrLevel)) {
+      throw new Error(`Invalid unit CEFR level: ${unit.cefrLevel}`);
+    }
+  }
+
+  if (unit.unitOrder !== undefined && (!Number.isInteger(unit.unitOrder) || unit.unitOrder < 1 || unit.unitOrder > 999)) {
+    throw new Error(`Invalid unit order: ${unit.unitOrder}`);
+  }
+
+  validateOptionalIdArray(unit.prerequisiteUnitIds, "unit prerequisiteUnitIds");
+
   validateTextArray(unit.tenseIds, "unit tenseIds", MAX_ITEMS, true);
   validateTextArray(unit.contextTags, "unit contextTags", MAX_ITEMS, true);
   validateKnownContextTags(unit.contextTags, contextIds);
   validateTextArray(unit.objectives, "unit objectives", MAX_OBJECTIVES);
+  validateOptionalLearnerContext(unit.learnerContext);
+  validateOptionalExerciseCollection(unit.controlledPractice, "unit controlledPractice", contextIds);
+  validateOptionalExerciseCollection(unit.contrastPractice, "unit contrastPractice", contextIds);
+  validateOptionalExerciseCollection(unit.mistakeCorrection, "unit mistakeCorrection", contextIds);
+  validateOptionalExerciseCollection(unit.translationPractice, "unit translationPractice", contextIds);
+  validateOptionalSectionStructures(unit.grammarBlocks, "unit grammarBlocks");
+  validateOptionalPronunciationDrills(unit.pronunciationDrills);
+  validateOptionalProductionTask(unit.productionTask);
 
   if (!Array.isArray(unit.sections) || unit.sections.length === 0 || unit.sections.length > MAX_SECTIONS) {
     throw new Error("Invalid unit sections");
@@ -119,6 +176,29 @@ function validateUnit(unit, seenUnitIds, contextIds) {
   const seenSectionIds = new Set();
   for (const section of unit.sections) {
     validateSection(section, unit.id, seenSectionIds, contextIds);
+  }
+}
+
+function validateCurriculumLinks(units, unitIds) {
+  const orderKeys = new Set();
+
+  for (const unit of units) {
+    for (const prerequisiteId of unit.prerequisiteUnitIds || []) {
+      if (prerequisiteId === unit.id) {
+        throw new Error(`Unit cannot require itself: ${unit.id}`);
+      }
+      if (!unitIds.has(prerequisiteId)) {
+        throw new Error(`Unknown prerequisite unit id: ${prerequisiteId}`);
+      }
+    }
+
+    if (unit.cefrLevel !== undefined && unit.unitOrder !== undefined) {
+      const orderKey = `${unit.cefrLevel}:${unit.unitOrder}`;
+      if (orderKeys.has(orderKey)) {
+        throw new Error(`Duplicate unit order: ${orderKey}`);
+      }
+      orderKeys.add(orderKey);
+    }
   }
 }
 
@@ -211,7 +291,7 @@ function validateExample(item, contextIds) {
 }
 
 function validateExercise(item, contextIds) {
-  validateObjectKeys(item, new Set(["id", "kind", "prompt", "answer", "explanation", "context"]), "exercise");
+  validateObjectKeys(item, EXERCISE_KEYS, "exercise");
 
   if (!isSafeString(item.id, MAX_ID_LENGTH)) {
     throw new Error("Invalid exercise id");
@@ -228,12 +308,93 @@ function validateExercise(item, contextIds) {
     }
   }
 
+  if (item.options !== undefined) {
+    validateTextArray(item.options, "exercise options", MAX_ITEMS);
+    if (item.options.length < 2) {
+      throw new Error("Invalid exercise options");
+    }
+  }
+
   if (item.context !== undefined) {
     if (!isSafeString(item.context, MAX_ID_LENGTH)) {
       throw new Error("Invalid exercise context");
     }
     validateId(item.context, "exercise context");
     validateKnownContextTag(item.context, contextIds);
+  }
+}
+
+function validateOptionalLearnerContext(value) {
+  if (value === undefined) return;
+
+  if (Array.isArray(value)) {
+    if (value.length === 0 || value.length > MAX_ITEMS) {
+      throw new Error("Invalid unit learnerContext");
+    }
+    for (const item of value) {
+      if (!isSafeString(item, MAX_STRING_LENGTH)) {
+        throw new Error("Invalid unit learnerContext");
+      }
+    }
+    return;
+  }
+
+  if (!isSafeString(value, MAX_STRING_LENGTH)) {
+    throw new Error("Invalid unit learnerContext");
+  }
+}
+
+function validateOptionalExerciseCollection(value, label, contextIds) {
+  if (value === undefined) return;
+  validateStructuredArray(value, label, (item) => validateExercise(item, contextIds));
+}
+
+function validateOptionalSectionStructures(value, label) {
+  if (value === undefined) return;
+  validateStructuredArray(value, label, (item) => validateStructure(item));
+}
+
+function validateOptionalPronunciationDrills(value) {
+  if (value === undefined) return;
+  validateStructuredArray(value, "unit pronunciationDrills", validatePronunciationDrill);
+}
+
+function validatePronunciationDrill(item) {
+  validateObjectKeys(item, ALLOWED_PRONUNCIATION_DRILL_KEYS, "pronunciation drill");
+
+  if (!isSafeString(item.id, MAX_ID_LENGTH)) {
+    throw new Error("Invalid pronunciationDrill id");
+  }
+  validateId(item.id, "pronunciationDrill id");
+
+  if (!isSafeString(item.text, MAX_STRING_LENGTH)) {
+    throw new Error("Invalid pronunciationDrill text");
+  }
+
+  if (item.focus !== undefined && !isSafeString(item.focus, MAX_STRING_LENGTH)) {
+    throw new Error("Invalid pronunciationDrill focus");
+  }
+
+  if (item.note !== undefined && !isSafeString(item.note, MAX_STRING_LENGTH)) {
+    throw new Error("Invalid pronunciationDrill note");
+  }
+}
+
+function validateOptionalProductionTask(value) {
+  if (value === undefined) return;
+
+  validateObjectKeys(value, ALLOWED_PRODUCTION_TASK_KEYS, "productionTask");
+
+  if (!isSafeString(value.prompt, MAX_STRING_LENGTH)) {
+    throw new Error("Invalid productionTask prompt");
+  }
+
+  if (value.requiredStructures !== undefined) {
+    validateTextArray(value.requiredStructures, "productionTask.requiredStructures", MAX_ITEMS);
+  }
+
+  if (value.checklist !== undefined) {
+    validateTextArray(value.checklist, "productionTask.checklist", MAX_ITEMS);
   }
 }
 
@@ -289,6 +450,25 @@ function validateTextArray(value, label, maxItems, validateIds = false) {
     if (validateIds) {
       validateId(item, label);
     }
+  }
+}
+
+function validateOptionalIdArray(value, label) {
+  if (value === undefined) return;
+  if (!Array.isArray(value) || value.length > MAX_ITEMS) {
+    throw new Error(`Invalid ${label}`);
+  }
+
+  const seenIds = new Set();
+  for (const item of value) {
+    if (!isSafeString(item, MAX_ID_LENGTH)) {
+      throw new Error(`Invalid ${label}`);
+    }
+    validateId(item, label);
+    if (seenIds.has(item)) {
+      throw new Error(`Duplicate ${label}: ${item}`);
+    }
+    seenIds.add(item);
   }
 }
 

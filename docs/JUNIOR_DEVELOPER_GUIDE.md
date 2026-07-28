@@ -37,6 +37,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `src/practice.js`: practice exercise extraction, answer normalization, and scoring.
 - `src/learningContexts.js`: context filtering and vocabulary extraction helpers.
 - `src/learningPath.js`: local unit progress and next-step recommendation helpers.
+- `src/learningDiagnostic.js`: local CEFR diagnostic checks and result helpers.
 - `public/data/verbs.json`: default verb database loaded by the app.
 - `public/data/learningUnits.json`: first structured learning-content database.
 - `src/styles.css`: visual layout and responsive behavior.
@@ -44,7 +45,7 @@ Use `npm.cmd` on Windows PowerShell if script execution blocks `npm`.
 - `scripts/mobile-smoke.cjs`: local Chrome/Vite mobile smoke test for critical screens.
 - `docs/`: user, developer, data, publishing, and roadmap docs.
 
-The mobile smoke has internal quality gates for Home ready time, Settings ready time, viewport size, 500-verb volume, and 25 visible Settings rows. If it fails, read the failure message before changing thresholds.
+The mobile smoke has internal quality gates for Home ready time, Settings ready time, viewport size, Home horizontal overflow, CEFR filter layout, 500-verb volume, and 25 visible Settings rows. If it fails, read the failure message before changing thresholds.
 For a phase milestone, also follow `docs/RELEASE_CHECKLIST.md`.
 
 ## Current Product Direction
@@ -54,11 +55,13 @@ SmartTense is moving from a conjugation table into a guided learning tool.
 The current stable surfaces are:
 
 - `Home`: dashboard and recommendations.
+- `Course level filter`: buttons for All, A1, A2, B1, and B2 on Home.
 - `Theory`: read-only learning lesson rendered from `public/data/learningUnits.json`.
 - `Contexts`: compact filters for examples, vocabulary, and practice.
 - `Why this form?`: compact explanations attached to generated sentence rows.
 - `Practice`: starter exercises with local answer checking.
 - `Learning path`: local Theory/Practice progress for the active unit.
+- `Level diagnostic`: local A1/A2/B1/B2 self-check and suggested unit.
 - `Individual`: focused affirmative practice.
 - `Production`: speaking and writing practice with status-based queue.
 - `Complete`: full conjugation comparison.
@@ -74,6 +77,7 @@ SmartTense uses a phase-driven execution model. Before and after bigger changes,
 2. Read the corresponding goals in:
    - `docs/INDEX.md` (documentation map).
    - `docs/CURRICULUM_PHASE_PLAN.md` (official curriculum roadmap and operational tasks).
+   - `docs/SOFTWARE_REQUIREMENTS.md` (requirement IDs, user stories, and acceptance criteria).
    - `docs/DEVELOPER_GUIDE.md` for architecture and file ownership.
 3. Implement the phase tasks with minimal scope.
 4. Update evidence in `docs/PHASE_EXECUTION_LOG.md` and adjust the phase plan/Gantt if needed.
@@ -168,10 +172,12 @@ When editing this flow, update `tests/learningContentAdmin.test.js` and keep val
 
 1. Edit prompts in `src/data/productionPrompts.js`.
 2. Keep prompt text short and practical (daily habits, work context, speaking tasks, writing tasks).
-3. Keep `mode`, `tenseId`, and `rubric` aligned with available labels in the UI.
+3. Keep `mode`, `tenseId`, `cefrLevel`, `unitIds`, and `rubric` aligned with available data.
 4. Update status labels in `src/i18n.js` and `PRODUCTION_STATUSES` together.
-5. Update `tests/productionPrompts.test.js` when prompt structure, statuses, or tense links change.
+5. Update `tests/productionPrompts.test.js` when prompt structure, statuses, tense links, or unit links change.
 6. Run `npm.cmd test` and `npm.cmd run build` after any structural prompt changes.
+
+Production shows suggested prompts for the active unit first. The queue of saved attempts stays global so older attempts do not disappear.
 
 ## Updating Learning Path
 
@@ -184,6 +190,19 @@ Current statuses:
 - `completed`
 
 Home uses `getNextLearningStep` to decide whether the learner should open Theory, Practice, or Individual next. Settings can reset the current unit progress. Update `tests/learningPath.test.js` with any rule change.
+
+The Home CEFR filter uses `getLearningUnitsByCefrFilter` from `src/learningPath.js`. If you change how A1/A2/B1/B2 filtering works, update `tests/learningPath.test.js`.
+
+## Updating The Level Diagnostic
+
+Diagnostic logic lives in `src/learningDiagnostic.js`.
+
+Safe rules:
+
+- Keep it local; do not add accounts or server calls.
+- Keep the checks short because Home must stay compact on mobile.
+- Update `src/i18n.js` when adding visible labels.
+- Update `tests/learningDiagnostic.test.js` when changing scoring or check IDs.
 
 ## Adding Or Editing Verbs
 

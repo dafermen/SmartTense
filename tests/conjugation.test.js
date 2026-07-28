@@ -95,6 +95,24 @@ test("rows include sentence-level Spanish translations and sentence parts", () =
   );
 });
 
+test("Spanish learner guide conjugates tense and contextual meaning", () => {
+  const workPresent = rowFor("work", "she", "simplePresent");
+  const workPast = rowFor("work", "she", "simplePast");
+  const workFuture = rowFor("work", "she", "simpleFuture");
+
+  assert.equal(workPresent.translations.affirmative, "Ella trabaja desde casa.");
+  assert.equal(workPresent.translations.negative, "Ella no trabaja desde casa.");
+  assert.equal(workPresent.translations.questionPositive, "¿Ella trabaja desde casa?");
+  assert.equal(workPast.translations.affirmative, "Ella trabajó desde casa.");
+  assert.equal(workFuture.translations.affirmative, "Ella trabajará desde casa.");
+  assert.equal(rowFor("ask", "she", "simplePresent").translations.affirmative, "Ella hace una pregunta.");
+  assert.equal(rowFor("feel", "she", "simplePresent").translations.affirmative, "Ella se siente mejor.");
+  assert.equal(rowFor("grow", "she", "simplePresent").translations.affirmative, "Ella cultiva vegetales.");
+  assert.equal(rowFor("hold", "she", "simplePresent").translations.affirmative, "Ella realiza una reunión.");
+  assert.equal(rowFor("order", "she", "simplePresent").translations.affirmative, "Ella pide el almuerzo.");
+  assert.equal(rowFor("spend", "she", "simplePresent").translations.affirmative, "Ella pasa tiempo con la familia.");
+});
+
 test("rows include concise form explanations", () => {
   const row = rowFor("write", "he", "simplePresent");
 
@@ -146,7 +164,7 @@ test("learner-language fields can replace legacy Spanish fields", () => {
   const row = buildRows(verb, [subject], [tense], "en", { learnerLanguage: "es" })[0];
 
   assert.equal(getVerbSummary(verb).meaning, "personalizar");
-  assert.equal(row.translations.affirmative, "Yo personalizar la práctica.");
+  assert.equal(row.translations.affirmative, "Yo personalizo la práctica.");
 });
 
 test("French learner language provides French meanings and translations", () => {

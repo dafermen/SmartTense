@@ -10,7 +10,24 @@ const cdpPort = Number(process.env.SMARTTENSE_CDP_PORT || 9400 + Math.floor(Math
 const viteBin = path.join(projectRoot, "node_modules", "vite", "bin", "vite.js");
 const chromePath = findChromePath();
 const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "smarttense-mobile-smoke-"));
-const REQUIRED_SCREENS = ["Home", "Theory", "Practice", "Individual", "Complete", "Production", "Settings"];
+const REQUIRED_SCREENS = ["Home", "Course", "Theory", "Manual", "Guided Lesson", "Adaptive Review", "Practice", "Progress", "Individual", "Complete", "Production", "Settings"];
+const GUIDED_A2_UNITS = [
+  "Present Continuous Actions",
+  "Present Perfect Experiences",
+  "Present Perfect Continuous Duration",
+  "Prepositions and Daily Habits"
+];
+const GUIDED_A1_UNITS = [
+  "Be and Have Foundation",
+  "Present Simple Foundation",
+  "Personal Information and Basic Questions"
+];
+const GUIDED_B1_UNITS = [
+  "Past, Future and Conditional Foundation",
+  "Narratives, Plans and Problems"
+];
+const GUIDED_B2_UNITS = ["Mixed Tenses and Independent Production"];
+const GUIDED_UNITS = [...GUIDED_A1_UNITS, ...GUIDED_A2_UNITS, ...GUIDED_B1_UNITS, ...GUIDED_B2_UNITS];
 // Conservative local QA gates. They catch obvious regressions without turning
 // normal machine variance into noise.
 const QA_THRESHOLDS = {
@@ -18,8 +35,8 @@ const QA_THRESHOLDS = {
   settingsReadyMs: readPositiveNumber("SMARTTENSE_QA_SETTINGS_READY_MS", 2000),
   syntheticVerbCount: 500,
   visibleRows: 25,
-  viewportWidth: 390,
-  viewportHeight: 844,
+  viewportWidth: readPositiveNumber("SMARTTENSE_QA_VIEWPORT_WIDTH", 390),
+  viewportHeight: readPositiveNumber("SMARTTENSE_QA_VIEWPORT_HEIGHT", 844),
   maxActiveButtons: readPositiveNumber("SMARTTENSE_QA_MAX_ACTIVE_BUTTONS", 140),
   minBodyChars: readPositiveNumber("SMARTTENSE_QA_MIN_BODY_CHARS", 1200)
 };
@@ -237,6 +254,20 @@ async function clickByText(cdp, text) {
   })()`);
 }
 
+async function selectOptionByText(cdp, text) {
+  const expected = JSON.stringify(text.toLowerCase());
+  return evaluate(cdp, `(() => {
+    const expected = ${expected};
+    const options = [...document.querySelectorAll('select option')];
+    const option = options.find((entry) => (entry.textContent || '').trim().toLowerCase().includes(expected));
+    if (!option) return false;
+    const select = option.parentElement;
+    select.value = option.value;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    return true;
+  })()`);
+}
+
 async function clickAndWait(cdp, label, expression) {
   const clicked = await clickByText(cdp, label);
   if (!clicked) throw new Error(`Could not find navigation control: ${label}`);
@@ -270,6 +301,57 @@ function assertQualityGates(result) {
   }
   if (metrics.bodyChars < QA_THRESHOLDS.minBodyChars) {
     failures.push(`Body text length ${metrics.bodyChars} was below ${QA_THRESHOLDS.minBodyChars}`);
+  }
+  if (metrics.homeHorizontalOverflow > 1) {
+    failures.push(`Home had ${metrics.homeHorizontalOverflow}px of horizontal overflow`);
+  }
+  if (metrics.cefrFilterVisible) {
+    failures.push("The legacy CEFR level filter was still visible on the mobile Home");
+  }
+  if (metrics.cefrFilterOverflow > 1) {
+    failures.push(`CEFR filter overflowed its own container by ${metrics.cefrFilterOverflow}px`);
+  }
+  if (metrics.cefrButtonsOutOfCard > 0) {
+    failures.push(`${metrics.cefrButtonsOutOfCard} CEFR filter buttons rendered outside the Home card`);
+  }
+  if (metrics.homeActionFieldOverlaps > 0) {
+    failures.push(`${metrics.homeActionFieldOverlaps} Home action controls overlapped the learning-unit field`);
+  }
+  if (metrics.homeActionsOutOfCard > 0) {
+    failures.push(`${metrics.homeActionsOutOfCard} Home action controls rendered outside the Home card`);
+  }
+  if (!metrics.mobileContinueVisible) {
+    failures.push("The mobile Continue lesson action was not visible on Home");
+  }
+  if (!metrics.mobilePrimaryNavVisible || metrics.mobilePrimaryNavCount !== 4) {
+    failures.push(`Mobile primary navigation exposed ${metrics.mobilePrimaryNavCount}/4 visible destinations`);
+  }
+  if (metrics.mobilePrimaryNavOverflow > 1) {
+    failures.push(`Mobile primary navigation had ${metrics.mobilePrimaryNavOverflow}px of horizontal overflow`);
+  }
+  if (!metrics.desktopActionHomeVisible) {
+    failures.push("The action-oriented Home was not visible at desktop width");
+  }
+  if (metrics.desktopLegacyHeroVisible) {
+    failures.push("The legacy dashboard hero was still visible at desktop width");
+  }
+  if (metrics.desktopHomeHorizontalOverflow > 1) {
+    failures.push(`Desktop Home had ${metrics.desktopHomeHorizontalOverflow}px of horizontal overflow`);
+  }
+  if (metrics.guidedLessonHorizontalOverflow > 1) {
+    failures.push(`Guided Lesson had ${metrics.guidedLessonHorizontalOverflow}px of horizontal overflow`);
+  }
+  if (metrics.guidedLessonUnitCount !== GUIDED_UNITS.length) {
+    failures.push(`Guided Lesson covered ${metrics.guidedLessonUnitCount}/${GUIDED_UNITS.length} A1-B2 units`);
+  }
+  if (!metrics.guidedResumeWorked) {
+    failures.push("Guided Lesson did not resume at the saved step");
+  }
+  if (metrics.focusedPracticeQuestionCount !== 1) {
+    failures.push(`Focused Practice showed ${metrics.focusedPracticeQuestionCount} visible question cards instead of 1`);
+  }
+  if (metrics.lockedCourseUnitCount < 1) {
+    failures.push("Course did not expose prerequisite-locked units for a new learner");
   }
   if (!accessibility.hasMain) {
     failures.push("Document did not expose a main landmark");
@@ -307,7 +389,7 @@ async function main() {
       "--disable-extensions",
       `--remote-debugging-port=${cdpPort}`,
       `--user-data-dir=${userDataDir}`,
-      "--window-size=390,844",
+      `--window-size=${QA_THRESHOLDS.viewportWidth},${QA_THRESHOLDS.viewportHeight}`,
       "about:blank"
     ], { stdio: "ignore", windowsHide: true });
 
@@ -345,8 +427,8 @@ async function main() {
     await cdp.send("Runtime.enable");
     await cdp.send("Fetch.enable", { patterns: [{ urlPattern: "*data/verbs.json*", requestStage: "Request" }] });
     await cdp.send("Emulation.setDeviceMetricsOverride", {
-      width: 390,
-      height: 844,
+      width: QA_THRESHOLDS.viewportWidth,
+      height: QA_THRESHOLDS.viewportHeight,
       deviceScaleFactor: 2,
       mobile: true
     });
@@ -355,12 +437,151 @@ async function main() {
     await cdp.send("Page.navigate", { url: appUrl });
     await waitFor(cdp, `(() => {
       const text = document.body.innerText;
-      return text.includes('SmartTense') && /\\b500\\b/.test(text) && text.toLowerCase().includes('learning workspace');
+      return text.includes('SmartTense') && text.toLowerCase().includes('your learning plan');
     })()`);
     const homeMs = Date.now() - startedAt;
+    const homeLayoutMetrics = await evaluate(cdp, `(() => {
+      const filter = document.querySelector('.cefr-filter');
+      const card = document.querySelector('.home-primary-card');
+      const actionWrap = document.querySelector('.compact-home-actions');
+      const mobileNav = document.querySelector('.mobile-primary-nav');
+      const mobileContinue = document.querySelector('.continue-learning-card > button');
+      const unitField = document.querySelector('.home-primary-card .field');
+      const cardRect = card?.getBoundingClientRect();
+      const buttons = filter ? [...filter.querySelectorAll('button')] : [];
+      const outsideButtons = cardRect ? buttons.filter((button) => {
+        const rect = button.getBoundingClientRect();
+        return rect.left < cardRect.left - 1 || rect.right > cardRect.right + 1;
+      }).length : 0;
+      const actionButtons = actionWrap
+        ? [...actionWrap.querySelectorAll('button')].filter((button) => {
+            const rect = button.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0;
+          })
+        : [];
+      const fieldRect = unitField?.getBoundingClientRect();
+      const actionOverlaps = fieldRect ? actionButtons.filter((button) => {
+        const rect = button.getBoundingClientRect();
+        return !(rect.right <= fieldRect.left || rect.left >= fieldRect.right || rect.bottom <= fieldRect.top || rect.top >= fieldRect.bottom);
+      }).length : 0;
+      const actionsOutsideCard = cardRect ? actionButtons.filter((button) => {
+        const rect = button.getBoundingClientRect();
+        return rect.left < cardRect.left - 1 || rect.right > cardRect.right + 1 || rect.top < cardRect.top - 1 || rect.bottom > cardRect.bottom + 1;
+      }).length : 0;
 
-    await clickAndWait(cdp, "Theory", `document.body.innerText.toLowerCase().includes('objectives')`);
-    await clickAndWait(cdp, "Practice", `document.body.innerText.toLowerCase().includes('check answer') && document.body.innerText.toLowerCase().includes('correct')`);
+      return {
+        homeHorizontalOverflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth),
+        cefrFilterVisible: Boolean(filter && filter.getBoundingClientRect().width > 0 && filter.getBoundingClientRect().height > 0),
+        cefrFilterOverflow: filter ? Math.max(0, filter.scrollWidth - Math.ceil(filter.clientWidth)) : 0,
+        cefrButtonsOutOfCard: outsideButtons,
+        homeActionFieldOverlaps: actionOverlaps,
+        homeActionsOutOfCard: actionsOutsideCard
+        ,mobileContinueVisible: Boolean(mobileContinue && mobileContinue.getBoundingClientRect().width > 0)
+        ,mobilePrimaryNavVisible: Boolean(mobileNav && mobileNav.getBoundingClientRect().width > 0)
+        ,mobilePrimaryNavCount: mobileNav ? [...mobileNav.querySelectorAll('button')].filter((button) => button.getBoundingClientRect().width > 0).length : 0
+        ,mobilePrimaryNavOverflow: mobileNav ? Math.max(0, mobileNav.scrollWidth - Math.ceil(mobileNav.clientWidth)) : 0
+      };
+    })()`);
+
+    await clickAndWait(cdp, "Manual", `document.body.innerText.toLowerCase().includes('a2 course manual')`);
+    const manualMobileReady = await evaluate(cdp, `(() => {
+      const card = document.querySelector('.manual-mobile-card');
+      const viewer = document.querySelector('.manual-viewer-shell');
+      const link = [...document.querySelectorAll('.manual-mobile-card a')].find((entry) => entry.href.includes('/docs/dario-general-english-course.pdf'));
+      const cardRect = card?.getBoundingClientRect();
+      const viewerRect = viewer?.getBoundingClientRect();
+      return Boolean(
+        cardRect && cardRect.width > 0 && cardRect.height > 0
+        && (!viewerRect || viewerRect.width === 0 || viewerRect.height === 0)
+        && link
+        && document.documentElement.scrollWidth <= window.innerWidth
+      );
+    })()`);
+    if (!manualMobileReady) throw new Error("Manual mobile view did not meet visibility, PDF link, or overflow requirements");
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+
+    await clickAndWait(cdp, "Start from A1", `document.body.innerText.toLowerCase().includes('a1 guided lesson')`);
+    await clickAndWait(cdp, "Continue", `document.body.innerText.includes('2/')`);
+    await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    await clickAndWait(cdp, "Continue lesson", `document.body.innerText.toLowerCase().includes('a1 guided lesson')`);
+    const guidedResumeWorked = await evaluate(cdp, `document.body.innerText.includes('2/')`);
+    await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+
+    await clickAndWait(cdp, "A2", `document.body.innerText.toLowerCase().includes('present continuous actions')`);
+    let guidedLessonHorizontalOverflow = 0;
+    let guidedLessonUnitCount = 0;
+    for (let index = 0; index < GUIDED_A2_UNITS.length; index += 1) {
+      const title = GUIDED_A2_UNITS[index];
+      if (index > 0) {
+        await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+        const selected = await selectOptionByText(cdp, title);
+        if (!selected) throw new Error(`Could not select A2 unit: ${title}`);
+        await waitFor(cdp, `document.body.innerText.toLowerCase().includes(${JSON.stringify(title.toLowerCase())})`);
+      }
+
+      await clickAndWait(cdp, "Theory", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+      await clickAndWait(cdp, "Start guided lesson", `document.body.innerText.toLowerCase().includes('a2 guided lesson')`);
+      const currentOverflow = await evaluate(cdp, `Math.max(0, document.documentElement.scrollWidth - window.innerWidth)`);
+      guidedLessonHorizontalOverflow = Math.max(guidedLessonHorizontalOverflow, currentOverflow);
+      guidedLessonUnitCount += 1;
+      await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    }
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    await clickAndWait(cdp, "A1", `document.body.innerText.toLowerCase().includes('be and have foundation')`);
+    for (let index = 0; index < GUIDED_A1_UNITS.length; index += 1) {
+      const title = GUIDED_A1_UNITS[index];
+      if (index > 0) {
+        await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+        const selected = await selectOptionByText(cdp, title);
+        if (!selected) throw new Error(`Could not select A1 unit: ${title}`);
+        await waitFor(cdp, `document.body.innerText.toLowerCase().includes(${JSON.stringify(title.toLowerCase())})`);
+      }
+
+      await clickAndWait(cdp, "Theory", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+      await clickAndWait(cdp, "Start guided lesson", `document.body.innerText.toLowerCase().includes('a1 guided lesson')`);
+      const currentOverflow = await evaluate(cdp, `Math.max(0, document.documentElement.scrollWidth - window.innerWidth)`);
+      guidedLessonHorizontalOverflow = Math.max(guidedLessonHorizontalOverflow, currentOverflow);
+      guidedLessonUnitCount += 1;
+      await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    }
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    await clickAndWait(cdp, "B1", `document.body.innerText.toLowerCase().includes('past, future and conditional foundation')`);
+    for (let index = 0; index < GUIDED_B1_UNITS.length; index += 1) {
+      const title = GUIDED_B1_UNITS[index];
+      if (index > 0) {
+        await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+        const selected = await selectOptionByText(cdp, title);
+        if (!selected) throw new Error(`Could not select B1 unit: ${title}`);
+        await waitFor(cdp, `document.body.innerText.toLowerCase().includes(${JSON.stringify(title.toLowerCase())})`);
+      }
+
+      await clickAndWait(cdp, "Theory", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+      await clickAndWait(cdp, "Start guided lesson", `document.body.innerText.toLowerCase().includes('b1 guided lesson')`);
+      const currentOverflow = await evaluate(cdp, `Math.max(0, document.documentElement.scrollWidth - window.innerWidth)`);
+      guidedLessonHorizontalOverflow = Math.max(guidedLessonHorizontalOverflow, currentOverflow);
+      guidedLessonUnitCount += 1;
+      await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    }
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    await clickAndWait(cdp, "B2", `document.body.innerText.toLowerCase().includes('mixed tenses and independent production')`);
+    for (const title of GUIDED_B2_UNITS) {
+      await clickAndWait(cdp, "Theory", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+      await clickAndWait(cdp, "Start guided lesson", `document.body.innerText.toLowerCase().includes('b2 guided lesson')`);
+      const currentOverflow = await evaluate(cdp, `Math.max(0, document.documentElement.scrollWidth - window.innerWidth)`);
+      guidedLessonHorizontalOverflow = Math.max(guidedLessonHorizontalOverflow, currentOverflow);
+      guidedLessonUnitCount += 1;
+      await clickAndWait(cdp, "Back", `document.body.innerText.toLowerCase().includes('objectives') && document.body.innerText.toLowerCase().includes('start guided lesson')`);
+    }
+    const guidedLessonMetrics = { guidedLessonHorizontalOverflow, guidedLessonUnitCount, guidedResumeWorked };
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    await clickAndWait(cdp, "Start adaptive review", `document.body.innerText.toLowerCase().includes('adaptive review') && Boolean(document.querySelector('.adaptive-answer-field select'))`);
+    await clickAndWait(cdp, "Progress", `document.body.innerText.toLowerCase().includes('see what you can do now')`);
+    await clickAndWait(cdp, "Course", `document.body.innerText.toLowerCase().includes('english course a1-b2')`);
+    const lockedCourseUnitCount = await evaluate(cdp, `[...document.querySelectorAll('.course-unit-row:disabled')].filter((element) => element.getBoundingClientRect().width > 0).length`);
+    await clickAndWait(cdp, "Practice", `Boolean(document.querySelector('.focused-question-card')) && document.body.innerText.toLowerCase().includes('check answer')`);
+    const focusedPracticeQuestionCount = await evaluate(cdp, `[...document.querySelectorAll('.focused-question-card')].filter((element) => element.getBoundingClientRect().width > 0).length`);
     await clickAndWait(cdp, "Individual", `document.body.innerText.toLowerCase().includes('individual') && document.body.innerText.toLowerCase().includes('tense')`);
     await clickAndWait(cdp, "Complete", `Boolean(document.querySelector('.mobile-card-list') && document.querySelector('.complete-table-card'))`);
     await clickAndWait(cdp, "Production", `document.body.innerText.toLowerCase().includes('production composer') && document.body.innerText.toLowerCase().includes('revision queue')`);
@@ -381,7 +602,11 @@ async function main() {
       activeButtons: document.querySelectorAll('button:not([disabled])').length,
       visibleRows: document.querySelectorAll('tbody tr').length,
       viewport: { width: window.innerWidth, height: window.innerHeight },
-      language: document.documentElement.lang
+      language: document.documentElement.lang,
+      ...${JSON.stringify(homeLayoutMetrics)},
+      ...${JSON.stringify(guidedLessonMetrics)},
+      lockedCourseUnitCount: ${JSON.stringify(lockedCourseUnitCount)},
+      focusedPracticeQuestionCount: ${JSON.stringify(focusedPracticeQuestionCount)}
     }))()`);
     const accessibility = await evaluate(cdp, `(() => {
       const isVisible = (element) => {
@@ -430,12 +655,36 @@ async function main() {
       };
     })()`);
 
+    await cdp.send("Emulation.setDeviceMetricsOverride", {
+      width: 1280,
+      height: 900,
+      deviceScaleFactor: 1,
+      mobile: false
+    });
+    await clickAndWait(cdp, "Home", `document.body.innerText.toLowerCase().includes('your learning plan')`);
+    const desktopHomeMetrics = await evaluate(cdp, `(() => {
+      const actionHome = document.querySelector('.home-mobile-focus');
+      const legacyHero = document.querySelector('.home-hero-grid');
+      const isVisible = (element) => {
+        if (!element) return false;
+        const rect = element.getBoundingClientRect();
+        const style = window.getComputedStyle(element);
+        return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+      };
+      return {
+        desktopActionHomeVisible: isVisible(actionHome),
+        desktopLegacyHeroVisible: isVisible(legacyHero),
+        desktopHomeHorizontalOverflow: Math.max(0, document.documentElement.scrollWidth - window.innerWidth)
+      };
+    })()`);
+    Object.assign(metrics, desktopHomeMetrics);
+
     if (browserProblems.length > 0) {
       throw new Error(`Browser problems detected:\\n${browserProblems.join("\\n")}`);
     }
 
     const result = {
-      viewport: "390x844",
+      viewport: `${QA_THRESHOLDS.viewportWidth}x${QA_THRESHOLDS.viewportHeight}`,
       syntheticVerbCount: syntheticData.verbs.length,
       screens: REQUIRED_SCREENS,
       paginationOk: true,

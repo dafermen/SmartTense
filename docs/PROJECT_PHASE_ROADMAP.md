@@ -22,6 +22,17 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 8 - Expansión de unidades de tiempo | Cerrada | Unidad past/future/conditional, ejercicios de transferencia y Production alineado | `npm test`, `npm run build`, smoke mobile CDP y QA alto volumen con 500 verbos |
 | Fase 9 - Calidad, metricas y robustez | Cerrada | E2E mobile repetible, quality gates, accesibilidad basica y release checklist | `npm run test:e2e:mobile` |
 | Fase 10 - Reorganizacion documental y guia curricular | Cerrada | Indice documental y plan curricular A1-B2 como fuente oficial | `npm run release:check` |
+| Fase 11 - Revision del modelo de contenido | Cerrada localmente | Schema v3 con CEFR, orden, prerequisitos, validacion y ruta ordenada | `npm run release:check` |
+| Fase 12 - A1 Foundation MVP | Cerrada localmente | 3 unidades A1, ruta inicial, ejercicios y prompts Production | `npm run release:check` |
+| Fase 13 - A2 Expansion Dario | Cerrada localmente | 4 unidades A2, ejercicios, vocabulario/contextos y prompts Production | `npm run release:check` |
+| Fase 14 - B1 Functional Communication | Cerrada localmente | 2 unidades B1, ejercicios de transferencia y prompts Production | `npm run release:check` |
+| Fase 15 - B2 Independent Production | Cerrada localmente | 1 unidad B2 inicial, ejercicios de mixed tenses y prompts Production | `npm run release:check` |
+| Fase 16 - Diagnostico y ruta recomendada | Cerrada localmente | Diagnostico CEFR local, unidad sugerida y reset en Settings | `npm run release:check` |
+| Fase 17 - Production por unidad y revision guiada | Cerrada localmente | Prompts sugeridos por unidad, vista global y cola de intentos global | `npm run release:check` |
+| Fase 18 - Pulido UX mobile MVP | Cerrada localmente | Filtro segmentado All/A1/A2/B1/B2 para orientar Home y ruta | `npm run release:check` |
+| Fase 19 - Revision de contenido y gaps A1-A2 | Lista para iniciar | Revisar contenido antes de ampliar mas UI | pendiente |
+| Fase 20 - Experiencia de estudio y continuidad | Validacion automatizada cerrada | Smart resume, reintento, banco de errores, Adaptive Review prioritario y handoff Codex | `src/FocusedPracticePage.jsx`, `src/adaptiveReview.js`, `AGENTS.md`, `docs/CURRENT_STATUS.md` |
+| Fase 21 - Manual del curso A2 | Validacion automatizada cerrada; revision en dispositivo fisico opcional | Seccion HTML Manual con visor del PDF original y acciones mobile | `src/ManualPage.jsx`, `public/docs/dario-general-english-course.pdf` |
 
 ## Lectura Ejecutiva Del Documento Fuente
 
@@ -371,6 +382,6 @@ gantt
 
 Continuar con la siguiente fase:
 
-1. Definir la siguiente fase de producto antes de abrir trabajo nuevo fuera del MVP actual.
+1. Implementar Fase 19 - Revision de contenido y gaps A1-A2.
 
-Este paso debe convertir la plataforma multiunidad en un flujo medible y repetible, sin cambiar el modelo tecnico actual.
+Este paso debe revisar si A1/A2 necesitan mas contenido o ejercicios antes de seguir agregando pantallas.

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { buildLearningContentPayload, cloneLearningContent, getLearningContentSummary } from "../src/learningContentAdmin.js";
 
 const sampleContent = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   updatedAt: "2026-07-11",
   contexts: [{ id: "it-work", title: "IT work", description: "Work" }],
   units: [
@@ -27,14 +27,14 @@ test("summarizes learning content for Settings preview", () => {
     vocabulary: 1,
     exercises: 1,
     updatedAt: "2026-07-11",
-    schemaVersion: 2
+    schemaVersion: 3
   });
 });
 
 test("builds an exportable learning content payload", () => {
   const payload = buildLearningContentPayload(sampleContent);
 
-  assert.equal(payload.schemaVersion, 2);
+  assert.equal(payload.schemaVersion, 3);
   assert.match(payload.updatedAt, /^\d{4}-\d{2}-\d{2}$/);
   assert.deepEqual(payload.contexts, sampleContent.contexts);
   assert.deepEqual(payload.units, sampleContent.units);

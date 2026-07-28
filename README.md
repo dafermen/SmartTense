@@ -191,7 +191,7 @@ Change this id before publishing if you have a final App Store or Play Store bun
 
 Default verb data lives in `public/data/verbs.json`.
 
-Structured learning content lives in `public/data/learningUnits.json`. Theory renders this file in the app. It is validated by `src/data/learningContentValidation.js` and currently includes a Present Simple foundation unit with theory, structures, common mistakes, examples, and starter exercises.
+Structured learning content lives in `public/data/learningUnits.json`. Theory renders this file in the app. It is validated by `src/data/learningContentValidation.js` and currently uses schema version 3 with CEFR metadata (`cefrLevel`, `unitOrder`, and `prerequisiteUnitIds`) for the curriculum path.
 
 Learning contexts also live in `public/data/learningUnits.json`. The current context catalog includes IT work, daily habits, family routines, meetings, travel/vacation, and prepositions. Theory and Practice can filter examples, vocabulary, and exercises by context.
 
@@ -203,6 +203,12 @@ Imported JSON and Settings edits only change the current browser session; they d
 
 Learning path progress is also local to the current browser. It tracks whether the active unit's Theory has been viewed and whether its Practice exercises have been completed.
 
+Skill mastery is local too. Practice and Guided Lesson update a 23-skill A1-B2 catalog, and Adaptive Review uses that history to prioritize up to eight questions. On mobile, the primary navigation is Home, Theory, Practice, and Review; advanced tools remain in the side menu.
+
+The bundled curriculum currently contains 10 methodology-ready units and 213 exercises. `npm run audit:content` checks all A1-B2 units for answer options, context coverage, required practice kinds, and methodology blocks.
+
+Each unit also has a local resumable journey. SmartTense saves the Guided Lesson step, answers, Practice position, results, and Production completion, then uses them to calculate real progress and unlock prerequisite-based Course units.
+
 For the accepted JSON shape, see `docs/DATA_SCHEMA.md`.
 
 For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
@@ -211,6 +217,7 @@ For the accepted learning-content shape, see `docs/LEARNING_CONTENT_SCHEMA.md`.
 
 - `docs/INDEX.md`: start here; official documentation map and reading order.
 - `docs/CURRICULUM_PHASE_PLAN.md`: official A1-B2 curriculum phase plan with executive phases, operational tasks, exit criteria, and internal Gantt.
+- `docs/SOFTWARE_REQUIREMENTS.md`: functional and non-functional requirements, user stories, acceptance criteria, and operational backlog.
 - `docs/USER_GUIDE.md`: guide for learners and non-technical users.
 - `docs/DEVELOPER_GUIDE.md`: architecture, scripts, testing, and mobile build notes.
 - `docs/DATA_SCHEMA.md`: JSON format for adding or importing verbs.

@@ -1,12 +1,12 @@
 export function cloneLearningContent(content) {
-  return JSON.parse(JSON.stringify(content || { schemaVersion: 2, contexts: [], units: [] }));
+  return JSON.parse(JSON.stringify(content || { schemaVersion: 3, contexts: [], units: [] }));
 }
 
 export function buildLearningContentPayload(content) {
   const draft = cloneLearningContent(content);
 
   return {
-    schemaVersion: draft.schemaVersion || 2,
+    schemaVersion: draft.schemaVersion || 3,
     updatedAt: new Date().toISOString().slice(0, 10),
     contexts: draft.contexts || [],
     units: draft.units || []
@@ -31,6 +31,6 @@ export function getLearningContentSummary(content) {
     vocabulary: vocabulary.length,
     exercises: exercises.length,
     updatedAt: content?.updatedAt || "local draft",
-    schemaVersion: content?.schemaVersion || 2
+    schemaVersion: content?.schemaVersion || 3
   };
 }
