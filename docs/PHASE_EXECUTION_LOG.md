@@ -743,7 +743,7 @@ Status: Implemented and locally validated.
 
 ## Phase 23 - Visual Documentation And GitHub Pages Release - 2026-09-13
 
-Status: Local release gate passed; GitHub Pages publication in progress.
+Status: Repository and GitHub Pages workflow published; DNS cutover pending.
 
 - Added an isolated Chrome capture command and four real application screenshots.
 - Added the screenshots to README and the generated learner documentation.
@@ -753,3 +753,7 @@ Status: Local release gate passed; GitHub Pages publication in progress.
 - Security evidence: `npm audit` reports 0 vulnerabilities.
 - Release evidence: 117/117 tests passed; mutation score 100% (43/43); 1,130/1,130 unsafe fuzz payloads rejected; 31 documentation pages generated with 0 broken links; production build and bundle budgets passed.
 - Mobile evidence: all 12 screens passed at 390x844, 0 horizontal overflow, 0 unnamed buttons, and 0 unlabeled fields.
+- Published commits `df04b76` and `6882d1c`; CI and Pages workflows completed successfully after aligning the runners with Node.js 22.
+- GitHub Pages reports `built`, an approved certificate, and `https_enforced: true` for `smarttense.innovalogic.tech`.
+- External verification is blocked by DNS: the subdomain has an A record to an Ubuntu/Nginx server and no CNAME to `dafermen.github.io`.
+- No SSH key was read and no private-server deployment was performed because the requested current target is GitHub Pages.

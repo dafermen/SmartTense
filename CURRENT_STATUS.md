@@ -5,7 +5,7 @@ Last updated: 2026-09-13
 ## Active State
 
 - Current implemented phase: **Phase 23 - Visual Documentation and GitHub Pages Release**.
-- Status: local release gate and dependency audit passed; remote Pages publication is the active delivery step.
+- Status: repository, CI, and Pages workflow published successfully; custom-domain DNS cutover remains external and pending.
 - Development URL normally used by the project: `http://127.0.0.1:5178/`.
 - Source project path: `C:\Projects\SmartTense`.
 
@@ -47,7 +47,7 @@ Phase 20 automated validation is now closed; the successful evidence is recorded
 
 ## Next Recommended Work
 
-1. Publish Phase 23 and confirm the remote CI, custom domain, and GitHub Pages workflow.
+1. Replace the current `smarttense` DNS A record with `CNAME smarttense -> dafermen.github.io`, then verify HTTPS.
 2. Add PWA cache-upgrade and offline-recovery integration coverage.
 3. Select the project license with the owner.
 4. Plan the private-server migration separately if GitHub Pages no longer meets product needs.
@@ -118,6 +118,9 @@ Phase 20 automated validation is now closed; the successful evidence is recorded
 - Updated five vulnerable transitive packages and pinned `qs` 6.16.0 for the Stryker toolchain without forced upgrades.
 - `npm audit` reports 0 vulnerabilities.
 - `npm run release:check` passed: 10/10 methodology-ready units, 213 exercises, 1,200 translations, 117/117 tests, 43/43 mutants, 1,130 fuzz cases, production build, bundle budgets, and the 12-screen mobile journey.
+- Published commits `df04b76` and `6882d1c` to `origin/main`; remote CI and GitHub Pages completed successfully on Node.js 22.
+- GitHub Pages reports the deployment built, the certificate approved, and HTTPS enforced.
+- Public-domain verification is pending because DNS currently exposes an A record to an Ubuntu/Nginx server and no CNAME to GitHub Pages. The private server and SSH keys were not touched.
 
 ## Phase 21 - A2 Course Manual
 
