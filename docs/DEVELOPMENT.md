@@ -7,7 +7,7 @@ npm ci
 npm run dev -- --port 5178 --host
 ```
 
-Use Node.js 20 or newer and Chrome for mobile E2E checks.
+Use Node.js 22 or newer and Chrome for mobile E2E checks. Stryker mutation testing requires Node.js 22 or later.
 
 ## Commands
 

@@ -88,7 +88,7 @@ SmartTense/
 
 ## Requirements
 
-- Node.js 20 or newer recommended.
+- Node.js 22 or newer required by the complete quality gate.
 - npm.
 - Xcode for iOS builds.
 - Android Studio for Android builds.

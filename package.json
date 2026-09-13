@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build:docs": "node scripts/build-docs.cjs",
     "docs:screenshots": "node scripts/capture-doc-screenshots.cjs",
