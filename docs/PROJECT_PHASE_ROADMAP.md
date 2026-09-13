@@ -33,6 +33,7 @@ La intencion no es copiar el curso dentro de la app, sino usar su estructura ped
 | Fase 19 - Revision de contenido y gaps A1-A2 | Lista para iniciar | Revisar contenido antes de ampliar mas UI | pendiente |
 | Fase 20 - Experiencia de estudio y continuidad | Validacion automatizada cerrada | Smart resume, reintento, banco de errores, Adaptive Review prioritario y handoff Codex | `src/FocusedPracticePage.jsx`, `src/adaptiveReview.js`, `AGENTS.md`, `docs/CURRENT_STATUS.md` |
 | Fase 21 - Manual del curso A2 | Validacion automatizada cerrada; revision en dispositivo fisico opcional | Seccion HTML Manual con visor del PDF original y acciones mobile | `src/ManualPage.jsx`, `public/docs/dario-general-english-course.pdf` |
+| Fase 22 - Documentation and quality governance | Implementada localmente; validacion pendiente | Documentacion canonica, ADR, CI, plantillas y matriz de 13 pruebas | `docs/TESTING.md`, `.github/workflows/ci.yml`, `CURRENT_STATUS.md` |
 
 ## Lectura Ejecutiva Del Documento Fuente
 

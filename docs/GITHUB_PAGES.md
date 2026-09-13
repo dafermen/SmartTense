@@ -56,10 +56,11 @@ The repository includes this workflow:
 The workflow:
 
 1. Runs `npm ci`.
-2. Runs `npm test`.
-3. Builds the app with `npm run build -- --base "$BASE_PATH"`.
-4. Uploads `dist/` as a Pages artifact.
-5. Deploys to GitHub Pages.
+2. Runs the complete `npm run release:check` quality gate.
+3. Audits production dependencies at high severity.
+4. Builds the app with `npm run build -- --base "$BASE_PATH"`.
+5. Uploads `dist/` as a Pages artifact.
+6. Deploys to GitHub Pages.
 
 ## Publish Without A Custom Domain
 
@@ -92,21 +93,21 @@ That value is required because Vite assets must be loaded from the repository pa
 A subdomain can point to GitHub Pages. Example:
 
 ```text
-smarttense.example.com
+    smarttense.innovalogic.tech
 ```
 
 High-level steps:
 
 1. In GitHub, open the repository.
 2. Go to `Settings` -> `Pages`.
-3. Set `Custom domain` to your subdomain, for example `smarttense.example.com`.
+3. Set `Custom domain` to `smarttense.innovalogic.tech`.
 4. Enable `Enforce HTTPS` after GitHub finishes provisioning the certificate.
 5. In your DNS provider, create a `CNAME` record:
 
    ```text
    Type:  CNAME
    Name:  smarttense
-   Value: YOUR_GITHUB_USER.github.io
+   Value: dafermen.github.io
    ```
 
 6. In the GitHub repository, go to `Settings` -> `Secrets and variables` -> `Actions` -> `Variables`.
@@ -120,6 +121,10 @@ High-level steps:
 8. Re-run the deploy workflow.
 
 The `PAGES_BASE_PATH=/` value matters because a custom subdomain serves the app from the domain root, not from `/SmartTense/`.
+
+The repository also includes `public/CNAME` with `smarttense.innovalogic.tech`. Vite copies it to the published artifact so GitHub Pages preserves the custom domain during deployments.
+
+Docker is not part of this publication flow. SmartTense is a static React/Vite application, so GitHub Actions builds static files and GitHub Pages serves them directly.
 
 ## DNS Notes
 
@@ -151,7 +156,7 @@ Run locally before pushing:
 
 ```bash
 npm run release:check
-npm audit --audit-level=moderate
+npm audit --omit=dev --audit-level=high
 ```
 
 Then push to `main` and verify the GitHub Actions deployment. If Chrome is not available locally, record that `npm run release:check` could not complete and keep `npm test` plus `npm run build` green before pushing. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.

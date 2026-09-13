@@ -1,0 +1,151 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="Datos curriculares - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>Datos curriculares | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a href="/docs/product/introduction/">Producto SmartTense</a><a href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a href="/docs/architecture/data-schema/">Datos de verbos</a><a class="active" aria-current="page" href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a href="/docs/delivery/github-pages/">GitHub Pages</a><a href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Arquitectura</p><h1 id="smarttense-learning-content-schema">SmartTense Learning Content Schema</h1>
+<p>This document defines the structured learning-content format for SmartTense. It is the foundation for Theory, Practice, learning path, vocabulary contexts, and future content administration features.</p>
+<p>The source file is:</p>
+<pre><code class="language-text">public/data/learningUnits.json</code></pre>
+<p>The validator is:</p>
+<pre><code class="language-text">src/data/learningContentValidation.js</code></pre>
+<p>Settings can import and export this same JSON shape through the Learning content manager. Imported content is validated before it can be applied to the current browser session.</p>
+<h2 id="root-object">Root Object</h2>
+<pre><code class="language-json">{
+  &quot;schemaVersion&quot;: 3,
+  &quot;updatedAt&quot;: &quot;2026-07-11&quot;,
+  &quot;contexts&quot;: [],
+  &quot;units&quot;: []
+}</code></pre>
+<p>Allowed root fields:</p>
+<ul><li><code>schemaVersion</code>: optional integer. Current maximum is <code>3</code>.</li><li><code>updatedAt</code>: optional non-empty string.</li><li><code>contexts</code>: optional non-empty array when context filtering is used.</li><li><code>units</code>: required non-empty array of learning units.</li></ul>
+<h2 id="context-catalog">Context Catalog</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;it-work&quot;,
+  &quot;title&quot;: &quot;IT work&quot;,
+  &quot;description&quot;: &quot;Software, support, meetings, and technical work.&quot;
+}</code></pre>
+<p>Rules:</p>
+<ul><li><code>id</code> must be unique and use letters, numbers, or hyphens.</li><li><code>title</code> and <code>description</code> are learner-facing text.</li><li>When the root <code>contexts</code> array exists, unit tags, examples, vocabulary, and exercises that include a <code>context</code> must reference an existing context ID.</li></ul>
+<h2 id="learning-unit">Learning Unit</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;present-simple-foundation&quot;,
+  &quot;title&quot;: &quot;Present Simple Foundation&quot;,
+  &quot;level&quot;: &quot;basic&quot;,
+  &quot;cefrLevel&quot;: &quot;A1&quot;,
+  &quot;unitOrder&quot;: 1,
+  &quot;prerequisiteUnitIds&quot;: [],
+  &quot;focus&quot;: &quot;Use Present Simple for habits, routines, facts, and schedules.&quot;,
+  &quot;tenseIds&quot;: [&quot;simplePresent&quot;],
+  &quot;contextTags&quot;: [&quot;daily-habits&quot;, &quot;it-work&quot;],
+  &quot;objectives&quot;: [&quot;Recognize when Present Simple is the right tense.&quot;],
+  &quot;learnerContext&quot;: &quot;daily life, family, IT work&quot;,
+  &quot;grammarBlocks&quot;: [],
+  &quot;controlledPractice&quot;: [],
+  &quot;contrastPractice&quot;: [],
+  &quot;mistakeCorrection&quot;: [],
+  &quot;translationPractice&quot;: [],
+  &quot;pronunciationDrills&quot;: [],
+  &quot;productionTask&quot;: {
+    &quot;prompt&quot;: &quot;Describe a routine sentence in Present Simple and one in Present Continuous.&quot;,
+    &quot;requiredStructures&quot;: [&quot;affirmative&quot;, &quot;negative&quot;, &quot;questionPositive&quot;],
+    &quot;checklist&quot;: [&quot;Uses the correct verb form&quot;, &quot;Uses time context&quot;]
+  },
+  &quot;sections&quot;: []
+}</code></pre>
+<p>Rules:</p>
+<ul><li><code>id</code> must be unique and use letters, numbers, or hyphens.</li><li><code>level</code> must be <code>basic</code>, <code>intermediate</code>, or <code>advanced</code>. This is the internal practice difficulty used by tense filters.</li><li><code>cefrLevel</code> must be <code>A1</code>, <code>A2</code>, <code>B1</code>, or <code>B2</code> for schema version <code>3</code>. This is the curricular level used for course planning.</li><li><code>unitOrder</code> must be a positive integer for schema version <code>3</code>. It controls recommended order inside a CEFR level.</li><li><code>prerequisiteUnitIds</code> is optional and may be an empty array. Every listed ID must point to another unit in the same payload.</li><li><code>tenseIds</code> links the unit to tense metadata from <code>src/data/defaultData.js</code>.</li><li><code>contextTags</code> controls which context buttons are shown for the unit.</li><li><code>objectives</code> are learner-facing goals.</li><li><code>learnerContext</code> is optional. It is a short learner-facing label (string or array of strings) that helps surface the unit&#39;s real-world scenario.</li><li><code>grammarBlocks</code> is optional and stores grammar structures for the unit.</li><li><code>controlledPractice</code> is optional. It stores practice exercises.</li><li><code>contrastPractice</code> is optional. It stores tense-comparison / selection practice.</li><li><code>mistakeCorrection</code> is optional. It stores correction-focused exercises.</li><li><code>translationPractice</code> is optional. It stores Spanish-to-English translation practice exercises.</li><li><code>pronunciationDrills</code> is optional. Each item has:</li><li><code>id</code> (required): stable identifier</li><li><code>text</code> (required): phrase/sentence for pronunciation focus</li><li><code>focus</code> (optional): coaching tag</li><li><code>note</code> (optional): optional guidance</li><li><code>productionTask</code> is optional and stores a guided speaking/writing prompt:</li><li><code>prompt</code> (required)</li><li><code>requiredStructures</code> (optional array): items expected in the student output</li><li><code>checklist</code> (optional array): review points for teacher/student self-check</li><li><code>sections</code> holds the real teaching and practice content.</li></ul>
+<h2 id="section-types">Section Types</h2>
+<p>Every section needs <code>id</code>, <code>type</code>, and <code>title</code>.</p>
+<h3 id="theory">theory</h3>
+<p>Use for short explanations.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;meaning&quot;,
+  &quot;type&quot;: &quot;theory&quot;,
+  &quot;title&quot;: &quot;Meaning&quot;,
+  &quot;body&quot;: [&quot;Present Simple describes habits and routines.&quot;],
+  &quot;signalWords&quot;: [&quot;always&quot;, &quot;usually&quot;, &quot;every day&quot;]
+}</code></pre>
+<h3 id="structures">structures</h3>
+<p>Use for grammar patterns.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;structures&quot;,
+  &quot;type&quot;: &quot;structures&quot;,
+  &quot;title&quot;: &quot;Structures&quot;,
+  &quot;structures&quot;: [
+    {
+      &quot;form&quot;: &quot;affirmative&quot;,
+      &quot;pattern&quot;: &quot;Subject + base verb (+ s/es for he/she/it)&quot;,
+      &quot;example&quot;: &quot;He works as an IT engineer.&quot;
+    }
+  ]
+}</code></pre>
+<p>Allowed <code>form</code> values:</p>
+<ul><li><code>affirmative</code></li><li><code>negative</code></li><li><code>questionPositive</code></li><li><code>questionNegative</code></li></ul>
+<h3 id="commonmistakes">commonMistakes</h3>
+<p>Use for error correction.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;common-mistakes&quot;,
+  &quot;type&quot;: &quot;commonMistakes&quot;,
+  &quot;title&quot;: &quot;Common mistakes&quot;,
+  &quot;mistakes&quot;: [
+    {
+      &quot;wrong&quot;: &quot;He work in IT.&quot;,
+      &quot;right&quot;: &quot;He works in IT.&quot;,
+      &quot;why&quot;: &quot;He/she/it needs -s in affirmative Present Simple.&quot;
+    }
+  ]
+}</code></pre>
+<h3 id="examples">examples</h3>
+<p>Use for contextual examples.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;examples&quot;,
+  &quot;type&quot;: &quot;examples&quot;,
+  &quot;title&quot;: &quot;Examples&quot;,
+  &quot;examples&quot;: [
+    {
+      &quot;context&quot;: &quot;it-work&quot;,
+      &quot;sentence&quot;: &quot;Dario checks his email before he starts coding.&quot;,
+      &quot;note&quot;: &quot;This describes a regular work routine.&quot;
+    }
+  ]
+}</code></pre>
+<p>Rules:</p>
+<ul><li><code>context</code> must reference a root context when the catalog exists.</li><li>Theory uses this field for the context filter.</li></ul>
+<h3 id="exercises">exercises</h3>
+<p>Use for Practice activities.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;starter-practice&quot;,
+  &quot;type&quot;: &quot;exercises&quot;,
+  &quot;title&quot;: &quot;Starter practice&quot;,
+  &quot;exercises&quot;: [
+    {
+      &quot;id&quot;: &quot;present-simple-fill-1&quot;,
+      &quot;kind&quot;: &quot;fillBlank&quot;,
+      &quot;prompt&quot;: &quot;Dario _____ as an IT engineer.&quot;,
+      &quot;answer&quot;: &quot;works&quot;,
+      &quot;explanation&quot;: &quot;Dario is he, so the verb work becomes works.&quot;,
+      &quot;context&quot;: &quot;it-work&quot;
+    }
+  ]
+}</code></pre>
+<p>Allowed <code>kind</code> values:</p>
+<ul><li><code>fillBlank</code></li><li><code>transform</code></li><li><code>chooseTense</code></li><li><code>correctMistake</code></li><li><code>translation</code></li><li><code>shortAnswer</code></li></ul>
+<p>Optional field:</p>
+<ul><li><code>context</code>: filters the exercise in Practice. It must reference a root context when the catalog exists.</li></ul>
+<h3 id="vocabulary">vocabulary</h3>
+<p>Use for vocabulary cards shown in Theory.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;work-words&quot;,
+  &quot;type&quot;: &quot;vocabulary&quot;,
+  &quot;title&quot;: &quot;Work words&quot;,
+  &quot;vocabulary&quot;: [
+    {
+      &quot;term&quot;: &quot;meeting&quot;,
+      &quot;meaning&quot;: &quot;A planned work conversation&quot;,
+      &quot;example&quot;: &quot;She has a meeting every Monday.&quot;,
+      &quot;context&quot;: &quot;meetings&quot;
+    }
+  ]
+}</code></pre>
+<p>Optional field:</p>
+<ul><li><code>context</code>: filters the vocabulary card in Theory. It must reference a root context when the catalog exists.</li></ul>
+<h2 id="validation-rules">Validation Rules</h2>
+<p>The validator rejects:</p>
+<ul><li>Empty unit collections.</li><li>Duplicate unit IDs.</li><li>Duplicate context IDs.</li><li>Unknown context references.</li><li>Unknown fields.</li><li>Unsupported schema versions.</li><li>Unsupported internal levels, CEFR levels, section types, structure forms, or exercise kinds.</li><li>Unknown prerequisite unit IDs.</li><li>Duplicate <code>unitOrder</code> values inside the same <code>cefrLevel</code>.</li><li>Strings that are empty, too long, or contain <code>&lt;</code> or <code>&gt;</code>.</li><li>Oversized collections.</li></ul>
+<p>When adding a new field, update the schema, validator, tests, and documentation in the same change.</p><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/architecture/data-schema/"><span>Anterior</span>Datos de verbos</a><a href="/docs/architecture/development/"><span>Siguiente</span>Preparacion del entorno</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#root-object">Root Object</a><a class="level-2" href="#context-catalog">Context Catalog</a><a class="level-2" href="#learning-unit">Learning Unit</a><a class="level-2" href="#section-types">Section Types</a><a class="level-3" href="#theory">theory</a><a class="level-3" href="#structures">structures</a><a class="level-3" href="#commonmistakes">commonMistakes</a><a class="level-3" href="#examples">examples</a><a class="level-3" href="#exercises">exercises</a><a class="level-3" href="#vocabulary">vocabulary</a><a class="level-2" href="#validation-rules">Validation Rules</a></aside></div></body></html>

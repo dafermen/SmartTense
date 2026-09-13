@@ -138,6 +138,70 @@
   margin: 6px 0 0;
 }
 
+.guided-pronunciation-toolbar {
+  align-items: end;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.guided-pronunciation-toolbar label {
+  display: grid;
+  font-weight: 700;
+  gap: 6px;
+}
+
+.guided-pronunciation-toolbar select {
+  border: 1px solid #afc8bb;
+  border-radius: 12px;
+  font: inherit;
+  min-height: 44px;
+  padding: 8px 10px;
+}
+
+.guided-pronunciation-toolbar button,
+.guided-drill-actions button {
+  min-height: 44px;
+}
+
+.guided-drill-list article {
+  display: grid;
+  gap: 10px;
+}
+
+.guided-drill-list article.is-practiced {
+  background: var(--guided-soft);
+  border-left-color: var(--guided-green);
+  border-radius: 0 12px 12px 0;
+}
+
+.guided-drill-actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.guided-drill-actions button:not(.secondary) {
+  background: var(--guided-green);
+  color: #fff;
+}
+
+.guided-pronunciation-note,
+.guided-pronunciation-count,
+.guided-pronunciation-status {
+  color: #526b62;
+  margin: 0;
+}
+
+.guided-pronunciation-status:empty {
+  display: none;
+}
+
+.guided-pronunciation-count {
+  font-weight: 700;
+  text-align: right;
+}
+
 .guided-answer-field {
   display: grid;
   font-weight: 700;
@@ -257,6 +321,11 @@
   }
 
   .guided-summary-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .guided-pronunciation-toolbar {
+    align-items: stretch;
     grid-template-columns: 1fr;
   }
 }

@@ -1,0 +1,28 @@
+{
+  "id": "./",
+  "name": "SmartTense English Course",
+  "short_name": "SmartTense",
+  "description": "A guided, contextual English course from A1 to B2 with grammar, practice, pronunciation and progress tracking.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f7f5",
+  "theme_color": "#102235",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./assets/smarttense-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/smarttense-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

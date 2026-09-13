@@ -2,7 +2,7 @@
 
 ## Start Here
 
-1. Read `docs/CURRENT_STATUS.md`.
+1. Read `CURRENT_STATUS.md`.
 2. Read `docs/INDEX.md` only for the documentation relevant to the task.
 3. Treat `src/` and `public/` as the web source of truth; `android/` and `ios/` wrap the built app.
 
@@ -19,7 +19,7 @@
 ## Working Agreement
 
 - Do not duplicate Guided Lesson, Focused Practice, Adaptive Review, Course, or Progress. Extend their existing modules.
-- Update `docs/CURRENT_STATUS.md` and `docs/PHASE_EXECUTION_LOG.md` after meaningful work.
+- Update `CURRENT_STATUS.md` and `docs/PHASE_EXECUTION_LOG.md` after meaningful work.
 - Record commands actually run; never mark validation complete without evidence.
 - Development command: `npm run dev -- --port 5178 --host`.
 - Full release gate: `npm run release:check`.

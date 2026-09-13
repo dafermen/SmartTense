@@ -2,6 +2,10 @@
 
 SmartTense is an English verb tense trainer built with React, Vite, and Capacitor. It helps learners study verb forms through a compact dashboard, focused affirmative practice, and a complete conjugation table.
 
+![SmartTense Home showing the current learning plan](docs/images/home-desktop.png)
+
+Real application views for Course, Practice, and Complete are available in `docs/USER_GUIDE.md`.
+
 The app is designed for two audiences:
 
 - English learners who want clear examples with learner-language guidance.
@@ -104,6 +108,12 @@ Start the development server:
 npm run dev
 ```
 
+To use the project's standard port:
+
+```powershell
+npm.cmd run dev -- --port 5178 --host 127.0.0.1
+```
+
 Open the URL shown by Vite, usually `http://127.0.0.1:5173/` or the next available port.
 
 If PowerShell blocks `npm.ps1`, run npm through `npm.cmd`:
@@ -152,6 +162,8 @@ SmartTense includes a GitHub Actions workflow for GitHub Pages:
 For a normal GitHub Pages project URL such as `https://YOUR_GITHUB_USER.github.io/REPOSITORY_NAME/`, enable GitHub Pages with `GitHub Actions` as the source and push to `main`.
 
 For a custom subdomain such as `smarttense.example.com`, point a DNS `CNAME` record to `YOUR_GITHUB_USER.github.io`, set the repository variable `PAGES_BASE_PATH` to `/`, and configure the custom domain in repository `Settings` -> `Pages`.
+
+The configured SmartTense domain is `https://smarttense.innovalogic.tech/`. The repository includes `public/CNAME` so the domain is preserved in every Pages artifact.
 
 See `docs/GITHUB_PAGES.md` for the full guide.
 
@@ -248,3 +260,9 @@ npm run cap:sync
 ## License
 
 No license has been selected yet. Add a `LICENSE` file before publishing if this repository will be public.
+
+## Documentation And Quality Governance
+
+Start with `AGENTS.md`, `CURRENT_STATUS.md`, and `docs/INDEX.md`. Every deployment must review all 13 categories in `docs/TESTING.md` and pass `npm run release:check`.
+
+The project license has not yet been selected; see `CONTRIBUTING.md` before accepting external contributions.

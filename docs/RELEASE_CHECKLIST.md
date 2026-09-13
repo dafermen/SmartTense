@@ -15,8 +15,13 @@ That command runs:
 ```bash
 git diff --check
 node --check scripts/mobile-smoke.cjs
+npm run audit:content
+npm run audit:translations
 npm test
+npm run test:mutation
+npm run test:fuzz
 npm run build
+npm run check:bundle
 npm run test:e2e:mobile
 ```
 
@@ -69,3 +74,9 @@ Use commit messages that describe the phase block, for example:
 Add mobile smoke accessibility gates
 Update phase 9 release checklist
 ```
+
+## Mandatory 13-Category Pre-Deployment Review
+
+Record PASS, justified NOT APPLICABLE, or approved EXCEPTION for acceptance; unit; properties/invariants; mutation; fuzzing; integration; contract; E2E; regression; security; concurrency/resilience; performance/resources; compatibility/deployment.
+
+Use `docs/TESTING.md`. Missing evidence blocks deployment.

@@ -1,0 +1,84 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="Datos de verbos - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>Datos de verbos | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a href="/docs/product/introduction/">Producto SmartTense</a><a href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a class="active" aria-current="page" href="/docs/architecture/data-schema/">Datos de verbos</a><a href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a href="/docs/delivery/github-pages/">GitHub Pages</a><a href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Arquitectura</p><h1 id="smarttense-data-schema">SmartTense Data Schema</h1>
+<p>SmartTense reads verb data from JSON. The default file is:</p>
+<pre><code class="language-text">public/data/verbs.json</code></pre>
+<p>The same shape is accepted by Settings -&gt; Import JSON and by the Settings data manager before saving a draft.</p>
+<h2 id="root-object">Root Object</h2>
+<pre><code class="language-json">{
+  &quot;schemaVersion&quot;: 1,
+  &quot;updatedAt&quot;: &quot;2026-06-28&quot;,
+  &quot;verbs&quot;: []
+}</code></pre>
+<p>Fields:</p>
+<ul><li><code>schemaVersion</code>: optional version number for humans and future migrations.</li><li><code>updatedAt</code>: optional date string.</li><li><code>verbs</code>: required non-empty array of verb objects.</li></ul>
+<p>Only these three root fields are accepted by the importer.</p>
+<h2 id="regular-verb-object">Regular Verb Object</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;write&quot;,
+  &quot;label&quot;: &quot;to write&quot;,
+  &quot;meaningEs&quot;: &quot;escribir&quot;,
+  &quot;meanings&quot;: {
+    &quot;es&quot;: &quot;escribir&quot;
+  },
+  &quot;base&quot;: &quot;write&quot;,
+  &quot;third&quot;: &quot;writes&quot;,
+  &quot;past&quot;: &quot;wrote&quot;,
+  &quot;participle&quot;: &quot;written&quot;,
+  &quot;gerund&quot;: &quot;writing&quot;,
+  &quot;object&quot;: &quot;a message&quot;,
+  &quot;objectEs&quot;: &quot;un mensaje&quot;,
+  &quot;objects&quot;: {
+    &quot;es&quot;: &quot;un mensaje&quot;
+  }
+}</code></pre>
+<p>Required fields:</p>
+<ul><li><code>id</code>: unique id used internally.</li><li><code>label</code>: text shown in the verb selector.</li><li><code>base</code>: base English form.</li></ul>
+<p>Recommended fields:</p>
+<ul><li><code>meaningEs</code>: legacy Spanish meaning shown in the learner guide.</li><li><code>meanings</code>: optional localized learner meanings keyed by language code, such as <code>es</code> or future <code>fr</code>.</li><li><code>third</code>: third-person singular present form.</li><li><code>past</code>: simple past form.</li><li><code>participle</code>: past participle.</li><li><code>gerund</code>: <code>-ing</code> form.</li><li><code>object</code>: short complement used to build natural examples.</li><li><code>objectEs</code>: legacy Spanish meaning of the object or complement.</li><li><code>objects</code>: optional localized learner complements keyed by language code.</li></ul>
+<p>If <code>meanings.es</code> or <code>objects.es</code> exists, it is preferred over the legacy <code>meaningEs</code> and <code>objectEs</code> fields. The legacy fields remain supported so existing JSON files keep working while the app moves toward multiple learner languages.</p>
+<p>If optional conjugation fields are missing, SmartTense uses simple fallbacks such as adding <code>s</code>, <code>ed</code>, or <code>ing</code>. For irregular verbs, always provide the explicit forms.</p>
+<p>Only documented verb fields are accepted. Unknown fields are rejected so imported files cannot smuggle unexpected data into the application state.</p>
+<h2 id="verb-pattern-classification">Verb Pattern Classification</h2>
+<p>SmartTense calculates a study pattern from the three principal forms: <code>base</code>, <code>past</code>, and <code>participle</code>.</p>
+<ul><li><code>AAA</code>: all three forms are equal, such as <code>cut / cut / cut</code>.</li><li><code>ABB</code>: past and participle are equal, such as <code>buy / bought / bought</code>.</li><li><code>ABC</code>: all three forms are different, such as <code>sing / sang / sung</code>.</li><li><code>ABA</code>: base and participle are equal, such as <code>come / came / come</code>.</li><li><code>REGULAR_ED</code>: regular verbs ending in <code>-ed</code>, such as <code>want / wanted / wanted</code>.</li><li><code>BE</code>: special handling for <code>to be</code>.</li><li><code>MODAL</code>: special handling for modal entries such as <code>can</code> and <code>should</code>.</li></ul>
+<p>Do not add this pattern to JSON files. It is calculated automatically so future filters can use it consistently.</p>
+<h2 id="special-verb-be">Special Verb: <code>be</code></h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;be&quot;,
+  &quot;label&quot;: &quot;to be&quot;,
+  &quot;meaningEs&quot;: &quot;ser / estar&quot;,
+  &quot;type&quot;: &quot;be&quot;,
+  &quot;base&quot;: &quot;be&quot;,
+  &quot;third&quot;: &quot;is&quot;,
+  &quot;past&quot;: &quot;was&quot;,
+  &quot;participle&quot;: &quot;been&quot;,
+  &quot;gerund&quot;: &quot;being&quot;,
+  &quot;object&quot;: &quot;careful&quot;,
+  &quot;objectEs&quot;: &quot;cuidadoso / cuidadosa&quot;
+}</code></pre>
+<p>Use <code>type: &quot;be&quot;</code> for <code>to be</code>. The grammar engine handles it separately because it does not use <code>do</code> and <code>does</code> like regular verbs.</p>
+<h2 id="special-verb-modal">Special Verb: Modal</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;can&quot;,
+  &quot;label&quot;: &quot;can&quot;,
+  &quot;meaningEs&quot;: &quot;poder&quot;,
+  &quot;type&quot;: &quot;modal&quot;,
+  &quot;base&quot;: &quot;can&quot;,
+  &quot;past&quot;: &quot;could&quot;,
+  &quot;object&quot;: &quot;speak English&quot;,
+  &quot;objectEs&quot;: &quot;hablar ingles&quot;,
+  &quot;actionBase&quot;: &quot;speak English&quot;,
+  &quot;actionParticiple&quot;: &quot;spoken English&quot;,
+  &quot;actionGerund&quot;: &quot;speaking English&quot;
+}</code></pre>
+<p>Use <code>type: &quot;modal&quot;</code> for modal-style entries. <code>actionBase</code>, <code>actionParticiple</code>, and <code>actionGerund</code> help the engine create natural examples for continuous and perfect tenses.</p>
+<h2 id="settings-data-manager">Settings Data Manager</h2>
+<p>Settings provides a browser-side administrator for this schema. It can import/export the database, add a draft verb, review an indexed/searchable/sortable/paginated table, edit a single row, cancel an in-progress row edit, enable Bulk edit for documented fields, delete draft rows, restore demo data, and save or discard the draft.</p>
+<p>The row editor and bulk editor intentionally expose only documented fields. Updating a draft runs the same validation used by file import, so duplicate IDs, missing required fields, unsupported types, unknown fields, and unsafe strings are rejected before <code>appData</code> changes. Update and delete actions require browser confirmation.</p>
+<p>Settings edits are not written directly to <code>public/data/verbs.json</code>. To make them permanent, export the database JSON and update the project data files intentionally.</p>
+<h2 id="validation-rules">Validation Rules</h2>
+<p>Import and Settings draft save reject data when:</p>
+<ul><li>The selected file does not end in <code>.json</code>.</li><li>The selected file is larger than 512 KB.</li><li><code>verbs</code> is missing, empty, or not an array.</li><li><code>verbs</code> contains more than 500 entries.</li><li>The root object contains unknown fields.</li><li><code>schemaVersion</code> is outside the supported range.</li><li>A verb is missing <code>id</code>, <code>label</code>, or <code>base</code>.</li><li>Two verbs use the same <code>id</code>.</li><li>A verb contains unknown fields.</li><li>A verb <code>id</code> contains characters other than letters, numbers, or dashes.</li><li><code>type</code> is present but is not <code>be</code> or <code>modal</code>.</li><li>Optional string fields are present but are not strings.</li><li>Any string field is empty, too long, or contains <code>&lt;</code> or <code>&gt;</code>.</li></ul>
+<h2 id="keeping-built-in-data-in-sync">Keeping Built-In Data In Sync</h2>
+<p>When adding permanent verbs after using Settings export, update both files:</p>
+<ul><li><code>public/data/verbs.json</code></li><li><code>src/data/defaultData.js</code></li></ul>
+<p>This keeps the normal data file and embedded fallback data aligned.</p><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/architecture/api/"><span>Anterior</span>API y modulos</a><a href="/docs/architecture/content-schema/"><span>Siguiente</span>Datos curriculares</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#root-object">Root Object</a><a class="level-2" href="#regular-verb-object">Regular Verb Object</a><a class="level-2" href="#verb-pattern-classification">Verb Pattern Classification</a><a class="level-2" href="#special-verb-be">Special Verb: be</a><a class="level-2" href="#special-verb-modal">Special Verb: Modal</a><a class="level-2" href="#settings-data-manager">Settings Data Manager</a><a class="level-2" href="#validation-rules">Validation Rules</a><a class="level-2" href="#keeping-built-in-data-in-sync">Keeping Built In Data In Sync</a></aside></div></body></html>

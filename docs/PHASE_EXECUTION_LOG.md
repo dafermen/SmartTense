@@ -1,4 +1,4 @@
-﻿# Registro de ejecucion por fases - SmartTense
+# Registro de ejecucion por fases - SmartTense
 
 Fecha base: 11/07/2026.
 
@@ -649,3 +649,107 @@ Fecha base: 11/07/2026.
 - El smoke oficial abre Manual y valida tarjeta mobile, enlace PDF local, visor oculto y ausencia de overflow.
 - Manual aparece entre las 12 pantallas del reporte.
 - Revision en telefono fisico: recomendada, no bloqueante.
+
+## Fase 22 - Documentation And Pre-Deployment Quality Governance
+
+**Estado:** Implementada localmente; workflow pendiente de validacion.
+
+- Estructura canonica, ADR, plantillas, CI y archivos de gobierno creados.
+- `CURRENT_STATUS.md` pasa a la raiz con enlace compatible en `docs/`.
+- Las 13 categorias se revisan antes de desplegar.
+- CI y Pages ejecutan release gate y auditoria.
+- LICENSE queda pendiente de decision legal del propietario.
+
+## Pronunciation Practice Block - 2026-07-31
+
+Status: Implemented and locally validated on 2026-07-31.
+
+- Reuses every unit's existing pronunciationDrills.
+- Adds device-voice playback for one sentence or the full drill set.
+- Adds slow and normal playback speeds.
+- Persists practiced drill IDs in the existing unit journey.
+- Falls back to manual read-and-repeat when speech synthesis is unavailable.
+- Adds isolated unit coverage for speech configuration without requiring a browser or network.
+- Validation evidence: 98/98 tests, production build and 12-screen mobile smoke journey passed.
+## Progress Backup And Restore - 2026-07-31
+
+Status: Implemented and locally validated.
+
+- Adds a dedicated, versioned progress data channel separate from verbs and learning content.
+- Exports and restores pedagogical history without replacing device display preferences.
+- Requires user confirmation before restoration and rejects incompatible, oversized, deeply nested or unsafe payloads.
+- Validation evidence: 101/101 tests, production build and 12-screen mobile smoke journey passed.
+## Installable And Offline PWA - 2026-07-31
+
+Status: Implemented and locally validated; published-device confirmation pending deployment.
+
+- Adds a standalone web-app manifest and standard/maskable icons.
+- Registers offline support only in production and removes stale registrations during local development.
+- Pre-caches curriculum, verbs and the application shell, with controlled runtime cache updates.
+- Adds no third-party runtime dependency.
+- Validation evidence: 104/104 tests, production build and 12-screen mobile smoke journey passed.
+## Documentation Recovery And Navigation - 2026-09-09
+
+Status: Implemented and locally validated except for the final mobile smoke.
+
+- Restored the root-level governance and continuity documents to their canonical locations.
+- Preserved `docs/CURRENT_STATUS.md` as a compatibility link for older references.
+- Corrected the static documentation Markdown parser to guarantee forward progress.
+- Generated 31 documentation pages with no broken local Markdown links and no duplicated nested documentation routes.
+- Confirmed the normal `npm run dev -- --port <port> --host` flow builds documentation and starts Vite.
+- Validation evidence: content and translation audits passed, 107/107 tests passed, and the production build passed.
+- Remaining evidence: repeat the mobile smoke when Chrome can complete the 12-screen journey; no application assertion failed in this run.
+## Property And Invariant Test Baseline - 2026-09-09
+
+Status: Implemented and locally validated.
+
+- Exercises every bundled verb across every subject and tense, covering 11,200 generated sentence rows.
+- Verifies complete forms, punctuation, translations, spacing, and absence of undefined output.
+- Verifies cumulative tense visibility across Basic, Intermediate, and Advanced levels.
+- Verifies normalization idempotence and scoring invariance for case, spacing, accents, and terminal punctuation.
+- Verifies deterministic progress-backup round trips, duplicate removal, and detached restored objects.
+- Focused evidence: 5/5 property and invariant tests passed.
+## Mutation Testing Baseline - 2026-09-09
+
+Status: Implemented and locally validated.
+
+- Installed the official StrykerJS core as a development-only dependency.
+- Uses the native Node test runner through Stryker's command runner; no test-framework migration was required.
+- Mutates `src/practice.js` against focused unit and property tests.
+- The first run scored 83.72% and exposed 7 surviving mutants.
+- Tests were strengthened for absent units, empty values, typographic apostrophes, internal punctuation, and repeated terminal punctuation.
+- Final evidence: 43/43 mutants killed, 0 survived, 0 timed out, mutation score 100%.
+- The release gate now includes mutation testing with a 90% blocking threshold.
+- Dependency note: npm originally reported 7 transitive alerts after installation; all were remediated with compatible updates during Phase 23.
+
+## Deterministic JSON Fuzzing Baseline - 2026-09-09
+
+Status: Implemented and locally validated.
+
+- Added `scripts/fuzz-json-validation.js` with a reproducible pseudo-random seed.
+- Exercises invalid roots, malicious or oversized verb records, malformed learning units, and unsafe progress backups.
+- Baseline evidence: 1,130/1,130 generated unsafe payloads rejected in 159 ms with seed `1397571922`.
+- Added `npm run test:fuzz` to the pre-deployment release gate.
+
+## Browser Persistence And Mobile Bundle Guard - 2026-09-09
+
+Status: Implemented and locally validated.
+
+- Centralized browser-storage reads, writes, and deletion behind a bounded, failure-tolerant adapter.
+- Rejects malformed JSON, unsafe keys, non-record roots, excessive depth and size, cycles, and non-finite numbers.
+- Preserves application availability when storage access, quota, or deletion is denied.
+- Added four integration tests; full evidence: 117/117 tests passed and the production build passed.
+- Added a post-build budget of 500 kB for the largest JavaScript asset and 100 kB for combined CSS.
+
+## Phase 23 - Visual Documentation And GitHub Pages Release - 2026-09-13
+
+Status: Local release gate passed; GitHub Pages publication in progress.
+
+- Added an isolated Chrome capture command and four real application screenshots.
+- Added the screenshots to README and the generated learner documentation.
+- Added `public/CNAME` for `smarttense.innovalogic.tech` and documented `PAGES_BASE_PATH=/`.
+- Documented that Docker is not required for the static Pages deployment and that private-server delivery is a separate future migration.
+- Updated safe transitive versions for XML, pattern expansion, NanoID, PostCSS, TAR, and QS; no forced or breaking npm fix was used.
+- Security evidence: `npm audit` reports 0 vulnerabilities.
+- Release evidence: 117/117 tests passed; mutation score 100% (43/43); 1,130/1,130 unsafe fuzz payloads rejected; 31 documentation pages generated with 0 broken links; production build and bundle budgets passed.
+- Mobile evidence: all 12 screens passed at 390x844, 0 horizontal overflow, 0 unnamed buttons, and 0 unlabeled fields.

@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { buildGuidedLessonSteps, isGuidedAnswerCorrect } from "./guidedLesson.js";
+import { playPronunciation, stopPronunciation } from "./pronunciation.js";
 import "./guidedLesson.css";
 
 export default function GuidedLessonPage({ unit, initialProgress, t, onProgressChange, onBack, onPractice, onAnswerResult }) {
@@ -9,6 +10,14 @@ export default function GuidedLessonPage({ unit, initialProgress, t, onProgressC
   const [checkedAnswers, setCheckedAnswers] = useState(initialProgress?.guidedCheckedAnswers || {});
   const [completedStepIds, setCompletedStepIds] = useState(initialProgress?.guidedCompletedStepIds || []);
   const [productionDraft, setProductionDraft] = useState(initialProgress?.guidedProductionDraft || "");
+  const [pronunciationSpeed, setPronunciationSpeed] = useState("normal");
+  const [practicedDrillIds, setPracticedDrillIds] = useState(initialProgress?.guidedPracticedDrillIds || []);
+  const [speechStatus, setSpeechStatus] = useState("");
+  const speechAvailable = typeof window !== "undefined"
+    && typeof window.speechSynthesis !== "undefined"
+    && typeof window.SpeechSynthesisUtterance === "function";
+
+  useEffect(() => () => stopPronunciation(), [stepIndex]);
 
   if (!unit || steps.length === 0) {
     return (
@@ -45,6 +54,24 @@ export default function GuidedLessonPage({ unit, initialProgress, t, onProgressC
     setCompletedStepIds(nextCompletedStepIds);
     setStepIndex(boundedIndex);
     onProgressChange?.({ guidedStepIndex: boundedIndex, guidedCompletedStepIds: nextCompletedStepIds, guidedCompleted });
+  }
+
+  function speak(text) {
+    const started = playPronunciation(text, {
+      speed: pronunciationSpeed,
+      onStart: () => setSpeechStatus(t("pronunciationPlaying")),
+      onEnd: () => setSpeechStatus(""),
+      onError: () => setSpeechStatus(t("pronunciationUnavailable"))
+    });
+    if (!started) setSpeechStatus(t("pronunciationUnavailable"));
+  }
+
+  function togglePracticedDrill(drillId) {
+    const nextIds = practicedDrillIds.includes(drillId)
+      ? practicedDrillIds.filter((id) => id !== drillId)
+      : [...practicedDrillIds, drillId];
+    setPracticedDrillIds(nextIds);
+    onProgressChange?.({ guidedPracticedDrillIds: nextIds });
   }
 
   function renderStep() {
@@ -140,14 +167,52 @@ export default function GuidedLessonPage({ unit, initialProgress, t, onProgressC
           <div className="guided-step-card">
             <p className="guided-kicker">{t("guidedSayAloud")}</p>
             <h2>{t("guidedRepeat")}</h2>
+            <div className="guided-pronunciation-toolbar">
+              <label>
+                <span>{t("pronunciationSpeed")}</span>
+                <select value={pronunciationSpeed} onChange={(event) => setPronunciationSpeed(event.target.value)}>
+                  <option value="slow">{t("pronunciationSlow")}</option>
+                  <option value="normal">{t("pronunciationNormal")}</option>
+                </select>
+              </label>
+              <button
+                type="button"
+                className="secondary"
+                disabled={!speechAvailable}
+                onClick={() => speak(step.drills.map((drill) => drill.text).join(" "))}
+              >
+                {t("pronunciationListenAll")}
+              </button>
+            </div>
+            {!speechAvailable && <p className="guided-pronunciation-note">{t("pronunciationUnavailable")}</p>}
+            <p className="guided-pronunciation-status" role="status" aria-live="polite">{speechStatus}</p>
             <div className="guided-drill-list">
-              {step.drills.map((drill) => (
-                <article key={drill.id}>
+              {step.drills.map((drill) => {
+                const practiced = practicedDrillIds.includes(drill.id);
+                return (
+                <article key={drill.id} className={practiced ? "is-practiced" : ""}>
                   <strong>{drill.text}</strong>
                   <p>{drill.focus}. {drill.note}</p>
+                  <div className="guided-drill-actions">
+                    <button type="button" disabled={!speechAvailable} onClick={() => speak(drill.text)}>
+                      {t("pronunciationListen")}
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary"
+                      aria-pressed={practiced}
+                      onClick={() => togglePracticedDrill(drill.id)}
+                    >
+                      {practiced ? t("pronunciationPracticed") : t("pronunciationMarkPracticed")}
+                    </button>
+                  </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
+            <p className="guided-pronunciation-count">
+              {t("pronunciationProgress")}: {practicedDrillIds.filter((id) => step.drills.some((drill) => drill.id === id)).length}/{step.drills.length}
+            </p>
           </div>
         );
       case "production":

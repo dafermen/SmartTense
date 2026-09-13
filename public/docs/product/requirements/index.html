@@ -1,0 +1,170 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="Definicion y alcance - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>Definicion y alcance | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a href="/docs/product/introduction/">Producto SmartTense</a><a class="active" aria-current="page" href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a href="/docs/architecture/data-schema/">Datos de verbos</a><a href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a href="/docs/delivery/github-pages/">GitHub Pages</a><a href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Producto</p><h1 id="smarttense-requerimientos-de-software">SmartTense - Requerimientos De Software</h1>
+<p>Fecha base: 2026-07-11.</p>
+<p>Este documento traduce el plan curricular en requerimientos funcionales, no funcionales, historias de usuario, criterios de aceptacion y tareas verificables. Es el documento operativo para saber que construir exactamente antes de tocar codigo.</p>
+<h2 id="relacion-con-otros-documentos">Relacion Con Otros Documentos</h2>
+<table><thead><tr><th>Documento</th><th>Rol</th></tr></thead><tbody><tr><td><code>INDEX.md</code></td><td>Dice donde esta cada documento y cual leer primero</td></tr><tr><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>Define fases ejecutivas, orden de trabajo y alcance curricular A1-B2</td></tr><tr><td><code>SOFTWARE_REQUIREMENTS.md</code></td><td>Define que debe hacer el software y como aceptar cada entrega</td></tr><tr><td><code>PHASE_EXECUTION_LOG.md</code></td><td>Registra que se ejecuto, que se valido y que quedo cerrado</td></tr><tr><td><code>DEVELOPER_GUIDE.md</code></td><td>Explica arquitectura, archivos, scripts y reglas tecnicas</td></tr></tbody></table>
+<h2 id="estados-permitidos">Estados Permitidos</h2>
+<table><thead><tr><th>Estado</th><th>Significado</th></tr></thead><tbody><tr><td>Proposed</td><td>Requerimiento definido pero aun no aprobado para construir</td></tr><tr><td>Ready</td><td>Listo para desarrollo en la fase activa</td></tr><tr><td>In Progress</td><td>En implementacion local</td></tr><tr><td>Done</td><td>Implementado, probado y documentado</td></tr><tr><td>Deferred</td><td>Valido, pero fuera del alcance actual</td></tr><tr><td>Blocked</td><td>No se puede avanzar sin decision o cambio previo</td></tr></tbody></table>
+<h2 id="trazabilidad-por-fase">Trazabilidad Por Fase</h2>
+<table><thead><tr><th>Fase</th><th>Documento ejecutivo</th><th>Requerimientos principales</th><th>Estado</th></tr></thead><tbody><tr><td>Fase 11 - Revision del modelo de contenido</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-001, FR-002, FR-003, NFR-003, NFR-008</td><td>Done</td></tr><tr><td>Fase 12 - A1 Foundation MVP</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-004, FR-005, FR-006, FR-009</td><td>Done</td></tr><tr><td>Fase 13 - A2 Expansion Dario</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-004, FR-005, FR-006, FR-010</td><td>Done</td></tr><tr><td>Fase 14 - B1 Functional Communication</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-005, FR-006, FR-011</td><td>Done</td></tr><tr><td>Fase 15 - B2 Independent Production</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-006, FR-012, NFR-001, NFR-006</td><td>Done</td></tr><tr><td>Fase 16 - Diagnostico y ruta recomendada</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-003, FR-007, FR-008, FR-009</td><td>Done</td></tr><tr><td>Fase 17 - Production por unidad y revision guiada</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-006, FR-009, NFR-001, NFR-008</td><td>Done</td></tr><tr><td>Fase 18 - Pulido UX mobile MVP</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>NFR-001, NFR-006, NFR-010</td><td>Done</td></tr><tr><td>Fase 19 - Revision de contenido y gaps A1-A2</td><td><code>CURRICULUM_PHASE_PLAN.md</code></td><td>FR-004, FR-005, FR-006, NFR-010</td><td>Ready</td></tr></tbody></table>
+<h2 id="requerimientos-funcionales">Requerimientos Funcionales</h2>
+<h3 id="fr-001-metadata-curricular-por-nivel">FR-001 - Metadata Curricular Por Nivel</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>El sistema debe poder representar unidades por nivel CEFR sin romper unidades existentes.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>identificar nivel objetivo: A1, A2, B1 o B2;</li><li>definir orden recomendado de unidades;</li><li>declarar prerequisitos cuando una unidad depende de otra;</li><li>mantener compatibilidad con unidades actuales.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li><code>public/data/learningUnits.json</code> puede expresar nivel, orden y prerequisitos o se documenta la brecha exacta;</li><li>el validador acepta casos validos y rechaza casos invalidos;</li><li><code>LEARNING_CONTENT_SCHEMA.md</code> explica los campos que se agreguen o confirme que no hacen falta.</li></ul>
+<h3 id="fr-002-validacion-de-contenido-curricular">FR-002 - Validacion De Contenido Curricular</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Todo contenido editable o importable debe validarse antes de llegar al estado de la app.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>validar IDs seguros y unicos;</li><li>validar referencias entre unidades, contextos, ejercicios y tense IDs;</li><li>rechazar campos desconocidos cuando el schema lo exija;</li><li>rechazar strings peligrosos, demasiado largos o con markup.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>pruebas cubren contenido valido e invalido;</li><li>Settings no aplica contenido invalido;</li><li>los mensajes de error ayudan a corregir el JSON.</li></ul>
+<h3 id="fr-003-ruta-de-aprendizaje-por-unidad">FR-003 - Ruta De Aprendizaje Por Unidad</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Home debe recomendar el siguiente paso segun unidad activa, teoria vista y practica completada.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>conservar progreso local por unidad;</li><li>recomendar Theory, Practice o siguiente unidad;</li><li>permitir reset desde Settings;</li><li>no requerir servidor ni cuenta.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>Home muestra recomendacion coherente;</li><li>progreso se mantiene en el navegador actual;</li><li>reset no borra datos de verbos ni contenido importado, salvo accion explicita.</li></ul>
+<h3 id="fr-004-theory-por-nivel-y-unidad">FR-004 - Theory Por Nivel Y Unidad</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Theory debe mostrar contenido curricular de una unidad de forma clara y apta para mobile.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>objetivos;</li><li>explicacion breve;</li><li>estructuras;</li><li>ejemplos;</li><li>errores comunes;</li><li>vocabulario contextual;</li><li>filtros de contexto cuando existan.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>una unidad A1/A2 abre sin overflow critico en mobile;</li><li>textos largos no rompen botones, tablas ni tarjetas;</li><li>contenido se renderiza desde JSON, no hardcodeado en componentes.</li></ul>
+<h3 id="fr-005-practice-por-nivel-y-unidad">FR-005 - Practice Por Nivel Y Unidad</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Practice debe ejecutar ejercicios asociados a la unidad activa.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>soportar los tipos actuales: <code>fillBlank</code>, <code>transform</code>, <code>chooseTense</code>, <code>correctMistake</code>, <code>translation</code>;</li><li>filtrar por contexto cuando aplique;</li><li>mostrar feedback inmediato;</li><li>mantener scoring local por sesion o unidad segun comportamiento existente.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>cada unidad nueva tiene ejercicios validos;</li><li>las respuestas se normalizan para evitar falsos negativos obvios;</li><li>pruebas cubren extraccion, filtro y scoring.</li></ul>
+<h3 id="fr-006-production-speaking-writing">FR-006 - Production Speaking/Writing</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Production debe ofrecer prompts alineados con la unidad activa y permitir revisar intentos locales.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>prompts por modo: speaking y writing;</li><li>estado de intento: draft, done, needs review, approved;</li><li>editar, cancelar edicion y eliminar con confirmacion;</li><li>filtros por modo y estado.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>prompts nuevos tienen tense IDs validos;</li><li>la cola se puede filtrar sin perder intentos;</li><li>mobile smoke cubre Production sin campos sin etiqueta.</li></ul>
+<h3 id="fr-007-diagnostico-mvp">FR-007 - Diagnostico MVP</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>El sistema debe ofrecer un diagnostico simple para sugerir nivel inicial.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>preguntas cortas por nivel;</li><li>resultado local: A1, A2, B1 o B2 sugerido;</li><li>opcion de reset;</li><li>sin servidor, login ni analitica externa.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>el diagnostico no bloquea el uso manual de la app;</li><li>Home puede usar la recomendacion local;</li><li><code>USER_GUIDE.md</code> explica privacidad y reset.</li></ul>
+<h3 id="fr-008-configuracion-local">FR-008 - Configuracion Local</h3>
+<p><strong>Estado:</strong> Proposed.</p>
+<p>Settings debe concentrar configuracion y administracion local sin mezclar flujos de estudio.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>reset de progreso;</li><li>importar/exportar verbos;</li><li>importar/exportar learning content;</li><li>administrar datos con busqueda, orden, paginacion, edicion individual y modo bulk opcional.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>acciones destructivas piden confirmacion;</li><li>tablas grandes usan paginacion;</li><li>exportaciones son JSON validos.</li></ul>
+<h3 id="fr-009-privacidad-y-persistencia-local">FR-009 - Privacidad Y Persistencia Local</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>El proyecto debe funcionar como app estatica sin subir progreso ni contenido del usuario.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>progreso en localStorage;</li><li>intentos de Production locales;</li><li>importaciones locales por sesion/navegador;</li><li>documentacion clara para usuario final.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>no se agregan llamadas de red para progreso;</li><li><code>SECURITY.md</code> y <code>USER_GUIDE.md</code> siguen alineados si cambia persistencia.</li></ul>
+<h3 id="fr-010-expansion-a2-desde-documento-dario">FR-010 - Expansion A2 Desde Documento Dario</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>El contenido A2 del documento de Dario debe convertirse en unidades pequenas y navegables.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>Present Simple;</li><li>Present Continuous;</li><li>Present Perfect Simple;</li><li>Present Perfect Continuous;</li><li>Prepositions;</li><li>Daily Habits;</li><li>speaking/writing.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>no se crea una unidad gigante dificil de usar en mobile;</li><li>cada unidad tiene objetivos, teoria, ejercicios y prompts;</li><li>contenido queda trazado a Fase 13.</li></ul>
+<h3 id="fr-011-transferencia-entre-tiempos-b1">FR-011 - Transferencia Entre Tiempos B1</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>Practice debe ayudar a elegir entre tiempos segun contexto, no solo llenar formas aisladas.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>ejercicios de decision de tiempo;</li><li>contraste entre pasado, futuro y condicional;</li><li>ejemplos de trabajo, viajes, reuniones y problemas cotidianos.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>feedback explica por que un tiempo es correcto;</li><li>Production tiene prompts de narracion y resolucion de problemas.</li></ul>
+<h3 id="fr-012-produccion-independiente-b2">FR-012 - Produccion Independiente B2</h3>
+<p><strong>Estado:</strong> Done.</p>
+<p>B2 debe enfocarse en produccion extendida, precision y coherencia.</p>
+<p><strong>Alcance minimo:</strong></p>
+<ul><li>prompts largos;</li><li>rubricas mas exigentes;</li><li>conectores y registro;</li><li>correccion avanzada de errores.</li></ul>
+<p><strong>Criterios de aceptacion:</strong></p>
+<ul><li>la UI no se vuelve pesada en mobile;</li><li>rubricas son claras y accionables;</li><li>ejercicios no dependen de evaluacion automatica no implementada.</li></ul>
+<h2 id="requerimientos-no-funcionales">Requerimientos No Funcionales</h2>
+<table><thead><tr><th>ID</th><th>Requerimiento</th><th>Criterio de aceptacion</th></tr></thead><tbody><tr><td>NFR-001</td><td>Mobile-first</td><td><code>npm run test:e2e:mobile</code> verde en <code>390x844</code></td></tr><tr><td>NFR-002</td><td>App estatica</td><td>No se agrega backend para fases A1-B2 MVP</td></tr><tr><td>NFR-003</td><td>Seguridad de importacion</td><td>JSON invalido, grande o peligroso se rechaza antes de aplicar</td></tr><tr><td>NFR-004</td><td>Rendimiento</td><td>Settings mantiene paginacion y smoke mobile valida 500 verbos sinteticos</td></tr><tr><td>NFR-005</td><td>Accesibilidad basica</td><td>Main landmark, navegacion con nombre, botones con nombre y campos con label</td></tr><tr><td>NFR-006</td><td>Legibilidad</td><td>Textos no deben desbordar contenedores en mobile</td></tr><tr><td>NFR-007</td><td>Mantenibilidad</td><td>Contenido curricular vive en datos; UI solo renderiza/filtra/guia</td></tr><tr><td>NFR-008</td><td>Testabilidad</td><td>Cambios de schema, Practice, Production o Settings agregan pruebas</td></tr><tr><td>NFR-009</td><td>Compatibilidad</td><td>Unidades existentes siguen funcionando despues de ampliar schema</td></tr><tr><td>NFR-010</td><td>Documentacion</td><td>Cada fase actualiza indice, requerimientos, guia afectada y log de evidencia</td></tr></tbody></table>
+<h2 id="historias-de-usuario">Historias De Usuario</h2>
+<h3 id="hu-001-autor-de-contenido-define-una-unidad">HU-001 - Autor De Contenido Define Una Unidad</h3>
+<p>Como autor de contenido, quiero definir una unidad con nivel, objetivos, teoria, ejemplos, vocabulario y ejercicios, para que la app pueda mostrarla sin cambiar codigo.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>la unidad valida contra el schema;</li><li>Theory y Practice la pueden renderizar;</li><li>los errores de validacion son claros.</li></ul>
+<h3 id="hu-002-estudiante-sigue-una-ruta-recomendada">HU-002 - Estudiante Sigue Una Ruta Recomendada</h3>
+<p>Como estudiante, quiero que Home me diga cual es el siguiente paso, para no perderme entre Theory, Practice, Individual, Production y Complete.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>Home muestra una recomendacion basada en progreso local;</li><li>puedo abrir la accion recomendada;</li><li>puedo cambiar de unidad manualmente.</li></ul>
+<h3 id="hu-003-estudiante-practica-segun-su-nivel">HU-003 - Estudiante Practica Segun Su Nivel</h3>
+<p>Como estudiante, quiero practicar ejercicios de mi unidad actual, para reforzar lo que acabo de leer.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>Practice carga ejercicios de la unidad activa;</li><li>recibo feedback inmediato;</li><li>el contador de aciertos no se rompe al filtrar por contexto.</li></ul>
+<h3 id="hu-004-estudiante-produce-speaking-writing">HU-004 - Estudiante Produce Speaking/Writing</h3>
+<p>Como estudiante, quiero responder prompts de speaking o writing, para practicar comunicacion real y revisar mis intentos.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>puedo crear, editar, cancelar edicion y eliminar intentos;</li><li>puedo filtrar por modo y estado;</li><li>las acciones destructivas piden confirmacion.</li></ul>
+<h3 id="hu-005-administrador-local-actualiza-datos">HU-005 - Administrador Local Actualiza Datos</h3>
+<p>Como administrador local, quiero importar, exportar, buscar, ordenar, paginar y editar datos, para mantener la base sin tocar codigo cuando sea posible.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>la tabla es paginada;</li><li>editar un registro tiene opcion clara de cancelar;</li><li>bulk edit es opcional y no se activa por accidente.</li></ul>
+<h3 id="hu-006-estudiante-recibe-nivel-sugerido">HU-006 - Estudiante Recibe Nivel Sugerido</h3>
+<p>Como estudiante, quiero hacer un diagnostico corto, para saber si debo empezar en A1, A2, B1 o B2.</p>
+<p><strong>Aceptacion:</strong></p>
+<ul><li>puedo saltar el diagnostico;</li><li>el resultado se guarda localmente;</li><li>puedo reiniciar el diagnostico desde Settings.</li></ul>
+<h2 id="backlog-operativo-inmediato">Backlog Operativo Inmediato</h2>
+<h3 id="fase-11-revision-del-modelo-de-contenido">Fase 11 - Revision Del Modelo De Contenido</h3>
+<ol><li>Revisar si <code>learningUnits</code> soporta <code>level</code>, <code>order</code>, <code>prerequisites</code> y agrupacion por ruta. <strong>Done</strong>: schema v3 agrega <code>cefrLevel</code>, <code>unitOrder</code> y <code>prerequisiteUnitIds</code>.</li><li>Revisar si el validador actual permite esos campos o los rechazaria. <strong>Done</strong>: el validador acepta los campos nuevos y mantiene compatibilidad con schema v1/v2.</li><li>Decidir si el cambio requiere schema nuevo o solo convencion documental. <strong>Done</strong>: se uso schema v3 porque agrega contrato curricular verificable.</li><li>Agregar pruebas de validacion para nivel, orden y prerequisitos si se implementan. <strong>Done</strong>: pruebas cubren metadata, CEFR invalido, prerequisito desconocido y orden duplicado.</li><li>Actualizar <code>LEARNING_CONTENT_SCHEMA.md</code>. <strong>Done</strong>.</li><li>Actualizar <code>DEVELOPER_GUIDE.md</code> con reglas para autores/desarrolladores. <strong>Done</strong>.</li><li>Ejecutar <code>npm run release:check</code>. <strong>Done</strong>.</li><li>Registrar evidencia en <code>PHASE_EXECUTION_LOG.md</code>. <strong>Done</strong>.</li></ol>
+<h3 id="fase-12-a1-foundation-mvp">Fase 12 - A1 Foundation MVP</h3>
+<ol><li>Crear primera unidad A1 antes de Present Simple. <strong>Done</strong>: <code>be-have-foundation</code> cubre <code>be</code>, <code>have</code> y <code>there is/are</code>.</li><li>Ajustar ruta A1 inicial. <strong>Done</strong>: Present Simple queda en orden 2 y depende de <code>be-have-foundation</code>.</li><li>Agregar ejercicios iniciales A1. <strong>Done</strong>: fillBlank, transform, correctMistake y chooseTense.</li><li>Agregar Production prompt A1. <strong>Done</strong>: <code>a1-personal-introduction</code>.</li><li>Crear 1 a 3 unidades A1 adicionales. <strong>Done</strong>: <code>personal-information-questions</code> completa el MVP minimo de 3 unidades A1.</li><li>Revisar si Production debe filtrar prompts por unidad activa. <strong>Done</strong>: se mantiene global por ahora; hay prompts A1 disponibles sin nuevo filtro.</li><li>Ejecutar <code>npm run release:check</code> para cierre de fase. <strong>Done</strong>.</li><li>Registrar evidencia final de Fase 12 en <code>PHASE_EXECUTION_LOG.md</code>. <strong>Done</strong>.</li></ol>
+<h3 id="fase-13-a2-expansion-dario">Fase 13 - A2 Expansion Dario</h3>
+<ol><li>Dividir el contenido A2 del documento de Dario en unidades pequenas. <strong>Done</strong>: se agregaron 4 unidades A2.</li><li>Migrar teoria y estructuras A2 a <code>learningUnits</code>. <strong>Done</strong>.</li><li>Migrar ejercicios A2 al formato validado. <strong>Done</strong>.</li><li>Agregar vocabulario/contextos A2. <strong>Done</strong>.</li><li>Agregar prompts de Production A2. <strong>Done</strong>.</li><li>Ejecutar <code>npm run release:check</code>. <strong>Done</strong>.</li><li>Registrar evidencia final de Fase 13 en <code>PHASE_EXECUTION_LOG.md</code>. <strong>Done</strong>.</li></ol>
+<h3 id="fase-14-b1-functional-communication">Fase 14 - B1 Functional Communication</h3>
+<ol><li>Revisar la unidad B1 existente <code>past-future-conditional-foundation</code>. <strong>Done</strong>.</li><li>Separar o ampliar B1 si la unidad actual queda demasiado densa. <strong>Done</strong>: se agrego <code>b1-narratives-plans-problems</code> como segunda unidad B1.</li><li>Agregar ejercicios de transferencia entre tiempos. <strong>Done</strong>: B1 incluye decision de tiempo, transformacion y correccion contextual.</li><li>Agregar prompts de Production B1. <strong>Done</strong>: <code>b1-problem-story</code> y <code>b1-plan-solution</code>.</li></ol>
+<h3 id="fase-15-b2-independent-production">Fase 15 - B2 Independent Production</h3>
+<ol><li>Definir unidad B2 inicial para produccion independiente. <strong>Done</strong>: <code>b2-mixed-tenses-independent-production</code>.</li><li>Agregar teoria de mixed tenses, pasiva, reported speech, conectores y condicional pasado. <strong>Done</strong>.</li><li>Agregar ejercicios B2 de transformacion, correccion, eleccion de estructura y traduccion. <strong>Done</strong>.</li><li>Agregar prompts B2 con rubrica mas exigente. <strong>Done</strong>: <code>b2-independent-summary</code> y <code>b2-mixed-speaking</code>.</li><li>Validar que A1 -&gt; A2 -&gt; B1 -&gt; B2 mantenga prerequisitos claros. <strong>Done</strong>.</li></ol>
+<h3 id="fase-16-diagnostico-y-ruta-recomendada">Fase 16 - Diagnostico Y Ruta Recomendada</h3>
+<ol><li>Definir diagnostico MVP por nivel CEFR. <strong>Done</strong>: autoevaluacion de 4 checks A1, A2, B1 y B2.</li><li>Guardar resultado local y permitir reset. <strong>Done</strong>: respuestas persistidas en settings locales y reset desde Home/Settings.</li><li>Conectar Home con recomendacion de nivel sugerido. <strong>Done</strong>: Home muestra nivel/unidad sugerida y puede aplicar la recomendacion.</li><li>Documentar privacidad y flujo de diagnostico. <strong>Done</strong>.</li></ol>
+<h3 id="fase-17-production-por-unidad-y-revision-guiada">Fase 17 - Production Por Unidad Y Revision Guiada</h3>
+<ol><li>Definir si los prompts deben filtrarse por unidad activa o por CEFR. <strong>Done</strong>: se usan <code>unitIds</code> y <code>cefrLevel</code>.</li><li>Mantener Production global como fallback. <strong>Done</strong>: el composer permite Suggested prompts o All prompts.</li><li>Mostrar prompts sugeridos segun ruta sin perder intentos existentes. <strong>Done</strong>: la cola de intentos queda global.</li><li>Actualizar pruebas y smoke mobile si cambia la UI de Production. <strong>Done</strong>.</li></ol>
+<h3 id="fase-18-pulido-ux-mobile-mvp">Fase 18 - Pulido UX Mobile MVP</h3>
+<ol><li>Revisar densidad visual de Home y Production tras diagnostico y prompts sugeridos. <strong>Done</strong>.</li><li>Reducir texto/controles si el smoke o revision manual muestra congestion. <strong>Done</strong>: Home agrega filtro segmentado compacto <code>All/A1/A2/B1/B2</code>.</li><li>Mantener comportamiento funcional sin nuevas features. <strong>Done</strong>.</li><li>Ejecutar <code>npm run release:check</code>. <strong>Pending</strong>.</li></ol>
+<h3 id="fase-19-revision-de-contenido-y-gaps-a1-a2">Fase 19 - Revision De Contenido Y Gaps A1-A2</h3>
+<ol><li>Revisar si A1 y A2 necesitan mas unidades o ejercicios antes de enriquecer B1/B2. <strong>Ready</strong>.</li><li>Identificar gaps pedagogicos por nivel sin implementar cambios aun. <strong>Pending</strong>.</li><li>Priorizar mejoras pequenas de contenido sobre nuevas pantallas. <strong>Pending</strong>.</li><li>Mantener la ruta actual estable. <strong>Pending</strong>.</li></ol>
+<h2 id="plantilla-para-nuevos-requerimientos">Plantilla Para Nuevos Requerimientos</h2>
+<pre><code class="language-text">### FR-XXX - Nombre
+
+Estado:
+Fase:
+Usuario principal:
+
+Descripcion:
+
+Alcance minimo:
+-
+
+Fuera de alcance:
+-
+
+Criterios de aceptacion:
+-
+
+Pruebas esperadas:
+-
+
+Documentacion a actualizar:
+-</code></pre>
+<h2 id="regla-de-cierre">Regla De Cierre</h2>
+<p>Ninguna tarea de fase debe considerarse completa si no tiene:</p>
+<ul><li>requerimiento relacionado;</li><li>criterio de aceptacion;</li><li>prueba o validacion manual definida;</li><li>documentacion actualizada;</li><li>evidencia registrada en <code>PHASE_EXECUTION_LOG.md</code>.</li></ul>
+<h3 id="fase-20-experiencia-de-estudio-y-continuidad">Fase 20 - Experiencia De Estudio Y Continuidad</h3>
+<ol><li>Mantener visible el feedback antes de cerrar Practice. <strong>Done localmente</strong>.</li><li>Permitir reintentar respuestas incorrectas. <strong>Done localmente</strong>.</li><li>Conservar errores recientes dentro del progreso local existente. <strong>Done localmente</strong>.</li><li>Priorizar esos errores en Adaptive Review. <strong>Done localmente</strong>.</li><li>Abrir el siguiente paso real desde Home. <strong>Done localmente</strong>.</li><li>Documentar continuidad para futuras sesiones de Codex. <strong>Done localmente</strong>.</li><li>Ejecutar pruebas, build y smoke mobile. <strong>Pending</strong>.</li></ol>
+<h3 id="fase-22-documentation-and-pre-deployment-quality-governance">Fase 22 - Documentation And Pre-Deployment Quality Governance</h3>
+<ol><li>Documentacion canonica y ADR. <strong>Done localmente</strong>.</li><li>Plantillas y archivos de gobierno. <strong>Done localmente</strong>.</li><li>Revision obligatoria de 13 categorias. <strong>Done localmente</strong>.</li><li>Release gate y auditoria en CI/Pages. <strong>Done localmente</strong>.</li><li>Validar workflows. <strong>Pending</strong>.</li><li>Seleccionar licencia. <strong>Pending owner decision</strong>.</li></ol><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/product/introduction/"><span>Anterior</span>Producto SmartTense</a><a href="/docs/product/user-guide/"><span>Siguiente</span>Guia de uso</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#relacion-con-otros-documentos">Relacion Con Otros Documentos</a><a class="level-2" href="#estados-permitidos">Estados Permitidos</a><a class="level-2" href="#trazabilidad-por-fase">Trazabilidad Por Fase</a><a class="level-2" href="#requerimientos-funcionales">Requerimientos Funcionales</a><a class="level-3" href="#fr-001-metadata-curricular-por-nivel">FR 001 Metadata Curricular Por Nivel</a><a class="level-3" href="#fr-002-validacion-de-contenido-curricular">FR 002 Validacion De Contenido Curricular</a><a class="level-3" href="#fr-003-ruta-de-aprendizaje-por-unidad">FR 003 Ruta De Aprendizaje Por Unidad</a><a class="level-3" href="#fr-004-theory-por-nivel-y-unidad">FR 004 Theory Por Nivel Y Unidad</a><a class="level-3" href="#fr-005-practice-por-nivel-y-unidad">FR 005 Practice Por Nivel Y Unidad</a><a class="level-3" href="#fr-006-production-speaking-writing">FR 006 Production Speaking/Writing</a><a class="level-3" href="#fr-007-diagnostico-mvp">FR 007 Diagnostico MVP</a><a class="level-3" href="#fr-008-configuracion-local">FR 008 Configuracion Local</a><a class="level-3" href="#fr-009-privacidad-y-persistencia-local">FR 009 Privacidad Y Persistencia Local</a><a class="level-3" href="#fr-010-expansion-a2-desde-documento-dario">FR 010 Expansion A2 Desde Documento Dario</a><a class="level-3" href="#fr-011-transferencia-entre-tiempos-b1">FR 011 Transferencia Entre Tiempos B1</a><a class="level-3" href="#fr-012-produccion-independiente-b2">FR 012 Produccion Independiente B2</a><a class="level-2" href="#requerimientos-no-funcionales">Requerimientos No Funcionales</a><a class="level-2" href="#historias-de-usuario">Historias De Usuario</a><a class="level-3" href="#hu-001-autor-de-contenido-define-una-unidad">HU 001 Autor De Contenido Define Una Unidad</a><a class="level-3" href="#hu-002-estudiante-sigue-una-ruta-recomendada">HU 002 Estudiante Sigue Una Ruta Recomendada</a><a class="level-3" href="#hu-003-estudiante-practica-segun-su-nivel">HU 003 Estudiante Practica Segun Su Nivel</a><a class="level-3" href="#hu-004-estudiante-produce-speaking-writing">HU 004 Estudiante Produce Speaking/Writing</a><a class="level-3" href="#hu-005-administrador-local-actualiza-datos">HU 005 Administrador Local Actualiza Datos</a><a class="level-3" href="#hu-006-estudiante-recibe-nivel-sugerido">HU 006 Estudiante Recibe Nivel Sugerido</a><a class="level-2" href="#backlog-operativo-inmediato">Backlog Operativo Inmediato</a><a class="level-3" href="#fase-11-revision-del-modelo-de-contenido">Fase 11 Revision Del Modelo De Contenido</a><a class="level-3" href="#fase-12-a1-foundation-mvp">Fase 12 A1 Foundation MVP</a><a class="level-3" href="#fase-13-a2-expansion-dario">Fase 13 A2 Expansion Dario</a><a class="level-3" href="#fase-14-b1-functional-communication">Fase 14 B1 Functional Communication</a><a class="level-3" href="#fase-15-b2-independent-production">Fase 15 B2 Independent Production</a><a class="level-3" href="#fase-16-diagnostico-y-ruta-recomendada">Fase 16 Diagnostico Y Ruta Recomendada</a><a class="level-3" href="#fase-17-production-por-unidad-y-revision-guiada">Fase 17 Production Por Unidad Y Revision Guiada</a><a class="level-3" href="#fase-18-pulido-ux-mobile-mvp">Fase 18 Pulido UX Mobile MVP</a><a class="level-3" href="#fase-19-revision-de-contenido-y-gaps-a1-a2">Fase 19 Revision De Contenido Y Gaps A1 A2</a><a class="level-2" href="#plantilla-para-nuevos-requerimientos">Plantilla Para Nuevos Requerimientos</a><a class="level-2" href="#regla-de-cierre">Regla De Cierre</a><a class="level-3" href="#fase-20-experiencia-de-estudio-y-continuidad">Fase 20 Experiencia De Estudio Y Continuidad</a><a class="level-3" href="#fase-22-documentation-and-pre-deployment-quality-governance">Fase 22 Documentation And Pre Deployment Quality Governance</a></aside></div></body></html>

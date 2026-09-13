@@ -20,6 +20,8 @@ Home is the starting dashboard. It shows:
 
 Use Home when you want to quickly continue studying without opening the full table.
 
+![SmartTense Home on desktop](images/home-desktop.png)
+
 Use the course-level selector when you want to focus the learning unit list. For example, choose `A1` to see only A1 units or `A2` to continue the A2 path. `All` shows the full route.
 
 ### Level Diagnostic
@@ -52,6 +54,8 @@ For any A2 unit, press `Start guided lesson`. SmartTense then shows one activity
 ### Practice
 
 Practice shows starter exercises from the current learning unit in dropdown lists. A1 and A2 use curated options with one valid answer and distractors based on common mistakes. Press Check answer to get immediate feedback.
+
+![Focused Practice on a mobile screen](images/practice-mobile.png)
 
 Use the Context row in Practice when you want exercises for one situation only. For example, choose IT work to practice software examples, or Daily habits to practice routine examples.
 
@@ -108,6 +112,8 @@ You can select or clear a whole tense group by pressing the group label. You can
 ### Complete
 
 Complete shows the full conjugation table. Each row can include:
+
+![Complete conjugation view on desktop](images/complete-desktop.png)
 
 - Affirmative form: `He writes a message.`
 - Negative form: `He does not write a message.`
@@ -176,6 +182,8 @@ The verb pattern filter is useful when you want to practice one irregular family
 ## Mobile Use
 
 SmartTense is designed to save space on phones:
+
+![Course route on a mobile screen](images/course-mobile.png)
 
 - Home uses compact cards and two-column sections when the screen is wide enough.
 - The A1/A2/B1/B2 selector stays in one compact row and can scroll horizontally if needed.

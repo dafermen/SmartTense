@@ -1,0 +1,68 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="GitHub Pages - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>GitHub Pages | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a href="/docs/product/introduction/">Producto SmartTense</a><a href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a href="/docs/architecture/data-schema/">Datos de verbos</a><a href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a class="active" aria-current="page" href="/docs/delivery/github-pages/">GitHub Pages</a><a href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Entrega</p><h1 id="publishing-smarttense-with-github">Publishing SmartTense With GitHub</h1>
+<p>This guide explains how to keep the SmartTense repository updated and how to publish the web app with GitHub Pages.</p>
+<h2 id="repository-remote">Repository Remote</h2>
+<p>The expected remote is:</p>
+<pre><code class="language-text">https://github.com/dafermen/SmartTense.git</code></pre>
+<p>Check it locally with:</p>
+<pre><code class="language-bash">git remote -v</code></pre>
+<h2 id="recommended-local-release-flow">Recommended Local Release Flow</h2>
+<p>Before pushing a UI, documentation, Settings data export, source data, or phase plan change:</p>
+<pre><code class="language-bash">npm run release:check</code></pre>
+<p>The mobile smoke fails if critical screens do not render, Settings pagination breaks, or the internal readiness/density gates are exceeded. For phase milestones, also follow <code>docs/RELEASE_CHECKLIST.md</code>.</p>
+<p>If Settings was used to edit verbs, export the database first and intentionally update <code>public/data/verbs.json</code> plus <code>src/data/defaultData.js</code> before committing. Then commit and push:</p>
+<pre><code class="language-bash">git status
+git add .
+git commit -m &quot;Update SmartTense documentation and UI&quot;
+git push origin main</code></pre>
+<p>Use a more specific commit message when possible.</p>
+<p>If the change closes a phase milestone, add phase artifacts to the same commit scope:</p>
+<ul><li><code>docs/PHASE_EXECUTION_LOG.md</code></li><li><code>docs/CURRICULUM_PHASE_PLAN.md</code></li><li><code>docs/PROJECT_PHASE_ROADMAP.md</code></li></ul>
+<h2 id="github-pages-deployment-model">GitHub Pages Deployment Model</h2>
+<p>SmartTense is a static React/Vite app. For GitHub Pages, publish the generated <code>dist/</code> folder through GitHub Actions. Do not add a custom server unless the project later needs server-side features.</p>
+<p>The repository includes this workflow:</p>
+<pre><code class="language-text">.github/workflows/deploy-pages.yml</code></pre>
+<p>The workflow:</p>
+<ol><li>Runs <code>npm ci</code>.</li><li>Runs the complete <code>npm run release:check</code> quality gate.</li><li>Audits production dependencies at high severity.</li><li>Builds the app with <code>npm run build -- --base &quot;$BASE_PATH&quot;</code>.</li><li>Uploads <code>dist/</code> as a Pages artifact.</li><li>Deploys to GitHub Pages.</li></ol>
+<h2 id="publish-without-a-custom-domain">Publish Without A Custom Domain</h2>
+<p>Use this when the site URL will be:</p>
+<pre><code class="language-text">https://YOUR_GITHUB_USER.github.io/REPOSITORY_NAME/</code></pre>
+<p>Steps:</p>
+<ol><li>Push the project to GitHub.</li><li>Open the repository on GitHub.</li><li>Go to <code>Settings</code> -&gt; <code>Pages</code>.</li><li>Under <code>Build and deployment</code>, choose <code>GitHub Actions</code>.</li><li>Push to the <code>main</code> branch, or run the workflow manually from the <code>Actions</code> tab.</li><li>Wait for the <code>Deploy SmartTense to GitHub Pages</code> workflow to finish.</li><li>Open the Pages URL shown by GitHub.</li></ol>
+<p>When <code>PAGES_BASE_PATH</code> is not set, the workflow uses:</p>
+<pre><code class="language-text">/SmartTense/</code></pre>
+<p>That value is required because Vite assets must be loaded from the repository path.</p>
+<h2 id="publish-with-a-custom-subdomain">Publish With A Custom Subdomain</h2>
+<p>A subdomain can point to GitHub Pages. Example:</p>
+<pre><code class="language-text">    smarttense.innovalogic.tech</code></pre>
+<p>High-level steps:</p>
+<ol><li>In GitHub, open the repository.</li><li>Go to <code>Settings</code> -&gt; <code>Pages</code>.</li><li>Set <code>Custom domain</code> to <code>smarttense.innovalogic.tech</code>.</li><li>Enable <code>Enforce HTTPS</code> after GitHub finishes provisioning the certificate.</li><li>In your DNS provider, create a <code>CNAME</code> record:</li></ol>
+<p>``<code>text Type:  CNAME Name:  smarttense Value: dafermen.github.io </code>``</p>
+<ol><li>In the GitHub repository, go to <code>Settings</code> -&gt; <code>Secrets and variables</code> -&gt; <code>Actions</code> -&gt; <code>Variables</code>.</li><li>Add this repository variable:</li></ol>
+<p>``<code>text Name:  PAGES_BASE_PATH Value: / </code>``</p>
+<ol><li>Re-run the deploy workflow.</li></ol>
+<p>The <code>PAGES_BASE_PATH=/</code> value matters because a custom subdomain serves the app from the domain root, not from <code>/SmartTense/</code>.</p>
+<p>The repository also includes <code>public/CNAME</code> with <code>smarttense.innovalogic.tech</code>. Vite copies it to the published artifact so GitHub Pages preserves the custom domain during deployments.</p>
+<p>Docker is not part of this publication flow. SmartTense is a static React/Vite application, so GitHub Actions builds static files and GitHub Pages serves them directly.</p>
+<h2 id="dns-notes">DNS Notes</h2>
+<p>For a subdomain, use <code>CNAME</code>. For an apex/root domain such as <code>example.com</code>, use GitHub Pages&#39; recommended <code>A</code> and <code>AAAA</code> records instead. A subdomain is simpler and is the recommended first setup.</p>
+<p>DNS changes can take minutes or hours to propagate depending on the DNS provider.</p>
+<h2 id="security-notes-for-github-pages">Security Notes For GitHub Pages</h2>
+<p>GitHub Pages is suitable for SmartTense because the app is static and JSON import plus Settings data edits run only in the user&#39;s browser.</p>
+<p>Important limitation:</p>
+<ul><li>GitHub Pages does not use <code>public/_headers</code>. That file is useful on static hosts such as Cloudflare Pages or Netlify, but GitHub Pages does not apply it.</li></ul>
+<p>For GitHub Pages, keep these protections in the app itself:</p>
+<ul><li>Strict JSON validation in <code>src/data/validation.js</code>.</li><li>Strict learning-content and context validation in <code>src/data/learningContentValidation.js</code>.</li><li>Settings draft validation before local database changes are applied.</li><li>File type and file size checks before import.</li><li>No <code>eval</code>.</li><li>No <code>dangerouslySetInnerHTML</code>.</li><li>Dependency checks with <code>npm audit</code>.</li></ul>
+<h2 id="pre-publish-checklist">Pre-Publish Checklist</h2>
+<p>Run locally before pushing:</p>
+<pre><code class="language-bash">npm run release:check
+npm audit --omit=dev --audit-level=high</code></pre>
+<p>Then push to <code>main</code> and verify the GitHub Actions deployment. If Chrome is not available locally, record that <code>npm run release:check</code> could not complete and keep <code>npm test</code> plus <code>npm run build</code> green before pushing. If verb data changed through Settings, confirm the exported JSON was committed as source data before pushing.</p>
+<p>If <code>public/data/learningUnits.json</code>, Theory, Practice, Production prompts, learning contexts, learning-content administration, learning path, or form explanations changed, confirm the relevant validation/conjugation/practice/production/context/content-admin/learning-path tests pass and run the production build before pushing.</p>
+<p>When learning content is edited through Settings, export the content JSON and intentionally update <code>public/data/learningUnits.json</code> before committing.</p>
+<p>If a phase closes, register date, evidence (<code>npm test</code>, <code>npm run build</code>, manual validation notes), and next-step tasks in:</p>
+<ul><li><code>docs/PHASE_EXECUTION_LOG.md</code></li><li><code>docs/CURRICULUM_PHASE_PLAN.md</code> (when the phase plan changes)</li></ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If the page loads blank or assets return 404:</p>
+<ul><li>If using <code>github.io/SmartTense/</code>, leave <code>PAGES_BASE_PATH</code> unset or set it to <code>/SmartTense/</code>.</li><li>If using a custom subdomain, set <code>PAGES_BASE_PATH</code> to <code>/</code>.</li></ul>
+<p>If the custom domain does not work:</p>
+<ul><li>Check that the <code>CNAME</code> record points to <code>YOUR_GITHUB_USER.github.io</code>.</li><li>Check that the custom domain is saved in GitHub Pages settings.</li><li>Wait for DNS propagation.</li><li>Enable <code>Enforce HTTPS</code> after GitHub provisions the certificate.</li></ul><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/delivery/deployment/"><span>Anterior</span>Publicacion</a><a href="/docs/delivery/roadmap/"><span>Siguiente</span>Roadmap</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#repository-remote">Repository Remote</a><a class="level-2" href="#recommended-local-release-flow">Recommended Local Release Flow</a><a class="level-2" href="#github-pages-deployment-model">GitHub Pages Deployment Model</a><a class="level-2" href="#publish-without-a-custom-domain">Publish Without A Custom Domain</a><a class="level-2" href="#publish-with-a-custom-subdomain">Publish With A Custom Subdomain</a><a class="level-2" href="#dns-notes">DNS Notes</a><a class="level-2" href="#security-notes-for-github-pages">Security Notes For GitHub Pages</a><a class="level-2" href="#pre-publish-checklist">Pre Publish Checklist</a><a class="level-2" href="#troubleshooting">Troubleshooting</a></aside></div></body></html>

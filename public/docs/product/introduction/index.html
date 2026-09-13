@@ -1,0 +1,107 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="Producto SmartTense - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>Producto SmartTense | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a class="active" aria-current="page" href="/docs/product/introduction/">Producto SmartTense</a><a href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a href="/docs/architecture/data-schema/">Datos de verbos</a><a href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a href="/docs/delivery/github-pages/">GitHub Pages</a><a href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Producto</p><h1 id="smarttense">SmartTense</h1>
+<p>SmartTense is an English verb tense trainer built with React, Vite, and Capacitor. It helps learners study verb forms through a compact dashboard, focused affirmative practice, and a complete conjugation table.</p>
+<p><img src="docs/images/home-desktop.png" alt="SmartTense Home showing the current learning plan" loading="lazy"></p>
+<p>Real application views for Course, Practice, and Complete are available in <code>docs/USER_GUIDE.md</code>.</p>
+<p>The app is designed for two audiences:</p>
+<ul><li>English learners who want clear examples with learner-language guidance.</li><li>Developers who want a small React project that can run on the web, iPhone, and Android.</li></ul>
+<h2 id="main-features">Main Features</h2>
+<ul><li>Home dashboard with current verb summary, progress, quick actions, a live example, and a recommended next practice.</li><li>Local learning path for the active unit, with next-step recommendation and unit progress reset.</li><li>Theory view for the first Present Simple learning unit, rendered from structured JSON content.</li><li>Context filter for Theory and Practice, with vocabulary packs and real-life examples.</li><li>Practice view with starter exercises, local answer checking, immediate feedback, and context-aware filtering.</li><li>Individual practice view focused on affirmative conjugation only.</li><li>Complete view with affirmative, negative, interrogative, and negative interrogative forms.</li><li>Expandable &quot;Why this form?&quot; explanations for generated sentence forms.</li><li>Toggleable visible columns in Complete so users can reduce visual load.</li><li>Multi-select tense and subject controls in Individual.</li><li>Learning levels: Basic, Intermediate, and Advanced.</li><li>Verb pattern filter: Regular -ED, AAA, ABB, ABC, ABA, BE, and Modal.</li><li>Search by verb label, learner-language meaning, principal forms, complement, or pattern.</li><li>Tense groups: Present, Past, Future, and Conditional.</li><li>English and Spanish interface, with Spanish and French learner-language guides.</li><li>Responsive layout optimized for desktop and mobile.</li><li>Speaking and writing workspace for production practice with local revision tracking.</li><li>Local JSON verb data with hardened import support for custom verb lists.</li><li>Learning content import/export in Settings, with validation and preview before applying.</li><li>CSV and JSON export from Complete.</li><li>Capacitor projects for iOS and Android.</li></ul>
+<h2 id="screens-and-main-flow">Screens And Main Flow</h2>
+<ol><li>Start on Home to see progress, the current verb, a short example, and the recommended next learning step.</li><li>Open Theory when you want a short lesson with objectives, structures, signal words, common mistakes, context examples, vocabulary, and starter practice preview.</li><li>Open Individual when you want focused affirmative practice with selected tenses and subjects.</li><li>Open Practice when you want starter exercises with immediate feedback, context filtering, and local unit completion.</li><li>Open a &quot;Why this form?&quot; panel when you want the pattern, reason, auxiliary, and verb-form explanation for a generated sentence.</li><li>Open Complete when you want the full table and comparison across sentence forms.</li><li>Use Display options to show translations, sentence parts, all subjects, or selected Complete columns.</li><li>Open Production to respond to speaking or writing prompts and track each attempt by status.</li><li>Export CSV or JSON from Complete if you need a generated table snapshot.</li></ol>
+<h2 id="tech-stack">Tech Stack</h2>
+<ul><li>React 19</li><li>Vite 8</li><li>Capacitor 8</li><li>Node native test runner</li><li>Plain CSS</li></ul>
+<h2 id="project-structure">Project Structure</h2>
+<pre><code class="language-text">SmartTense/
+  android/                    Android Capacitor project
+  ios/                        iOS Capacitor project
+  public/
+    assets/                   Static visual assets
+    data/verbs.json           Default editable verb data
+    data/learningUnits.json   Structured learning content, contexts, vocabulary, Theory, and Practice
+  src/
+    App.jsx                   Main React interface, app state, and local data/content manager
+    conjugation.js            Verb tense generation engine
+    i18n.js                   English/Spanish UI strings
+    learningContentAdmin.js   Learning-content summary, clone, and export helpers
+    learnerLanguages/         Learner-language guidance
+    styles.css                Responsive visual design
+    data/
+      defaultData.js          Embedded fallback data and tense metadata
+      validation.js           JSON import validation
+      learningContentValidation.js  Learning content validation
+  tests/                      Unit tests for grammar and validation
+  scripts/
+    mobile-smoke.cjs          Chrome/Vite mobile smoke test for critical screens
+  docs/                       User, developer, data, and GitHub guides
+  .github/workflows/          GitHub Actions workflows
+  capacitor.config.json       Capacitor app settings
+  package.json                Scripts and dependencies
+  README.md                   Project overview</code></pre>
+<h2 id="requirements">Requirements</h2>
+<ul><li>Node.js 20 or newer recommended.</li><li>npm.</li><li>Xcode for iOS builds.</li><li>Android Studio for Android builds.</li><li>JDK 21 for the Android Gradle build used by the generated Capacitor project.</li></ul>
+<h2 id="run-locally-on-windows">Run Locally On Windows</h2>
+<p>Install dependencies:</p>
+<pre><code class="language-bash">npm install</code></pre>
+<p>Start the development server:</p>
+<pre><code class="language-bash">npm run dev</code></pre>
+<p>To use the project&#39;s standard port:</p>
+<pre><code class="language-powershell">npm.cmd run dev -- --port 5178 --host 127.0.0.1</code></pre>
+<p>Open the URL shown by Vite, usually <code>http://127.0.0.1:5173/</code> or the next available port.</p>
+<p>If PowerShell blocks <code>npm.ps1</code>, run npm through <code>npm.cmd</code>:</p>
+<pre><code class="language-powershell">npm.cmd install
+npm.cmd run dev</code></pre>
+<h2 id="test-and-build">Test And Build</h2>
+<p>Run unit tests:</p>
+<pre><code class="language-bash">npm test</code></pre>
+<p>Run the mobile smoke test for critical screens and high-volume Settings data:</p>
+<pre><code class="language-bash">npm run test:e2e:mobile</code></pre>
+<p>This starts Vite, opens Chrome headless at <code>390x844</code>, uses 500 synthetic verbs in the browser, and checks Home, Theory, Practice, Individual, Complete, Production, Settings, Settings pagination, and conservative quality gates for readiness time and visible table density.</p>
+<p>Create a production web build:</p>
+<pre><code class="language-bash">npm run build</code></pre>
+<p>Preview the production build:</p>
+<pre><code class="language-bash">npm run preview</code></pre>
+<h2 id="publish-to-github-pages">Publish To GitHub Pages</h2>
+<p>SmartTense includes a GitHub Actions workflow for GitHub Pages:</p>
+<pre><code class="language-text">.github/workflows/deploy-pages.yml</code></pre>
+<p>For a normal GitHub Pages project URL such as <code>https://YOUR_GITHUB_USER.github.io/REPOSITORY_NAME/</code>, enable GitHub Pages with <code>GitHub Actions</code> as the source and push to <code>main</code>.</p>
+<p>For a custom subdomain such as <code>smarttense.example.com</code>, point a DNS <code>CNAME</code> record to <code>YOUR_GITHUB_USER.github.io</code>, set the repository variable <code>PAGES_BASE_PATH</code> to <code>/</code>, and configure the custom domain in repository <code>Settings</code> -&gt; <code>Pages</code>.</p>
+<p>The configured SmartTense domain is <code>https://smarttense.innovalogic.tech/</code>. The repository includes <code>public/CNAME</code> so the domain is preserved in every Pages artifact.</p>
+<p>See <code>docs/GITHUB_PAGES.md</code> for the full guide.</p>
+<h2 id="mobile-builds-with-capacitor">Mobile Builds With Capacitor</h2>
+<p>SmartTense includes native Capacitor projects for iOS and Android. The web app is built into <code>dist/</code>, then Capacitor copies that output into the native projects.</p>
+<p>Build and sync both native projects:</p>
+<pre><code class="language-bash">npm run cap:sync</code></pre>
+<p>Open the iOS project in Xcode:</p>
+<pre><code class="language-bash">npm run cap:open:ios</code></pre>
+<p>Open the Android project in Android Studio:</p>
+<pre><code class="language-bash">npm run cap:open:android</code></pre>
+<p>Native app settings live in <code>capacitor.config.json</code>.</p>
+<p>Current native app id:</p>
+<pre><code class="language-text">com.smarttense.app</code></pre>
+<p>Change this id before publishing if you have a final App Store or Play Store bundle identifier.</p>
+<h2 id="data">Data</h2>
+<p>Default verb data lives in <code>public/data/verbs.json</code>.</p>
+<p>Structured learning content lives in <code>public/data/learningUnits.json</code>. Theory renders this file in the app. It is validated by <code>src/data/learningContentValidation.js</code> and currently uses schema version 3 with CEFR metadata (<code>cefrLevel</code>, <code>unitOrder</code>, and <code>prerequisiteUnitIds</code>) for the curriculum path.</p>
+<p>Learning contexts also live in <code>public/data/learningUnits.json</code>. The current context catalog includes IT work, daily habits, family routines, meetings, travel/vacation, and prepositions. Theory and Practice can filter examples, vocabulary, and exercises by context.</p>
+<p>Settings can import, preview, validate, apply, and export learning-content JSON for the current browser session. Use the exported JSON when <code>public/data/learningUnits.json</code> should be updated in source control.</p>
+<p>The app also includes embedded fallback data in <code>src/data/defaultData.js</code>. The fallback keeps the app usable if the browser cannot load <code>public/data/verbs.json</code>.</p>
+<p>Imported JSON and Settings edits only change the current browser session; they do not overwrite project files. Imported JSON is validated before it reaches app state. SmartTense rejects oversized files, unknown fields, unsupported schema versions, duplicate IDs, unsafe IDs, non-string fields, and strings that are too long or contain markup characters.</p>
+<p>Learning path progress is also local to the current browser. It tracks whether the active unit&#39;s Theory has been viewed and whether its Practice exercises have been completed.</p>
+<p>Skill mastery is local too. Practice and Guided Lesson update a 23-skill A1-B2 catalog, and Adaptive Review uses that history to prioritize up to eight questions. On mobile, the primary navigation is Home, Theory, Practice, and Review; advanced tools remain in the side menu.</p>
+<p>The bundled curriculum currently contains 10 methodology-ready units and 213 exercises. <code>npm run audit:content</code> checks all A1-B2 units for answer options, context coverage, required practice kinds, and methodology blocks.</p>
+<p>Each unit also has a local resumable journey. SmartTense saves the Guided Lesson step, answers, Practice position, results, and Production completion, then uses them to calculate real progress and unlock prerequisite-based Course units.</p>
+<p>For the accepted JSON shape, see <code>docs/DATA_SCHEMA.md</code>.</p>
+<p>For the accepted learning-content shape, see <code>docs/LEARNING_CONTENT_SCHEMA.md</code>.</p>
+<h2 id="documentation">Documentation</h2>
+<ul><li><code>docs/INDEX.md</code>: start here; official documentation map and reading order.</li><li><code>docs/CURRICULUM_PHASE_PLAN.md</code>: official A1-B2 curriculum phase plan with executive phases, operational tasks, exit criteria, and internal Gantt.</li><li><code>docs/SOFTWARE_REQUIREMENTS.md</code>: functional and non-functional requirements, user stories, acceptance criteria, and operational backlog.</li><li><code>docs/USER_GUIDE.md</code>: guide for learners and non-technical users.</li><li><code>docs/DEVELOPER_GUIDE.md</code>: architecture, scripts, testing, and mobile build notes.</li><li><code>docs/DATA_SCHEMA.md</code>: JSON format for adding or importing verbs.</li><li><code>docs/LEARNING_CONTENT_SCHEMA.md</code>: JSON format for learning units, contexts, vocabulary, examples, and exercises.</li><li><code>docs/JUNIOR_DEVELOPER_GUIDE.md</code>: safe first steps for new contributors.</li><li><code>docs/PROJECT_PHASE_ROADMAP.md</code>: phased product and software development roadmap.</li><li><code>docs/PHASE_EXECUTION_LOG.md</code>: phase execution log and delivery evidence.</li><li><code>docs/GITHUB_PAGES.md</code>: GitHub Pages and repository publishing guide.</li><li><code>docs/RELEASE_CHECKLIST.md</code>: internal release checklist for phase milestones and critical UI changes.</li><li><code>SECURITY.md</code>: static hosting security model, JSON import limits, and publishing checklist.</li></ul>
+<h2 id="current-validation">Current Validation</h2>
+<p>Before publishing a change, run:</p>
+<pre><code class="language-bash">npm run release:check</code></pre>
+<p>For phase milestones and critical UI changes, also follow <code>docs/RELEASE_CHECKLIST.md</code>.</p>
+<p>For native wrapper updates, also run:</p>
+<pre><code class="language-bash">npm run cap:sync</code></pre>
+<h2 id="license">License</h2>
+<p>No license has been selected yet. Add a <code>LICENSE</code> file before publishing if this repository will be public.</p>
+<h2 id="documentation-and-quality-governance">Documentation And Quality Governance</h2>
+<p>Start with <code>AGENTS.md</code>, <code>CURRENT_STATUS.md</code>, and <code>docs/INDEX.md</code>. Every deployment must review all 13 categories in <code>docs/TESTING.md</code> and pass <code>npm run release:check</code>.</p>
+<p>The project license has not yet been selected; see <code>CONTRIBUTING.md</code> before accepting external contributions.</p><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/"><span>Anterior</span>Introduccion</a><a href="/docs/product/requirements/"><span>Siguiente</span>Definicion y alcance</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#main-features">Main Features</a><a class="level-2" href="#screens-and-main-flow">Screens And Main Flow</a><a class="level-2" href="#tech-stack">Tech Stack</a><a class="level-2" href="#project-structure">Project Structure</a><a class="level-2" href="#requirements">Requirements</a><a class="level-2" href="#run-locally-on-windows">Run Locally On Windows</a><a class="level-2" href="#test-and-build">Test And Build</a><a class="level-2" href="#publish-to-github-pages">Publish To GitHub Pages</a><a class="level-2" href="#mobile-builds-with-capacitor">Mobile Builds With Capacitor</a><a class="level-2" href="#data">Data</a><a class="level-2" href="#documentation">Documentation</a><a class="level-2" href="#current-validation">Current Validation</a><a class="level-2" href="#license">License</a><a class="level-2" href="#documentation-and-quality-governance">Documentation And Quality Governance</a></aside></div></body></html>

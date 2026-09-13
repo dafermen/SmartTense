@@ -19,12 +19,15 @@ import FocusedPracticePage from "./FocusedPracticePage.jsx";
 import OnboardingDiagnostic from "./OnboardingDiagnostic.jsx";
 import { buildGuidedLessonSteps } from "./guidedLesson.js";
 import { getJourneyPercent, getJourneyStatus, getUnitJourney, resetUnitJourney, updateUnitJourney } from "./learningJourney.js";
+import { buildProgressBackup, validateProgressBackup } from "./progressBackup.js";
 import ManualPage from "./ManualPage.jsx";
 import UiIcon from "./UiIcon.jsx";
 
 const INITIAL_ALERT_MS = 6000;
 const MOBILE_MENU_QUERY = "(max-width: 880px)";
 const MAX_IMPORT_BYTES = 512 * 1024;
+import { clearJsonStorage, readJsonStorage, writeJsonStorage } from "./browserStorage.js";
+
 const STORAGE_KEY = "smarttense-progress-v1";
 const VERB_PATTERN_FILTERS = ["all", "REGULAR_ED", "AAA", "ABB", "ABC", "ABA", "BE", "MODAL"];
 const MENU_ITEMS = ["home", "course", "theory", "manual", "practice", "progress", "individual", "complete", "production", "settings", "documentation", "about"];
@@ -233,6 +236,7 @@ export default function App() {
   const fileInputRef = useRef(null);
   const settingsFileInputRef = useRef(null);
   const learningContentFileInputRef = useRef(null);
+  const progressFileInputRef = useRef(null);
   const [dataDraft, setDataDraft] = useState(() => cloneVerbData(DEFAULT_DATA));
   const [newVerbForm, setNewVerbForm] = useState(EMPTY_VERB_FORM);
   const [bulkEditSearch, setBulkEditSearch] = useState("");
@@ -862,6 +866,40 @@ export default function App() {
     showTimedAlert(t("progressReset"));
   }
 
+  function handleExportProgress() {
+    const payload = buildProgressBackup({ activeLearningUnitId, visitedVerbIds, unitProgress, skillProgress, journeyProgress, diagnosticAnswers, diagnosticCompleted, productionAttempts });
+    downloadText(`${JSON.stringify(payload, null, 2)}\n`, "smarttense-progress.json", "application/json");
+    showTimedAlert(t("progressExported"));
+  }
+
+  async function handleImportProgress(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      validateImportFile(file);
+      const payload = validateProgressBackup(JSON.parse(await file.text()));
+      if (!window.confirm(t("importProgressConfirm"))) return;
+      const progress = payload.progress;
+      setActiveLearningUnitId(progress.activeLearningUnitId || "");
+      setVisitedVerbIds(progress.visitedVerbIds);
+      setUnitProgress(progress.unitProgress);
+      setSkillProgress(progress.skillProgress);
+      setJourneyProgress(progress.journeyProgress);
+      setDiagnosticAnswers(progress.diagnosticAnswers);
+      setDiagnosticCompleted(progress.diagnosticCompleted);
+      setProductionAttempts(progress.productionAttempts);
+      setPracticeAnswers({});
+      setPracticeResults({});
+      showTimedAlert(t("progressImported"));
+    } catch (error) {
+      console.error(error);
+      showTimedAlert(t("invalidProgressBackup"), "error");
+    } finally {
+      if (progressFileInputRef.current) progressFileInputRef.current.value = "";
+    }
+  }
+
   function handleResetCurrentUnitProgress() {
     if (!primaryLearningUnit?.id || !window.confirm(t("resetUnitProgressConfirm"))) return;
 
@@ -1429,6 +1467,17 @@ export default function App() {
               <label className="check-row check-row-light"><input type="checkbox" checked={showSentenceParts} onChange={(event) => setShowSentenceParts(event.target.checked)} /><span>{t("showSentenceParts")}</span></label>
             </div>
             <button type="button" className="reset-progress-button" onClick={handleResetProgress}>{t("resetProgress")}</button>
+            <div className="unit-progress-box">
+              <p className="eyebrow">{t("progressBackup")}</p>
+              <p className="settings-note">{t("progressBackupHelp")}</p>
+              <div className="settings-actions settings-actions-wrap">
+                <label className="import-button import-button-light">
+                  <input ref={progressFileInputRef} type="file" accept="application/json,.json" onChange={handleImportProgress} />
+                  {t("importProgress")}
+                </label>
+                <button type="button" onClick={handleExportProgress}>{t("exportProgress")}</button>
+              </div>
+            </div>
             <div className="unit-progress-box">
               <p className="eyebrow">{t("learningPath")}</p>
               <dl className="data-summary-grid">
@@ -2046,7 +2095,13 @@ export default function App() {
         </div>
 
         <nav className="side-nav" aria-label={t("mainMenu")}>
-          {MENU_ITEMS.map((item) => (
+          {MENU_ITEMS.map((item) => item === "documentation" ? (
+            <a href="/docs/" key={item} onClick={() => {
+              if (window.matchMedia(MOBILE_MENU_QUERY).matches) setIsMenuOpen(false);
+            }}>
+              {t(item)}
+            </a>
+          ) : (
             <button
               type="button"
               className={activePage === item ? "active" : ""}
@@ -2480,6 +2535,7 @@ function DocumentationPage({ t, learnerLanguage }) {
     <section className="info-page">
       <p className="eyebrow">{t("documentation")}</p>
       <h2>{t("documentationTitle")}</h2>
+      <a className="documentation-site-link" href="/docs/">{t("openDocumentationSite")}</a>
       <div className="info-grid">
         <article>
           <h3>{t("docStudyTitle")}</h3>
@@ -2982,34 +3038,17 @@ function normalizeSearchText(value) {
 
 function readStoredSettings() {
   if (typeof window === "undefined") return {};
-
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "{}");
-    return parsed && typeof parsed === "object" ? parsed : {};
-  } catch {
-    return {};
-  }
+  return readJsonStorage(window.localStorage, STORAGE_KEY);
 }
 
 function writeStoredSettings(settings) {
   if (typeof window === "undefined") return;
-
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch {
-    // Browsers can deny storage in private or restricted modes. The app should
-    // continue to work; it simply will not remember progress in that case.
-  }
+  writeJsonStorage(window.localStorage, STORAGE_KEY, settings);
 }
 
 function clearStoredSettings() {
   if (typeof window === "undefined") return;
-
-  try {
-    window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // Ignore storage errors for the same reason as writeStoredSettings.
-  }
+  clearJsonStorage(window.localStorage, STORAGE_KEY);
 }
 
 function downloadText(text, filename, type) {

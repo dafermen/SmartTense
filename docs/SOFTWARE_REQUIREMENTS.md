@@ -472,3 +472,12 @@ Ninguna tarea de fase debe considerarse completa si no tiene:
 5. Abrir el siguiente paso real desde Home. **Done localmente**.
 6. Documentar continuidad para futuras sesiones de Codex. **Done localmente**.
 7. Ejecutar pruebas, build y smoke mobile. **Pending**.
+
+### Fase 22 - Documentation And Pre-Deployment Quality Governance
+
+1. Documentacion canonica y ADR. **Done localmente**.
+2. Plantillas y archivos de gobierno. **Done localmente**.
+3. Revision obligatoria de 13 categorias. **Done localmente**.
+4. Release gate y auditoria en CI/Pages. **Done localmente**.
+5. Validar workflows. **Pending**.
+6. Seleccionar licencia. **Pending owner decision**.

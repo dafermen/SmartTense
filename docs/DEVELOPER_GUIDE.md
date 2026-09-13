@@ -604,3 +604,7 @@ Run `npm run audit:translations` after adding or changing verbs. The audit gener
 Repository-level instructions live in `AGENTS.md`. The current implementation state, active phase, validation status, and next recommended tasks live in `docs/CURRENT_STATUS.md`. A new Codex session should read those two files before changing code, then use `docs/INDEX.md` for the complete documentation map.
 
 Recent practice mistakes are stored in `skillProgress[skillId].mistakeExerciseIds`. Keep this inside the existing local progress payload. `recordExerciseResult` adds an incorrect exercise and removes it after a correct answer. `buildAdaptiveReviewQueue` gives these exercises the highest explainable priority.
+
+## Canonical Documentation Entry Points
+
+Canonical guidance now lives in `ARCHITECTURE.md`, `API.md`, `DEVELOPMENT.md`, `TESTING.md`, `DEPLOYMENT.md`, `OPERATIONS.md`, `SECURITY.md`, and `TROUBLESHOOTING.md`. This file remains the detailed module reference.

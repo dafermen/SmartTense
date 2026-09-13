@@ -77,8 +77,12 @@ Ese comando ejecuta:
 git diff --check
 node --check scripts/mobile-smoke.cjs
 npm run audit:content
+npm run audit:translations
 npm test
+npm run test:mutation
+npm run test:fuzz
 npm run build
+npm run check:bundle
 npm run test:e2e:mobile
 ```
 
@@ -98,6 +102,21 @@ No abrir una fase nueva de desarrollo sin:
 ## Continuidad Entre Sesiones
 
 - `../AGENTS.md`: instrucciones breves para cualquier agente que trabaje en el repositorio.
-- `CURRENT_STATUS.md`: estado operativo actual, ultima fase implementada, validacion pendiente y siguientes pasos.
+- `../CURRENT_STATUS.md`: estado operativo actual, ultima fase implementada, validacion pendiente y siguientes pasos.
 
 Lea estos dos archivos antes del roadmap cuando retome trabajo iniciado por otra sesion.
+
+## Canonical Engineering Documentation
+
+- [Architecture](ARCHITECTURE.md)
+- [API](API.md)
+- [Development](DEVELOPMENT.md)
+- [Testing](TESTING.md)
+- [Deployment](DEPLOYMENT.md)
+- [Operations](OPERATIONS.md)
+- [Security](SECURITY.md)
+- [Troubleshooting](TROUBLESHOOTING.md)
+- [ADRs](adr/README.md)
+- [Current Status](../CURRENT_STATUS.md)
+- [Changelog](../CHANGELOG.md)
+- [Contributing](../CONTRIBUTING.md)

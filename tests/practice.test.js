@@ -5,6 +5,17 @@ import { getPracticeExercises, normalizePracticeAnswer, scorePracticeAnswer } fr
 test("normalizes practice answers for fair comparison", () => {
   assert.equal(normalizePracticeAnswer("  Does he work in IT?  "), "does he work in it");
   assert.equal(normalizePracticeAnswer("DARIO   works."), "dario works");
+  assert.equal(normalizePracticeAnswer("I\u2019m ready!"), "i'm ready");
+  assert.equal(normalizePracticeAnswer("Wait... really?!"), "wait... really");
+  assert.equal(normalizePracticeAnswer("Ready?!"), "ready");
+  assert.equal(normalizePracticeAnswer(undefined), "");
+  assert.equal(normalizePracticeAnswer(null), "");
+});
+
+test("returns no exercises when a unit has no exercise sections", () => {
+  assert.deepEqual(getPracticeExercises(), []);
+  assert.deepEqual(getPracticeExercises(null), []);
+  assert.deepEqual(getPracticeExercises({}), []);
 });
 
 test("scores exact answers after normalization", () => {

@@ -141,7 +141,15 @@ button:disabled {
   gap: 8px;
 }
 
-.side-nav button {
+.side-nav button,
+.side-nav a {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  display: flex;
+  font: inherit;
+  min-height: 40px;
+  text-decoration: none;
   justify-content: flex-start;
   width: 100%;
   border-color: rgba(255, 255, 255, 0.12);
@@ -152,10 +160,30 @@ button:disabled {
 }
 
 .side-nav button:hover,
-.side-nav button.active {
+.side-nav button.active,
+.side-nav a:hover,
+.side-nav a:focus-visible {
   border-color: rgba(120, 184, 255, 0.42);
   background: rgba(120, 184, 255, 0.16);
   color: #ffffff;
+}
+
+.documentation-site-link {
+  align-items: center;
+  background: #214c83;
+  border-radius: 8px;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 44px;
+  padding: 0 16px;
+  text-decoration: none;
+}
+
+.documentation-site-link:hover,
+.documentation-site-link:focus-visible {
+  background: #183c69;
+  color: #fff;
 }
 
 .mobile-filter-bar {

@@ -1,0 +1,171 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102235"><meta name="description" content="Roadmap - Documentacion SmartTense"><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/docs/docs.css"><title>Roadmap | SmartTense Docs</title><script src="/docs/docs.js" defer></script></head><body><a class="skip-link" href="#main-content">Saltar al contenido</a><header class="docs-header"><button class="mobile-menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="docs-sidebar">Menu</button><a class="docs-brand" href="/docs/"><img src="/assets/smarttense-mark.svg" alt=""><span>SmartTense Docs</span></a><div class="docs-search"><input data-search type="search" aria-label="Buscar documentacion" placeholder="Buscar documentacion..."><div class="search-results" data-search-results hidden></div></div><div class="docs-actions"><button class="docs-button" type="button" data-theme-toggle>Tema oscuro</button><a class="back-app" href="/" target="_self">← Volver a la aplicacion</a></div></header><div class="docs-layout"><nav class="docs-sidebar" id="docs-sidebar" data-sidebar aria-label="Documentacion"><a class="back-app mobile-back" href="/" target="_self">← Volver a la aplicacion</a><section class="nav-group"><h2>Producto</h2><a href="/docs/">Introduccion</a><a href="/docs/product/introduction/">Producto SmartTense</a><a href="/docs/product/requirements/">Definicion y alcance</a><a href="/docs/product/user-guide/">Guia de uso</a><a href="/docs/product/methodology/">Metodologia</a><a href="/docs/product/curriculum/">Plan curricular</a><a href="/docs/product/content-quality/">Calidad de contenido</a><a href="/docs/product/troubleshooting/">Solucion de problemas</a></section><section class="nav-group"><h2>Arquitectura</h2><a href="/docs/architecture/overview/">Vision general</a><a href="/docs/architecture/api/">API y modulos</a><a href="/docs/architecture/data-schema/">Datos de verbos</a><a href="/docs/architecture/content-schema/">Datos curriculares</a><a href="/docs/architecture/development/">Preparacion del entorno</a><a href="/docs/architecture/code-tour/">Recorrido por el codigo</a><a href="/docs/architecture/junior-guide/">Guia junior</a><a href="/docs/architecture/testing/">Estrategia de pruebas</a><a href="/docs/architecture/operations/">Operaciones</a></section><section class="nav-group"><h2>Entrega</h2><a href="/docs/delivery/deployment/">Publicacion</a><a href="/docs/delivery/github-pages/">GitHub Pages</a><a class="active" aria-current="page" href="/docs/delivery/roadmap/">Roadmap</a><a href="/docs/delivery/release-checklist/">Checklist de release</a><a href="/docs/delivery/adr/">Decisiones de arquitectura</a><a href="/docs/delivery/adr/local-first/">ADR 0001: Local-first</a><a href="/docs/delivery/adr/content-driven/">ADR 0002: Curriculo</a><a href="/docs/delivery/adr/github-pages/">ADR 0003: Pages</a></section><section class="nav-group"><h2>Gestion del proyecto</h2><a href="/docs/project/status/">Estado actual</a><a href="/docs/project/tasks/">Fases y tareas</a><a href="/docs/project/changelog/">Changelog</a><a href="/docs/project/contributing/">Contribucion</a><a href="/docs/project/security/">Seguridad</a><a href="/docs/project/third-party/">Licencias de terceros</a></section></nav><main class="docs-main" id="main-content"><article class="docs-article"><p class="page-meta">Entrega</p><h1 id="smarttense-roadmap-de-desarrollo-por-fases">SmartTense - Roadmap De Desarrollo Por Fases</h1>
+<p>Este documento convierte las ideas del curso de ingles revisado en un plan incremental para SmartTense. La direccion del producto es clara: evolucionar de una tabla inteligente de conjugaciones hacia una experiencia guiada de aprendizaje, con teoria, explicaciones, ejemplos, ejercicios, vocabulario y practica oral/escrita.</p>
+<p>La documentacion oficial empieza en <a href="/docs/">INDEX.md</a>. La version ejecutiva + operativa para la expansion curricular A1-B2 esta en <a href="/docs/product/curriculum/">CURRICULUM_PHASE_PLAN.md</a>.</p>
+<p>La intencion no es copiar el curso dentro de la app, sino usar su estructura pedagogica para disenar el siguiente nivel del producto.</p>
+<h2 id="estado-ejecutivo-de-fases">Estado Ejecutivo De Fases</h2>
+<table><thead><tr><th>Fase</th><th>Estado</th><th>Entregable actual</th><th>Evidencia</th></tr></thead><tbody><tr><td>Fase 0 - Arquitectura de contenido</td><td>Cerrada</td><td><code>public/data/learningUnits.json</code>, validador, pruebas y esquema documentado</td><td><code>npm test</code> con validacion de contenido</td></tr><tr><td>Fase 1 - Theory</td><td>Cerrada</td><td>Pagina Theory renderizada desde JSON, enlazada desde Home y menu</td><td><code>npm test</code>, <code>npm run build</code>; navegador interno no disponible para captura automatizada</td></tr><tr><td>Fase 2 - Explicaciones inteligentes</td><td>Cerrada</td><td>Panel compacto <code>Why this form?</code> con patron, razon, auxiliar y forma verbal</td><td><code>npm test</code>, <code>npm run build</code></td></tr><tr><td>Fase 3 - Motor de practica</td><td>Cerrada</td><td>Pagina Practice con ejercicios iniciales, scoring local y feedback inmediato</td><td><code>npm test</code>, <code>npm run build</code></td></tr><tr><td>Fase 4 - Ruta de aprendizaje</td><td>Cerrada</td><td>Progreso local por unidad y Home recomienda el siguiente paso</td><td><code>npm test</code>, <code>npm run build</code></td></tr><tr><td>Fase 5 - Vocabulario y contextos</td><td>Cerrada</td><td>Contextos, vocabulario y practica filtrable por contexto</td><td><code>npm test</code>, <code>npm run build</code></td></tr><tr><td>Fase 6 - Administracion de contenido</td><td>Cerrada</td><td>Import/export, preview y validacion de contenido de aprendizaje en Settings</td><td><code>npm test</code>, <code>npm run build</code></td></tr><tr><td>Fase 7 - Speaking, writing y revision</td><td>Cerrada</td><td>Workspace Production con speaking/writing, estado de intento y filtros</td><td><code>src/data/productionPrompts.js</code>, <code>App.jsx</code>, <code>src/i18n.js</code></td></tr><tr><td>Fase 8 - Expansión de unidades de tiempo</td><td>Cerrada</td><td>Unidad past/future/conditional, ejercicios de transferencia y Production alineado</td><td><code>npm test</code>, <code>npm run build</code>, smoke mobile CDP y QA alto volumen con 500 verbos</td></tr><tr><td>Fase 9 - Calidad, metricas y robustez</td><td>Cerrada</td><td>E2E mobile repetible, quality gates, accesibilidad basica y release checklist</td><td><code>npm run test:e2e:mobile</code></td></tr><tr><td>Fase 10 - Reorganizacion documental y guia curricular</td><td>Cerrada</td><td>Indice documental y plan curricular A1-B2 como fuente oficial</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 11 - Revision del modelo de contenido</td><td>Cerrada localmente</td><td>Schema v3 con CEFR, orden, prerequisitos, validacion y ruta ordenada</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 12 - A1 Foundation MVP</td><td>Cerrada localmente</td><td>3 unidades A1, ruta inicial, ejercicios y prompts Production</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 13 - A2 Expansion Dario</td><td>Cerrada localmente</td><td>4 unidades A2, ejercicios, vocabulario/contextos y prompts Production</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 14 - B1 Functional Communication</td><td>Cerrada localmente</td><td>2 unidades B1, ejercicios de transferencia y prompts Production</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 15 - B2 Independent Production</td><td>Cerrada localmente</td><td>1 unidad B2 inicial, ejercicios de mixed tenses y prompts Production</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 16 - Diagnostico y ruta recomendada</td><td>Cerrada localmente</td><td>Diagnostico CEFR local, unidad sugerida y reset en Settings</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 17 - Production por unidad y revision guiada</td><td>Cerrada localmente</td><td>Prompts sugeridos por unidad, vista global y cola de intentos global</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 18 - Pulido UX mobile MVP</td><td>Cerrada localmente</td><td>Filtro segmentado All/A1/A2/B1/B2 para orientar Home y ruta</td><td><code>npm run release:check</code></td></tr><tr><td>Fase 19 - Revision de contenido y gaps A1-A2</td><td>Lista para iniciar</td><td>Revisar contenido antes de ampliar mas UI</td><td>pendiente</td></tr><tr><td>Fase 20 - Experiencia de estudio y continuidad</td><td>Validacion automatizada cerrada</td><td>Smart resume, reintento, banco de errores, Adaptive Review prioritario y handoff Codex</td><td><code>src/FocusedPracticePage.jsx</code>, <code>src/adaptiveReview.js</code>, <code>AGENTS.md</code>, <code>docs/CURRENT_STATUS.md</code></td></tr><tr><td>Fase 21 - Manual del curso A2</td><td>Validacion automatizada cerrada; revision en dispositivo fisico opcional</td><td>Seccion HTML Manual con visor del PDF original y acciones mobile</td><td><code>src/ManualPage.jsx</code>, <code>public/docs/dario-general-english-course.pdf</code></td></tr><tr><td>Fase 22 - Documentation and quality governance</td><td>Implementada localmente; validacion pendiente</td><td>Documentacion canonica, ADR, CI, plantillas y matriz de 13 pruebas</td><td><code>docs/TESTING.md</code>, <code>.github/workflows/ci.yml</code>, <code>CURRENT_STATUS.md</code></td></tr></tbody></table>
+<h2 id="lectura-ejecutiva-del-documento-fuente">Lectura Ejecutiva Del Documento Fuente</h2>
+<p>El documento revisado trabaja un nivel A2 y combina:</p>
+<ul><li>Objetivos claros por unidad.</li><li>Teoria gramatical por tiempo verbal.</li><li>Estructuras afirmativas, negativas, interrogativas e interrogativas negativas.</li><li>Respuestas cortas, reglas ortograficas, palabras senal y errores comunes.</li><li>Ejemplos contextualizados en trabajo de IT, familia, rutinas, escuela/trabajo, vacaciones y movimiento.</li><li>Ejercicios de completar, transformar, elegir tiempo correcto, corregir errores, traducir de espanol a ingles y practicar speaking.</li><li>Temas de soporte que amplian el valor de SmartTense: preposiciones, vocabulario diario y tareas guiadas de speaking/writing.</li></ul>
+<p>La oportunidad principal es que SmartTense ya genera estructuras. El siguiente paso es explicar por que funcionan y convertirlas en practica guiada.</p>
+<h2 id="direccion-del-producto">Direccion Del Producto</h2>
+<p>SmartTense deberia evolucionar hacia un espacio de aprendizaje estructurado:</p>
+<ul><li><code>Home</code>: progreso, recomendaciones y siguiente actividad.</li><li><code>Theory</code>: teoria corta, reglas, ejemplos y errores comunes.</li><li><code>Individual</code>: practica enfocada, inicialmente afirmativa.</li><li><code>Complete</code>: comparacion completa de formas.</li><li><code>Practice</code>: ejercicios interactivos generados desde datos.</li><li><code>Settings</code>: configuracion y administracion de datos/contenido.</li></ul>
+<p>Principio clave: cada nueva capacidad debe apoyarse en el motor gramatical y el modelo de datos existente. Evitar crear un visor estatico de curso separado de SmartTense.</p>
+<h2 id="fases-ejecutivas-y-tareas-operativas">Fases Ejecutivas Y Tareas Operativas</h2>
+<h3 id="fase-0-arquitectura-de-contenido">Fase 0 - Arquitectura De Contenido</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Crear la base para que SmartTense pueda manejar teoria, ejemplos, ejercicios, vocabulario y unidades de aprendizaje como datos estructurados.</p>
+<p>Tareas operativas:</p>
+<ul><li>Disenar un esquema JSON para <code>learningUnits</code>.</li><li>Definir entidades: unidad, seccion, objetivo, nota gramatical, estructura, ejemplo, ejercicio, vocabulario y contexto.</li><li>Conectar el contenido con <code>tenseIds</code>, idioma de interfaz e idioma del estudiante.</li><li>Crear validacion similar a <code>src/data/validation.js</code>.</li><li>Crear contenido minimo para Present Simple.</li><li>Agregar pruebas de validacion.</li><li>Documentar el esquema en <code>docs/LEARNING_CONTENT_SCHEMA.md</code>.</li></ul>
+<p>Entregable:</p>
+<ul><li>SmartTense puede cargar una unidad de aprendizaje desde JSON y rechazar contenido invalido.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada. Existe una unidad <code>present-simple-foundation</code>, un validador dedicado, pruebas automatizadas y documentacion del esquema.</li></ul>
+<h3 id="fase-1-seccion-theory">Fase 1 - Seccion Theory</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Permitir que el usuario lea teoria breve antes de practicar.</p>
+<p>Tareas operativas:</p>
+<ul><li>Agregar seccion o pagina <code>Theory</code>.</li><li>Crear componentes reutilizables: objetivos, explicacion del tiempo verbal, estructuras, palabras senal, errores comunes y ejemplos.</li><li>Renderizar contenido desde JSON, no hard-coded.</li><li>Conectar teoria con grupos de tiempos existentes.</li><li>Agregar textos de interfaz en ingles/espanol.</li><li>Disenar layout responsive para movil.</li><li>Actualizar documentacion.</li></ul>
+<p>Entregable:</p>
+<ul><li>Present Simple tiene una vista de teoria navegable desde la app.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada. Theory carga <code>public/data/learningUnits.json</code>, valida el contenido, renderiza la unidad Present Simple y muestra objetivos, teoria, estructuras, palabras senal, errores comunes, ejemplos y vista previa de ejercicios.</li></ul>
+<h3 id="fase-2-explicaciones-inteligentes">Fase 2 - Explicaciones Inteligentes</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Hacer que SmartTense explique como se construye una oracion, no solo mostrarla.</p>
+<p>Tareas operativas:</p>
+<ul><li>Extender las filas generadas con metadatos explicativos: sujeto, auxiliar, forma verbal, complemento, motivo del tiempo verbal y tipo de forma.</li><li>Agregar panel <code>Why this form?</code>.</li><li>Explicar errores comunes como <code>He doesn&#39;t works</code>.</li><li>Agregar explicaciones en el idioma del estudiante cuando existan.</li><li>Agregar pruebas para helpers de explicacion.</li></ul>
+<p>Entregable:</p>
+<ul><li>El usuario puede abrir una oracion y ver una explicacion clara de su estructura.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada. Las filas generadas incluyen <code>explanations</code> por forma, y la UI muestra un panel desplegable <code>Why this form?</code> en Complete, tarjetas moviles e Individual.</li></ul>
+<h3 id="fase-3-motor-de-practica">Fase 3 - Motor De Practica</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Convertir SmartTense en una herramienta activa de practica.</p>
+<p>Tareas operativas:</p>
+<ul><li>Crear pagina <code>Practice</code>.</li><li>Implementar ejercicios de completar espacios, escoger tiempo correcto, corregir errores, transformar formas, traducir espanol -&gt; ingles y respuestas cortas.</li><li>Crear normalizacion de respuestas.</li><li>Agregar feedback inmediato.</li><li>Guardar progreso local.</li><li>Generar ejercicios desde verbos, sujetos, tiempos y plantillas.</li><li>Agregar pruebas para scoring y validacion de respuestas.</li></ul>
+<p>Entregable:</p>
+<ul><li>Present Simple tiene al menos tres tipos de ejercicios funcionales con feedback.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada para MVP. Practice renderiza ejercicios desde <code>learningUnits</code>, permite escribir respuestas, normaliza/scoring localmente y muestra feedback inmediato. El contenido inicial incluye completar y transformar; mas tipos quedan para iteraciones posteriores de Practice.</li></ul>
+<h3 id="fase-4-ruta-de-aprendizaje">Fase 4 - Ruta De Aprendizaje</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Organizar el aprendizaje en una secuencia guiada.</p>
+<p>Tareas operativas:</p>
+<ul><li>Agregar estado de unidad: no iniciada, en progreso, completada.</li><li>Agregar flujo: teoria -&gt; ejemplos -&gt; practica -&gt; revision.</li><li>Actualizar Home para recomendar la siguiente actividad.</li><li>Crear unidades iniciales para presente, pasado, futuro/condicional, preposiciones y speaking/writing.</li><li>Agregar criterios locales de completitud.</li><li>Agregar reset de progreso por unidad en Settings.</li></ul>
+<p>Entregable:</p>
+<ul><li>Home puede recomendar el siguiente paso del usuario dentro de una unidad.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada para MVP. La app guarda progreso local por unidad, marca Theory como visto, marca Practice como completado al responder correctamente todos los ejercicios, recomienda el siguiente paso en Home y permite resetear la unidad desde Settings.</li></ul>
+<h3 id="fase-5-vocabulario-y-contextos">Fase 5 - Vocabulario Y Contextos</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Hacer que SmartTense genere ejemplos mas cercanos a la vida real del estudiante.</p>
+<p>Tareas operativas:</p>
+<ul><li>Crear paquetes de vocabulario: IT work, daily habits, family routines, meetings, travel/vacation y prepositions.</li><li>Conectar vocabulario con complementos y ejercicios.</li><li>Agregar filtros por contexto.</li><li>Agregar tarjetas simples de vocabulario.</li><li>Permitir import/export de vocabulary packs desde Settings.</li><li>Agregar validaciones y pruebas.</li></ul>
+<p>Entregable:</p>
+<ul><li>El usuario puede escoger un contexto y ver ejemplos/practicas adaptadas a ese contexto.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada para MVP. Existe un catalogo de contextos en <code>public/data/learningUnits.json</code>, Theory y Practice comparten un filtro compacto por contexto, Theory muestra vocabulario contextual y Practice filtra ejercicios por la situacion seleccionada. Import/export de vocabulario queda para Fase 6 como parte de administracion de contenido.</li></ul>
+<h3 id="fase-6-administracion-de-contenido">Fase 6 - Administracion De Contenido</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Permitir crecer el contenido sin editar archivos JSON manualmente todo el tiempo.</p>
+<p>Tareas operativas:</p>
+<ul><li>Extender Settings para administrar verbos, unidades, teoria, ejercicios y vocabulario.</li><li>Agregar import/export por tipo de contenido.</li><li>Agregar vista previa antes de guardar.</li><li>Agregar validacion con resumen de errores.</li><li>Agregar bulk edit para metadatos de contenido.</li><li>Crear documentacion para autores de contenido.</li></ul>
+<p>Entregable:</p>
+<ul><li>Un administrador puede editar contenido de aprendizaje, validarlo y exportarlo como JSON.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada para MVP. Settings incluye un administrador compacto de contenido de aprendizaje: importa JSON compatible como borrador, valida con <code>validateLearningContent</code>, muestra vista previa de unidades/contextos/vocabulario/ejercicios, aplica el contenido a Theory/Practice con confirmacion y exporta JSON para actualizar <code>public/data/learningUnits.json</code>. La edicion visual campo por campo queda para iteraciones posteriores si el volumen de contenido lo exige.</li></ul>
+<h3 id="fase-7-speaking-writing-y-revision">Fase 7 - Speaking, Writing Y Revision</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Soportar practica de produccion, que es donde el estudiante realmente gana fluidez.</p>
+<p>Tareas operativas:</p>
+<ul><li>Crear tarjetas de speaking prompts.</li><li>Crear tarjetas de writing prompts.</li><li>Agregar rubricas simples de autoevaluacion.</li><li>Agregar drills con temporizador.</li><li>Guardar intentos localmente.</li><li>Agregar notas del estudiante o profesor.</li><li>Crear cola de revision para errores frecuentes.</li></ul>
+<p>Entregable:</p>
+<ul><li>El usuario puede completar una tarea corta de speaking/writing y guardarla para revision.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada para MVP. Production está activo con:</li><li>prompts iniciales (hablar y escribir),</li><li>intentos en cola con estados <code>draft</code>, <code>done</code>, <code>needsReview</code>, <code>approved</code>,</li><li>filtros por modo y estado,</li><li>registro local y edición de notas,</li><li>confirmación al editar/eliminar.</li></ul>
+<h3 id="fase-8-expansion-de-unidades">Fase 8 - Expansion De Unidades</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Extender la ruta de aprendizaje a nuevos tiempos y unidades sin reconstruir la arquitectura actual.</p>
+<p>Tareas operativas:</p>
+<ul><li>Diseñar nueva unidad pedagógica para past/future/conditional usando el mismo schema de <code>learningUnits</code>.</li><li>Consolidar patrones de ejercicios de transferencia entre tiempos.</li><li>Reutilizar la lógica de contextos, filtros y progreso por unidad ya construida.</li><li>Mantener rendimiento con tablas, paginación y filtrado para alta escala de contenido.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada. La unidad adicional, los ejercicios de transferencia, Production y la validacion mobile/alto volumen quedaron documentados en <code>docs/PHASE_EXECUTION_LOG.md</code>.</li></ul>
+<h3 id="fase-9-calidad-metricas-y-robustez">Fase 9 - Calidad, Metricas Y Robustez</h3>
+<p>Objetivo ejecutivo:</p>
+<p>Convertir los recorridos criticos de la app en evidencia repetible y medible, sin agregar features fuera del MVP.</p>
+<p>Tareas operativas:</p>
+<ul><li>Mantener un smoke E2E mobile ejecutable desde npm.</li><li>Validar Home, Theory, Practice, Individual, Complete, Production y Settings en viewport mobile.</li><li>Simular alto volumen con 500 verbos, que es el limite actual del validador.</li><li>Definir metricas y umbrales internos para proximos cierres.</li><li>Preparar checklist de release interna por pantalla.</li></ul>
+<p>Estado:</p>
+<ul><li>Cerrada. F9a, F9b y F9c estan entregadas con <code>npm run test:e2e:mobile</code>, quality gates internos, checks de accesibilidad basica y <code>docs/RELEASE_CHECKLIST.md</code>. No se agrega virtualizacion mientras el limite actual siga en 500 verbos y el smoke mobile pase.</li></ul>
+<h2 id="gantt-interno">Gantt Interno</h2>
+<p>Fechas internas de referencia. Se pueden ajustar segun prioridad, tiempo disponible y feedback del usuario.</p>
+<pre><code class="language-mermaid">gantt
+    title Roadmap SmartTense - Evolucion A Plataforma De Aprendizaje
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+
+    section Fundacion
+    Fase 0 - Arquitectura de contenido      :done, p0, 2026-07-11, 1d
+    Esquema y validacion                    :done, p0a, 2026-07-11, 1d
+    Contenido Present Simple                :done, p0b, 2026-07-11, 1d
+
+    section Teoria
+    Fase 1 - Theory                         :done, p1, 2026-07-11, 1d
+    Componentes de teoria                   :done, p1a, 2026-07-11, 1d
+    Vista responsive                        :done, p1b, 2026-07-11, 1d
+
+    section Explicaciones
+    Fase 2 - Smart explanations             :done, p2, 2026-07-11, 1d
+    Metadatos explicativos                  :done, p2a, 2026-07-11, 1d
+    Panel Why this form                     :done, p2b, 2026-07-11, 1d
+
+    section Practica
+    Fase 3 - Practice engine                :done, p3, 2026-07-11, 1d
+    Modelo de ejercicios                    :done, p3a, 2026-07-11, 1d
+    Feedback y scoring                      :done, p3b, 2026-07-11, 1d
+
+    section Ruta
+    Fase 4 - Learning path                  :done, p4, 2026-07-11, 1d
+    Modelo de progreso                      :done, p4a, 2026-07-11, 1d
+    Recomendaciones en Home                 :done, p4b, 2026-07-11, 1d
+
+    section Expansion
+    Fase 5 - Vocabulario y contextos        :done, p5, 2026-07-11, 1d
+    Modelo de contextos                     :done, p5a, 2026-07-11, 1d
+    Ejemplos por contexto                   :done, p5b, 2026-07-11, 1d
+
+    section Administracion
+    Fase 6 - Authoring tools                :done, p6, 2026-07-11, 1d
+    Import export de contenido              :done, p6a, 2026-07-11, 1d
+    Preview y validacion                    :done, p6b, 2026-07-11, 1d
+
+    section Produccion
+    Fase 7 - Speaking y writing             :done, p7, 2026-07-12, 12d
+    Prompts y rubricas                      :p7a, 2026-07-12, 6d
+    Cola de revision                        :p7b, after p7a, 6d
+    Fase 8 - Expansion de unidades          :done, p8, 2026-07-12, 10d
+    Unit 2/3 y validaciones por escala      :done, p8a, after p8, 4d
+    Rendimiento y UX mobile                  :done, p8b, after p8a, 3d
+    Ruta de progreso multiunidad             :done, p8c, after p8b, 3d
+    section Calidad
+    Fase 9 - QA mobile repetible             :done, p9, after p8c, 5d
+    E2E mobile CDP                            :done, p9a, after p8c, 1d
+    Metricas internas                         :done, p9b, after p9a, 1d
+    Accesibilidad y release checklist         :done, p9c, after p9b, 3d</code></pre>
+<h2 id="releases-sugeridos">Releases Sugeridos</h2>
+<h3 id="release-1-theory-mvp">Release 1 - Theory MVP</h3>
+<ul><li>Fase 0 completa.</li><li>Fase 1 solo con Present Simple.</li><li>Sin motor de practica todavia.</li></ul>
+<h3 id="release-2-explain-the-sentence">Release 2 - Explain The Sentence</h3>
+<ul><li>Fase 2 para Present Simple, Present Continuous y Present Perfect Simple.</li><li>Explicaciones visibles desde Individual y Complete.</li></ul>
+<h3 id="release-3-practice-mvp">Release 3 - Practice MVP</h3>
+<ul><li>Fase 3 con completar espacios, transformar oracion y elegir tiempo correcto.</li><li>Scoring local.</li></ul>
+<h3 id="release-4-course-mode">Release 4 - Course Mode</h3>
+<ul><li>Fase 4 con flujo de Unidad 1.</li><li>Home recomienda la siguiente actividad.</li></ul>
+<h3 id="release-5-content-scale">Release 5 - Content Scale</h3>
+<ul><li>Bases de Fase 5 y Fase 6.</li><li>Vocabulario por contexto e import/export de contenido.</li></ul>
+<h2 id="siguiente-implementacion-recomendada">Siguiente Implementacion Recomendada</h2>
+<p>Continuar con la siguiente fase:</p>
+<ol><li>Implementar Fase 19 - Revision de contenido y gaps A1-A2.</li></ol>
+<p>Este paso debe revisar si A1/A2 necesitan mas contenido o ejercicios antes de seguir agregando pantallas.</p><nav class="page-nav" aria-label="Anterior y siguiente"><a href="/docs/delivery/github-pages/"><span>Anterior</span>GitHub Pages</a><a href="/docs/delivery/release-checklist/"><span>Siguiente</span>Checklist de release</a></nav></article></main><aside class="docs-toc" aria-label="En esta pagina"><h2>En esta pagina</h2><a class="level-2" href="#estado-ejecutivo-de-fases">Estado Ejecutivo De Fases</a><a class="level-2" href="#lectura-ejecutiva-del-documento-fuente">Lectura Ejecutiva Del Documento Fuente</a><a class="level-2" href="#direccion-del-producto">Direccion Del Producto</a><a class="level-2" href="#fases-ejecutivas-y-tareas-operativas">Fases Ejecutivas Y Tareas Operativas</a><a class="level-3" href="#fase-0-arquitectura-de-contenido">Fase 0 Arquitectura De Contenido</a><a class="level-3" href="#fase-1-seccion-theory">Fase 1 Seccion Theory</a><a class="level-3" href="#fase-2-explicaciones-inteligentes">Fase 2 Explicaciones Inteligentes</a><a class="level-3" href="#fase-3-motor-de-practica">Fase 3 Motor De Practica</a><a class="level-3" href="#fase-4-ruta-de-aprendizaje">Fase 4 Ruta De Aprendizaje</a><a class="level-3" href="#fase-5-vocabulario-y-contextos">Fase 5 Vocabulario Y Contextos</a><a class="level-3" href="#fase-6-administracion-de-contenido">Fase 6 Administracion De Contenido</a><a class="level-3" href="#fase-7-speaking-writing-y-revision">Fase 7 Speaking, Writing Y Revision</a><a class="level-3" href="#fase-8-expansion-de-unidades">Fase 8 Expansion De Unidades</a><a class="level-3" href="#fase-9-calidad-metricas-y-robustez">Fase 9 Calidad, Metricas Y Robustez</a><a class="level-2" href="#gantt-interno">Gantt Interno</a><a class="level-2" href="#releases-sugeridos">Releases Sugeridos</a><a class="level-3" href="#release-1-theory-mvp">Release 1 Theory MVP</a><a class="level-3" href="#release-2-explain-the-sentence">Release 2 Explain The Sentence</a><a class="level-3" href="#release-3-practice-mvp">Release 3 Practice MVP</a><a class="level-3" href="#release-4-course-mode">Release 4 Course Mode</a><a class="level-3" href="#release-5-content-scale">Release 5 Content Scale</a><a class="level-2" href="#siguiente-implementacion-recomendada">Siguiente Implementacion Recomendada</a></aside></div></body></html>
