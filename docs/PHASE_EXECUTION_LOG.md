@@ -761,3 +761,7 @@ Status: Repository and GitHub Pages workflow published; DNS cutover pending.
 ## DOC-STD-20261002
 
 Documentation navigation and canonical sources updated; no product task or release gate is accepted by this change.
+
+## 2026-10-02 — Estandarización y auditoría documental
+
+Se incorporó el mapa canónico y se actualizó brace-expansion 5.0.12. `npm run release:check` y auditoría de producción: PASS. Una alerta moderada de fast-uri en herramientas de desarrollo permanece registrada. Ver CURRENT_STATUS.md para límites y evidencia; no se modificó DNS.

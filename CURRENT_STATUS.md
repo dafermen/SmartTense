@@ -151,3 +151,10 @@ Phase 20 automated validation is now closed; the successful evidence is recorded
 ## DOC-STD-20261002 — Documentation organization
 
 The [documentation map](docs/INDEX.md) now identifies canonical sources and maintenance rules. Existing implementation milestones and pending acceptance are unchanged. Validation and publication are tracked separately for this documentation-only change.
+
+## Documentation release audit — 2026-10-02
+
+- Updated locked brace-expansion from 5.0.9 to 5.0.12 to clear the production audit that blocked CI and the documentation publication workflow.
+- `npm run release:check`: PASS (117 tests, 43 mutation cases, 1,130 rejected fuzz inputs, content/translation audits, 31 documentation pages, production build, bundle budgets and mobile smoke).
+- `npm audit --omit=dev --audit-level=high`: PASS, 0 production findings. The full development audit still reports one moderate fast-uri finding; it is recorded separately and not counted as a clean full audit.
+- These results apply to automated checks; existing physical-device and public-domain limitations remain documented. Remote CI and Pages results must be checked for the published commit.
