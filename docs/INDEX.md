@@ -120,3 +120,38 @@ Lea estos dos archivos antes del roadmap cuando retome trabajo iniciado por otra
 - [Current Status](../CURRENT_STATUS.md)
 - [Changelog](../CHANGELOG.md)
 - [Contributing](../CONTRIBUTING.md)
+
+## DOC-STD-20261002 — Canonical sources
+
+Documentation standard v1.0 · reviewed 2026-10-02. Primary language: English.
+
+Local-first language learning web application with mobile shells.
+
+The root CURRENT_STATUS is canonical; docs/CURRENT_STATUS is already a compatibility pointer, not a competing status source. Preserve that pointer. Curriculum data belongs in public/data and learner progress stays local. Do not infer custom-domain readiness from the GitHub Pages build.
+
+| Need | Authoritative source |
+| --- | --- |
+| Presentation | [README.md](../README.md) |
+| Current state | [CURRENT_STATUS.md](../CURRENT_STATUS.md) |
+| Development | [docs/DEVELOPMENT.md](DEVELOPMENT.md) |
+| Architecture | [docs/ARCHITECTURE.md](ARCHITECTURE.md) |
+| Usage | [docs/USER_GUIDE.md](USER_GUIDE.md) |
+| API / contracts | [docs/API.md](API.md) |
+| Testing | [docs/TESTING.md](TESTING.md) |
+| Security | [docs/SECURITY.md](SECURITY.md) |
+| Deployment | [docs/DEPLOYMENT.md](DEPLOYMENT.md) |
+| Operations | [docs/OPERATIONS.md](OPERATIONS.md) |
+| Troubleshooting | [docs/TROUBLESHOOTING.md](TROUBLESHOOTING.md) |
+| Curriculum | [docs/CURRICULUM_PHASE_PLAN.md](CURRICULUM_PHASE_PLAN.md) |
+| Execution history | [docs/PHASE_EXECUTION_LOG.md](PHASE_EXECUTION_LOG.md) |
+| Data schema | [docs/LEARNING_CONTENT_SCHEMA.md](LEARNING_CONTENT_SCHEMA.md) |
+| History | [CHANGELOG.md](../CHANGELOG.md) |
+| Decisions | [docs/adr/README.md](adr/README.md) |
+
+Start with the presentation and current state, then read the user guide to try the product, development/architecture to contribute, or deployment/operations to maintain it. The existing detailed index remains valid.
+
+### Evidence and updates
+
+Keep current state, change history and decisions separate. Existing dated test results remain historical evidence. Adding this map does not rerun every documented command or complete pending product acceptance. Record actual checks, their environment and unresolved limits before publication.
+
+Update the source guide whenever commands, configuration, behavior, permissions or deployment change. Keep existing links and portal routes stable. Use real screenshots with synthetic data; never publish env values, access keys, user data or operational logs. A local commit, a remote commit and a deployed artifact are separate states.

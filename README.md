@@ -266,3 +266,7 @@ No license has been selected yet. Add a `LICENSE` file before publishing if this
 Start with `AGENTS.md`, `CURRENT_STATUS.md`, and `docs/INDEX.md`. Every deployment must review all 13 categories in `docs/TESTING.md` and pass `npm run release:check`.
 
 The project license has not yet been selected; see `CONTRIBUTING.md` before accepting external contributions.
+
+## DOC-STD-20261002 — Documentation navigation
+
+Use the [documentation map](docs/INDEX.md) for authoritative sources, reading paths and project-specific maintenance rules.

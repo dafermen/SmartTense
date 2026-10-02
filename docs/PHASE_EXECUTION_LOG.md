@@ -757,3 +757,7 @@ Status: Repository and GitHub Pages workflow published; DNS cutover pending.
 - GitHub Pages reports `built`, an approved certificate, and `https_enforced: true` for `smarttense.innovalogic.tech`.
 - External verification is blocked by DNS: the subdomain has an A record to an Ubuntu/Nginx server and no CNAME to `dafermen.github.io`.
 - No SSH key was read and no private-server deployment was performed because the requested current target is GitHub Pages.
+
+## DOC-STD-20261002
+
+Documentation navigation and canonical sources updated; no product task or release gate is accepted by this change.

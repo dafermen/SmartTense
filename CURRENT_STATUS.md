@@ -147,3 +147,7 @@ Phase 20 automated validation is now closed; the successful evidence is recorded
 - All 13 test categories are mandatory pre-deployment review items.
 - CI and Pages run the release gate and high-severity production dependency audit.
 - Project license selection remains an owner decision.
+
+## DOC-STD-20261002 — Documentation organization
+
+The [documentation map](docs/INDEX.md) now identifies canonical sources and maintenance rules. Existing implementation milestones and pending acceptance are unchanged. Validation and publication are tracked separately for this documentation-only change.
