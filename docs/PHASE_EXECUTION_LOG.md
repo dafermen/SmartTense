@@ -765,3 +765,7 @@ Documentation navigation and canonical sources updated; no product task or relea
 ## 2026-10-02 — Estandarización y auditoría documental
 
 Se incorporó el mapa canónico y se actualizó brace-expansion 5.0.12. `npm run release:check` y auditoría de producción: PASS. Una alerta moderada de fast-uri en herramientas de desarrollo permanece registrada. Ver CURRENT_STATUS.md para límites y evidencia; no se modificó DNS.
+
+### Cierre de auditoría de herramientas — 02/10/2026
+
+fast-uri actualizado a 3.1.8. Repetidos release:check y npm audit: PASS; cero alertas en producción y desarrollo. El problema TLS del dominio permanece pendiente.

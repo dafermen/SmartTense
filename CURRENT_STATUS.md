@@ -1,6 +1,6 @@
 # SmartTense Current Status
 
-Last updated: 2026-09-13
+Last updated: 2026-10-02
 
 ## Active State
 
@@ -158,3 +158,8 @@ The [documentation map](docs/INDEX.md) now identifies canonical sources and main
 - `npm run release:check`: PASS (117 tests, 43 mutation cases, 1,130 rejected fuzz inputs, content/translation audits, 31 documentation pages, production build, bundle budgets and mobile smoke).
 - `npm audit --omit=dev --audit-level=high`: PASS, 0 production findings. The full development audit still reports one moderate fast-uri finding; it is recorded separately and not counted as a clean full audit.
 - These results apply to automated checks; existing physical-device and public-domain limitations remain documented. Remote CI and Pages results must be checked for the published commit.
+
+
+## Development audit follow-up — 2026-10-02
+
+The remaining fast-uri development dependency was patched to 3.1.8. The full `npm run release:check` passed again (117 tests, 43 mutation cases, 1,130 fuzz cases, build, documentation, budgets and mobile smoke). `npm audit` now reports 0 findings across production and development dependencies. This supersedes the earlier moderate development finding; the custom-domain TLS mismatch remains unresolved.
