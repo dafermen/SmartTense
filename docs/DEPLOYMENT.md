@@ -9,22 +9,24 @@
 5. Complete `RELEASE_CHECKLIST.md`.
 6. Update `CHANGELOG.md` and `CURRENT_STATUS.md`.
 
-## GitHub Pages
+## Current Test Server — 2026-10-03
 
-Pushes to `main` trigger `.github/workflows/deploy-pages.yml`. Pages uses GitHub Actions and the custom domain `https://smarttense.innovalogic.tech/`.
+The owner authorized publishing the validated documentation/application build on the existing test server. The canonical demo is https://smarttense.innovalogic.tech/ and documentation is https://smarttense.innovalogic.tech/docs/. DNS already pointed to that server; no DNS changes were made.
 
-The deployment artifact includes `public/CNAME`, and the repository variable `PAGES_BASE_PATH` must be `/` for the custom subdomain.
+Nginx serves static files from `/var/www/smarttense.innovalogic.tech/current`, a symlink to an immutable release. The initial release is `releases/20261003-c314914`, built from source `c314914debd7f872e47de6ae012348e9d7dcadd7` with base `/`. It has no backend and preserves browser-local progress. HTTPS uses a domain certificate managed by the existing Certbot renewal service. No credentials belong in Git.
 
-## Current DNS Cutover
+Future releases must pass the required gate above, build with root base `/`, transfer only the verified `dist/` artifacts into a new release directory, preserve the current target for rollback, and atomically switch `current`. Keep the existing Nginx `/docs/` directory routing and ACME challenge route. Check valid HTTPS, root assets, documentation search/navigation, and desktop/mobile layouts after switching. Restore the previous symlink target if checks fail. Never upload `.env`, source dependencies or private user data.
 
-The GitHub Pages workflow and certificate are configured for `smarttense.innovalogic.tech`. The external DNS must expose `CNAME smarttense -> dafermen.github.io`. As of 2026-09-13, the subdomain still resolves through an A record to an Ubuntu/Nginx server, so HTTPS verification of the Pages content remains blocked until the DNS record is changed by the domain administrator.
+## GitHub Pages Artifact
 
-## Docker And Private Server
+The existing Pages workflow still builds on pushes to `main`. It is a secondary artifact and **does not update the test server**. `PAGES_BASE_PATH=/` remains appropriate for a root-domain build. Do not claim the canonical domain was updated merely because the Pages workflow passed. A future switch back to Pages requires a deliberate DNS/hosting decision.
 
-Docker is not required for the current GitHub Pages deployment because SmartTense has no application backend and produces static files in `dist/`. A future private-server deployment can serve that directory with Nginx, Caddy, or a small container, but it should be treated as a separate migration with TLS, rollback, health checks, and server-access review. Do not copy or publish SSH keys.
+## Recorded Verification
+
+The Linux release gate and production dependency audit passed before the initial server release. Public HTTPS and exact root/documentation assets passed; Chrome at 1440px and 390px passed reader, theme and overflow checks. The previous domain state was an unmatched certificate, not a working server release. Deployment evidence and server rollback records are retained centrally in `/var/backups/documentation-navigation-20261003-v1/smarttense`.
 
 ## Rollback
 
-Revert the faulty commit with a new commit, push `main`, monitor Pages, verify both URLs, and record the incident. Do not rewrite shared history.
+For the test server, restore the previous `current` symlink target and verify HTTPS, app assets and `/docs/`. Correct the source with a new commit and record the incident. A Pages-only rollback changes the secondary artifact, not the canonical server. Do not rewrite shared history.
 
 Run `npm run cap:sync` only after the web gate passes; native signing and store delivery require a separate checklist.

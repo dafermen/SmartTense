@@ -1,5 +1,10 @@
 # SmartTense Current Status
 
+## Published documentation and test server — 2026-10-03
+
+Navigation source PR #1 is merged at `c314914`. The validated root-base build is deployed at https://smarttense.innovalogic.tech/ with documentation under `/docs/`. HTTPS, exact artifact checks and desktop/mobile reader checks passed. The domain's prior TLS mismatch is resolved. Browser-local progress and the application data model are unchanged. GitHub Pages remains a secondary build; it does not update the VPS. See [deployment](docs/DEPLOYMENT.md) for the current procedure. Earlier local-candidate/DNS-pending notes below are historical.
+
+
 ## Documentation web navigation v1 â€” local candidate, 2026-10-03
 
 InnovaLogic documentation theme, reading paths and reading controls are implemented. release:check PASS. After full-content search correction, build and browser at 1440 and 390 px PASS. See [navigation maintenance and evidence](docs/WEB_NAVIGATION.md). GitHub and server delivery of this revision are pending; earlier deployment status below remains historical evidence.

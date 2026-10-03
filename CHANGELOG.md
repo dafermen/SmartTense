@@ -1,5 +1,10 @@
 # Changelog
 
+## Test-server documentation delivery — 2026-10-03
+
+Published the standardized documentation on the authorized test server; configured valid TLS and recorded separate VPS/Pages deployment paths.
+
+
 ## Documentation navigation candidate â€” 2026-10-03
 
 InnovaLogic visual family, reading paths, collapsible navigation where applicable, code copy and keyboard image enlargement. Local validation and delivery status are recorded in docs/WEB_NAVIGATION.md.
