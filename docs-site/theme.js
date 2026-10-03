@@ -7,10 +7,11 @@ const searchResults = document.querySelector("[data-search-results]");
 
 function applyTheme(theme) {
   root.dataset.theme = theme;
-  localStorage.setItem("smarttense-docs-theme", theme);
+  try { localStorage.setItem("smarttense-docs-theme", theme); } catch { /* Theme remains usable. */ }
   if (themeButton) themeButton.textContent = theme === "dark" ? "Tema claro" : "Tema oscuro";
 }
-const storedTheme = localStorage.getItem("smarttense-docs-theme");
+let storedTheme;
+try { storedTheme = localStorage.getItem("smarttense-docs-theme"); } catch { /* System preference. */ }
 applyTheme(storedTheme === "light" || storedTheme === "dark" ? storedTheme : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 themeButton?.addEventListener("click", () => applyTheme(root.dataset.theme === "dark" ? "light" : "dark"));
 menuButton?.addEventListener("click", () => {
@@ -45,4 +46,18 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "/" && !event.ctrlKey && !event.metaKey && !/INPUT|TEXTAREA/.test(document.activeElement?.tagName || "")) {
     event.preventDefault(); searchInput?.focus();
   }
+});
+
+// Close the mobile drawer by keyboard or its visible button.
+function closeDocumentationMenu() {
+  sidebar?.classList.remove("is-open");
+  menuButton?.setAttribute("aria-expanded", "false");
+  menuButton?.focus();
+}
+const closeMenu = document.createElement("button");
+closeMenu.type = "button"; closeMenu.className = "mobile-menu"; closeMenu.textContent = "Cerrar menú";
+closeMenu.addEventListener("click", closeDocumentationMenu);
+sidebar?.prepend(closeMenu);
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && sidebar?.classList.contains("is-open")) closeDocumentationMenu();
 });
