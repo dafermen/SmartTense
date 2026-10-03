@@ -769,3 +769,7 @@ Se incorporó el mapa canónico y se actualizó brace-expansion 5.0.12. `npm run
 ### Cierre de auditoría de herramientas — 02/10/2026
 
 fast-uri actualizado a 3.1.8. Repetidos release:check y npm audit: PASS; cero alertas en producción y desarrollo. El problema TLS del dominio permanece pendiente.
+
+## Navegación documental v1 — 2026-10-03
+
+Identidad InnovaLogic, recorridos, menú con cierre visible/Escape, copia, imágenes y búsqueda de contenido completo. release:check PASS; build y navegador 1440/390 PASS tras el último ajuste de búsqueda. Candidata local, sin publicación ni despliegue de esta revisión.
