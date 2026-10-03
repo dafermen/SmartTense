@@ -1,6 +1,6 @@
 # Publishing SmartTense With GitHub
 
-This guide explains how to keep the SmartTense repository updated and how to publish the web app with GitHub Pages.
+This guide covers the secondary GitHub Pages artifact. Since 2026-10-03 the canonical demo domain is served by the authorized test server; a successful Pages workflow does not deploy that server. See [DEPLOYMENT.md](DEPLOYMENT.md) for the current topology, verification and rollback.
 
 ## Repository Remote
 

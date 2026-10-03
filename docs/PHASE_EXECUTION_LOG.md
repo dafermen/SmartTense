@@ -1,5 +1,10 @@
 # Registro de ejecucion por fases - SmartTense
 
+## Test-server documentation delivery — 2026-10-03
+
+2026-10-03 delivery: source c314914, Linux release gate PASS, production audit PASS, HTTPS root/docs PASS, Chrome 1440/390 reader/theme/overflow PASS. VPS canonical domain; Pages secondary artifact. Backend not introduced and browser storage preserved. Current procedure: docs/DEPLOYMENT.md.
+
+
 Fecha base: 11/07/2026.
 
 ## Fase actual
